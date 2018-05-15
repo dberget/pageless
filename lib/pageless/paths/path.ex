@@ -17,6 +17,6 @@ defmodule Pageless.Paths.Path do
   def changeset(path, attrs) do
     path
     |> cast(attrs, [:description, :company_id])
-    |> validate_required([])
+    |> validate_required([:company_id])
   end
 end

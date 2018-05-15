@@ -38,6 +38,26 @@ defmodule Pageless.Assignments do
   def get_assignment!(id), do: Repo.get!(Assignment, id)
 
   @doc """
+  Gets a users assignments.
+
+  Raises `Ecto.NoResultsError` if the Assignment does not exist.
+
+  ## Examples
+
+      iex> get_assignment!(123)
+      %Assignment{}
+
+      iex> get_assignment!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user_assignments(user_id) do
+    query = from a in Assignment, where: a.user_id == ^user_id
+
+    Repo.all(query)
+  end
+
+  @doc """
   Creates a assignment.
 
   ## Examples
