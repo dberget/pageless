@@ -8,6 +8,7 @@ defmodule Pageless.Users.User do
   alias Comeonin.Bcrypt
   alias Ecto.Changeset
   alias Pageless.Companies.Company
+  alias Pageless.Assignments.Assignment
 
   schema "users" do
     field :email, :string
@@ -19,7 +20,7 @@ defmodule Pageless.Users.User do
     field :state, :string, read_after_writes: true
     field :session_salt, :string
     belongs_to :company, Company
-    # has_many :assignments, Assignment
+    has_many :assignments, Assignment
 
     timestamps()
   end
