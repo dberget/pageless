@@ -3,6 +3,7 @@ defmodule Pageless.Repo.Migrations.CreateUsers do
 
   def up do
     execute("CREATE TYPE user_state AS ENUM ('ACTIVE','DISABLED')")
+    execute("CREATE TYPE user_role AS ENUM ('ADMIN','LEARNER')")
 
     create table(:users) do
       add :state, :user_state, null: false, default: "ACTIVE"
@@ -12,6 +13,7 @@ defmodule Pageless.Repo.Migrations.CreateUsers do
       add :password_hash, :text
       add :session_salt, :text, null: false, default: "salt"
       add :company_id, references(:companies)
+      add :role, :user_role, default: "LEARNER"
 
       timestamps()
     end
