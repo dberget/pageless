@@ -11,9 +11,9 @@ config :logger, level: :warn
 
 # Configure your database
 config :pageless, Pageless.Repo,
-  adapter: Ecto.Adapters.MySQL,
-  username: "root",
-  password: "root",
+  adapter: Ecto.Adapters.Postgres,
+  username: "davidberget",
+  password: "",
   database: "pageless_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

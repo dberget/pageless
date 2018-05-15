@@ -57,9 +57,9 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :pageless, Pageless.Repo,
-  adapter: Ecto.Adapters.MySQL,
-  username: "root",
-  password: "root",
+  adapter: Ecto.Adapters.Postgres,
+  username: "davidberget",
+  password: "",
   database: "pageless_dev",
   hostname: "localhost",
   pool_size: 10
