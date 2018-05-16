@@ -18,7 +18,6 @@ defmodule Pageless.Repo.Migrations.CreateUsers do
       timestamps()
     end
 
-    create(index(:users, [:id]))
     create(unique_index(:users, ["lower(email)"]))
   end
 

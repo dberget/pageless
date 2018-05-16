@@ -17,7 +17,13 @@ defmodule Pageless.Companies.Company do
   @doc false
   def changeset(company, attrs) do
     company
+    |> change(slug: random_slug())
     |> cast(attrs, [:state, :name, :slug])
-    |> validate_required([:name])
+    |> validate_required([:name, :slug])
+  end
+
+  # TODO: change to user defined slug 
+  defp random_slug() do
+    5 |> :crypto.strong_rand_bytes() |> Base.url_encode64() |> binary_part(0, 5)
   end
 end

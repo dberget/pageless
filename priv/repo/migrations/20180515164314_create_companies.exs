@@ -12,7 +12,6 @@ defmodule Pageless.Repo.Migrations.CreateCompanies do
       timestamps()
     end
 
-    create(index(:companies, [:id]))
     create(unique_index(:companies, ["lower(slug)"]))
   end
 

@@ -19,6 +19,7 @@ defmodule Pageless.Users.User do
     field :role, :string
     field :state, :string, read_after_writes: true
     field :session_salt, :string
+
     belongs_to :company, Company
     has_many :assignments, Assignment
 

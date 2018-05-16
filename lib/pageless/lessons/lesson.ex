@@ -8,8 +8,8 @@ defmodule Pageless.Lessons.Lesson do
     field :description, :string
     field :type, :string
     field :content, :string
-    belongs_to :path, Path
 
+    belongs_to :path, Path
     timestamps()
   end
 

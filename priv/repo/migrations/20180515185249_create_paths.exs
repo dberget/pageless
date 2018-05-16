@@ -5,6 +5,8 @@ defmodule Pageless.Repo.Migrations.CreatePaths do
     create table(:paths) do
       add :description, :text
       add :company_id, references(:companies, on_delete: :nothing)
+
+      timestamps()
     end
   end
 end
