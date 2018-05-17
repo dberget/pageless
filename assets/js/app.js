@@ -3,7 +3,7 @@ import "phoenix_html"
 
 import React from "react"
 import ReactDOM from "react-dom"
-import App from "./components/index"
+import App from "./pages/index"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { BrowserRouter } from "react-router-dom"
 

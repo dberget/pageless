@@ -9,13 +9,7 @@ defmodule Pageless.Assignments do
   alias Pageless.Assignments.Assignment
 
   @doc """
-  Returns the list of assignments.
-
-  ## Examples
-
-      iex> list_assignments()
-      [%Assignment{}, ...]
-
+  Returns the list of all assignments.
   """
   def list_assignments do
     Repo.all(Assignment)
@@ -23,33 +17,11 @@ defmodule Pageless.Assignments do
 
   @doc """
   Gets a single assignment.
-
-  Raises `Ecto.NoResultsError` if the Assignment does not exist.
-
-  ## Examples
-
-      iex> get_assignment!(123)
-      %Assignment{}
-
-      iex> get_assignment!(456)
-      ** (Ecto.NoResultsError)
-
   """
   def get_assignment!(id), do: Repo.get!(Assignment, id)
 
   @doc """
   Gets a users assignments.
-
-  Raises `Ecto.NoResultsError` if the Assignment does not exist.
-
-  ## Examples
-
-      iex> get_assignment!(123)
-      %Assignment{}
-
-      iex> get_assignment!(456)
-      ** (Ecto.NoResultsError)
-
   """
   def get_user_assignments(user_id) do
     query = from a in Assignment, where: a.user_id == ^user_id
@@ -59,15 +31,6 @@ defmodule Pageless.Assignments do
 
   @doc """
   Creates a assignment.
-
-  ## Examples
-
-      iex> create_assignment(%{field: value})
-      {:ok, %Assignment{}}
-
-      iex> create_assignment(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def create_assignment(attrs \\ %{}) do
     %Assignment{}
@@ -77,15 +40,6 @@ defmodule Pageless.Assignments do
 
   @doc """
   Updates a assignment.
-
-  ## Examples
-
-      iex> update_assignment(assignment, %{field: new_value})
-      {:ok, %Assignment{}}
-
-      iex> update_assignment(assignment, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def update_assignment(%Assignment{} = assignment, attrs) do
     assignment
@@ -95,28 +49,13 @@ defmodule Pageless.Assignments do
 
   @doc """
   Deletes a Assignment.
-
-  ## Examples
-
-      iex> delete_assignment(assignment)
-      {:ok, %Assignment{}}
-
-      iex> delete_assignment(assignment)
-      {:error, %Ecto.Changeset{}}
-
   """
   def delete_assignment(%Assignment{} = assignment) do
     Repo.delete(assignment)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking assignment changes.
-
-  ## Examples
-
-      iex> change_assignment(assignment)
-      %Ecto.Changeset{source: %Assignment{}}
-
+  Creates assignment changeset. 
   """
   def change_assignment(%Assignment{} = assignment) do
     Assignment.changeset(assignment, %{})

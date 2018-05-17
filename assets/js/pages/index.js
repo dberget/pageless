@@ -1,9 +1,10 @@
 import React, { Component } from "react"
 
-import Menu from "./menu"
-import Lessons from "./lessons"
-import LessonCard from "./lessonCard"
-import SideMenu from "./navList"
+import Menu from "../components/menu"
+import Lessons from "../components/lessons"
+import LessonCard from "../components/lessonCard"
+import SideMenu from "../components/navList"
+
 import { Home } from "./home"
 import { AllCourses } from "./courses"
 
