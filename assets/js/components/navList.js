@@ -10,6 +10,7 @@ import ViewList from "@material-ui/icons/ViewList"
 import PersonIcon from "@material-ui/icons/Person"
 import Drawer from "@material-ui/core/Drawer"
 import { withStyles } from "@material-ui/core/styles"
+import { Link } from "react-router-dom"
 
 const styles = theme => ({
   drawerPaper: {
@@ -26,13 +27,13 @@ class SideMenu extends Component {
       <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
         <div className={classes.toolbar} />
         <List component="nav">
-          <ListItem button>
+          <ListItem button component={Link} to="/lessons">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="My Assignments" />
           </ListItem>
-          <ListItem button>
+          <ListItem button component={Link} to="/courses">
             <ListItemIcon>
               <ViewList />
             </ListItemIcon>

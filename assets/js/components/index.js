@@ -4,9 +4,16 @@ import Menu from "./menu"
 import Lessons from "./lessons"
 import LessonCard from "./lessonCard"
 import SideMenu from "./navList"
+import { Home } from "./home"
+import { AllCourses } from "./courses"
+
 import { withStyles } from "@material-ui/core/styles"
+import { Route, Switch } from "react-router-dom"
 
 const styles = theme => ({
+  "@global a": {
+    textDecoration: "none"
+  },
   root: {
     flexGrow: 1,
     zIndex: 1,
@@ -32,7 +39,9 @@ class App extends Component {
         <SideMenu />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <LessonCard />
+          <Route exact path="/" component={Home} />
+          <Route path="/lessons" component={LessonCard} />
+          <Route path="/courses" component={AllCourses} />
         </main>
       </div>
     )

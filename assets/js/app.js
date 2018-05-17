@@ -5,12 +5,15 @@ import React from "react"
 import ReactDOM from "react-dom"
 import App from "./components/index"
 import CssBaseline from "@material-ui/core/CssBaseline"
+import { BrowserRouter } from "react-router-dom"
 
 document.addEventListener("DOMContentLoaded", () => {
   ReactDOM.render(
     <React.Fragment>
       <CssBaseline />
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </React.Fragment>,
     document.getElementById("app")
   )

@@ -9,16 +9,20 @@ import Typography from "@material-ui/core/Typography"
 
 const styles = theme => ({
   root: {
-    marginBottom: theme.spacing.unit
+    width: "100%",
+    marginBottom: theme.spacing.unit,
+    margin: "0 auto",
+    padding: theme.spacing.unit
   },
-  button: {
-    margin: "auto",
-    marginRight: theme.spacing.unit
-  },
+  button: {},
   instructions: {
-    alignSelf: "center",
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit
+  },
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    padding: theme.spacing.unit
   }
 })
 
@@ -41,28 +45,14 @@ function getStepContent(step) {
 
 class LessonStepper extends Component {
   state = {
-    activeStep: 0,
-    skipped: new Set()
-  }
-
-  isStepOptional = step => {
-    return step === 1
-  }
-
-  isStepSkipped(step) {
-    return this.state.skipped.has(step)
+    activeStep: 0
   }
 
   handleNext = () => {
     const { activeStep } = this.state
-    let { skipped } = this.state
-    if (this.isStepSkipped(activeStep)) {
-      skipped = new Set(skipped.values())
-      skipped.delete(activeStep)
-    }
+
     this.setState({
-      activeStep: activeStep + 1,
-      skipped
+      activeStep: activeStep + 1
     })
   }
 
@@ -70,19 +60,6 @@ class LessonStepper extends Component {
     const { activeStep } = this.state
     this.setState({
       activeStep: activeStep - 1
-    })
-  }
-
-  handleSkip = () => {
-    const { activeStep } = this.state
-    if (!this.isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.")
-    }
-    const skipped = new Set(this.state.skipped.values())
-    skipped.add(activeStep)
-    this.setState({
-      activeStep: this.state.activeStep + 1,
-      skipped
     })
   }
 
@@ -102,14 +79,6 @@ class LessonStepper extends Component {
           {steps.map((label, index) => {
             const props = {}
             const labelProps = {}
-            if (this.isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
-              )
-            }
-            if (this.isStepSkipped(index)) {
-              props.completed = false
-            }
             return (
               <Step key={label} {...props}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
@@ -117,7 +86,7 @@ class LessonStepper extends Component {
             )
           })}
         </Stepper>
-        <div>
+        <div className={classes.container}>
           {activeStep === steps.length ? (
             <div>
               <Typography className={classes.instructions}>
@@ -140,16 +109,6 @@ class LessonStepper extends Component {
                 >
                   Back
                 </Button>
-                {this.isStepOptional(activeStep) && (
-                  <Button
-                    variant="raised"
-                    color="primary"
-                    onClick={this.handleSkip}
-                    className={classes.button}
-                  >
-                    Skip
-                  </Button>
-                )}
                 <Button
                   variant="raised"
                   color="primary"

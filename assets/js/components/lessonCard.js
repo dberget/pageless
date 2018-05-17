@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import LessonStepper from "./lessonStepper"
 
 import { withStyles } from "@material-ui/core/styles"
@@ -19,10 +19,16 @@ import ShareIcon from "@material-ui/icons/Share"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import lessonStepper from "./lessonStepper"
+import Chip from "@material-ui/core/Chip"
+import { Divider } from "@material-ui/core"
 
 const styles = theme => ({
   card: {
     maxWidth: 400
+  },
+  chip: {
+    backgroundColor: red[500],
+    color: "white"
   },
   media: {
     height: 0,
@@ -41,9 +47,23 @@ const styles = theme => ({
   expandOpen: {
     transform: "rotate(180deg)"
   },
-  avatar: {
-    backgroundColor: red[500]
-  }
+  title: {
+    fontSize: "1rem"
+  },
+  stats: {
+    borderLeftStyle: "solid",
+    borderLeft: 1,
+    display: "inline",
+    color: "inherit",
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
+  h3: {
+    margin: 0,
+    marginTop: ".5rem",
+    marginBottom: ".5rem"
+  },
+  button: { padding: "inherit" }
 })
 
 class LessonCard extends Component {
@@ -59,18 +79,22 @@ class LessonCard extends Component {
       <div>
         <Card>
           <CardHeader
-            avatar={
-              <Avatar aria-label="Recipe" className={classes.avatar}>
-                R
-              </Avatar>
-            }
             action={
-              <IconButton>
-                <MoreVertIcon />
-              </IconButton>
+              <Fragment>
+                <Chip label={"Required"} className={classes.chip} />
+                <IconButton>
+                  <MoreVertIcon />
+                </IconButton>
+              </Fragment>
             }
-            title="OnBoarding"
-            subheader="REQUIRED"
+            title={<h3 className={classes.h3}>Getting Started 101</h3>}
+            subheader={
+              <Fragment>
+                Lessons: 3 <div className={classes.stats} /> Seat Time: 15
+                Minutes
+              </Fragment>
+            }
+            classes={{ title: classes.title }}
           />
           <CardContent>
             <Typography component="p">
@@ -79,6 +103,9 @@ class LessonCard extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.actions} disableActionSpacing>
+            <Button classes={classes.button} variant="raised" color="primary">
+              Begin Course
+            </Button>
             <IconButton
               className={classnames(classes.expand, {
                 [classes.expandOpen]: this.state.expanded
