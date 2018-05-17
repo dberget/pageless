@@ -8,9 +8,10 @@ import CssBaseline from "@material-ui/core/CssBaseline"
 
 document.addEventListener("DOMContentLoaded", () => {
   ReactDOM.render(
-    <CssBaseline>
+    <React.Fragment>
+      <CssBaseline />
       <App />
-    </CssBaseline>,
+    </React.Fragment>,
     document.getElementById("app")
   )
 })

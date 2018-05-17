@@ -38,6 +38,21 @@ defmodule Pageless.Companies do
   def get_company!(id), do: Repo.get!(Company, id)
 
   @doc """
+
+  Gets single company by slug
+
+  """
+  def get_company_by_slug(slug) do
+    case Repo.get_by(Company, %{slug: slug}) do
+      %Company{} = company ->
+        {:ok, %{company: company}}
+
+      _ ->
+        {:error, "company not found"}
+    end
+  end
+
+  @doc """
   Creates a company.
 
   ## Examples

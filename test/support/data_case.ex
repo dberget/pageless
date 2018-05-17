@@ -22,6 +22,7 @@ defmodule Pageless.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Pageless.DataCase
+      import Pageless.TestHelpers
     end
   end
 

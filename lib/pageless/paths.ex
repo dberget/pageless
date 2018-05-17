@@ -9,19 +9,6 @@ defmodule Pageless.Paths do
   alias Pageless.Paths.Path
 
   @doc """
-  Returns the list of paths.
-
-  ## Examples
-
-      iex> list_paths()
-      [%Path{}, ...]
-
-  """
-  def list_paths do
-    Repo.all(Path)
-  end
-
-  @doc """
   Gets a single path.
 
   Raises `Ecto.NoResultsError` if the Path does not exist.

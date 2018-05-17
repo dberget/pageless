@@ -1,5 +1,4 @@
 const path = require("path")
-const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 module.exports = (env, argv) => ({
   entry: "./js/app.js",
@@ -17,6 +16,5 @@ module.exports = (env, argv) => ({
         }
       }
     ]
-  },
-  plugins: [new CopyWebpackPlugin([{ from: "static/", to: "../" }])]
+  }
 })

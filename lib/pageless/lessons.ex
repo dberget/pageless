@@ -9,19 +9,6 @@ defmodule Pageless.Lessons do
   alias Pageless.Lessons.Lesson
 
   @doc """
-  Returns the list of lessons.
-
-  ## Examples
-
-      iex> list_lessonss()
-      [%Lesson{}, ...]
-
-  """
-  def list_lessons do
-    Repo.all(Lesson)
-  end
-
-  @doc """
   Gets a single lessons.
 
   Raises `Ecto.NoResultsError` if the lessons does not exist.
