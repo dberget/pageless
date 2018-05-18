@@ -24,7 +24,7 @@ defmodule PagelessWeb.Auth do
         sign_in(conn, user)
 
       user_id = get_session(conn, :user_id) ->
-        with {:ok, user} <- Users.get_user_by_id(user_id),
+        with {:ok, user} <- Users.get_user!(user_id),
              true <- user.session_salt == get_session(conn, :salt) do
           sign_in(conn, user)
         else

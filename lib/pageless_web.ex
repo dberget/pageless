@@ -24,7 +24,7 @@ defmodule PagelessWeb do
       import PagelessWeb.Router.Helpers
       import PagelessWeb.Gettext
 
-      import PagelessWeb.Plugs.Auth,
+      import PagelessWeb.Auth,
         only: [
           fetch_current_user_by_session: 2,
           authenticate_with_token: 2,
@@ -55,7 +55,7 @@ defmodule PagelessWeb do
     quote do
       use Phoenix.Router
       import Plug.Conn
-      import PagelessWeb.Plugs.Auth
+      import PagelessWeb.Auth
       import Phoenix.Controller
     end
   end
