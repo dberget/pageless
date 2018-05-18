@@ -1,17 +1,3 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Pageless.Repo.insert!(%Pageless.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
-
-# Companies
-
 alias Pageless.{Users.User, Assignments.Assignment, Companies.Company, Paths.Path, Lessons.Lesson}
 alias Pageless.Repo
 
@@ -51,14 +37,18 @@ people =
   Enum.map(people_names, fn person_name ->
     [first_name, last_name] = person_name |> String.split(" ")
 
-    Repo.insert!(%User{
-      first_name: first_name,
-      last_name: last_name,
-      email: first_name <> last_name <> "@gmail.com",
-      state: Enum.random(["ACTIVE", "DISABLED"]),
-      role: Enum.random(["ADMIN", "LEARNER"]),
-      company: Enum.random(companies)
-    })
+    user =
+      User.create_changeset(%User{
+        first_name: first_name,
+        last_name: last_name,
+        email: first_name <> last_name <> "@gmail.com",
+        password: Enum.take_random(?a..?z, 10),
+        state: Enum.random(["ACTIVE", "DISABLED"]),
+        role: Enum.random(["ADMIN", "LEARNER"]),
+        company: Enum.random(companies)
+      })
+
+    Repo.insert!(user)
   end)
 
 # paths

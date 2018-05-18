@@ -63,6 +63,7 @@ defmodule Pageless.Users.User do
   defp put_password_hash(changeset) do
     case changeset do
       %Changeset{valid?: true, changes: %{password: pass}} ->
+        IO.inspect(pass)
         put_change(changeset, :password_hash, Bcrypt.hashpwsalt(pass))
 
       _ ->
