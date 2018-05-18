@@ -67,7 +67,7 @@ defmodule PagelessWeb.Auth do
       conn
     else
       conn
-      |> redirect(to: PagelessWeb.session_path(conn, :new))
+      |> redirect(to: PagelessWeb.Router.Helpers.session_path(conn, :new))
       |> halt()
     end
   end
