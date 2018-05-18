@@ -5,11 +5,19 @@ import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
 import { Link } from "react-router-dom"
+import { withStyles } from "@material-ui/core/styles"
+
+const styles = theme => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1
+  }
+})
 
 class Menu extends Component {
   render() {
+    const { classes } = this.props
     return (
-      <AppBar position="absolute" style={{ zIndex: 1500 }}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography
             style={{ flex: 1 }}
@@ -28,4 +36,4 @@ class Menu extends Component {
   }
 }
 
-export default Menu
+export default withStyles(styles)(Menu)

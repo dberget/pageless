@@ -1,5 +1,7 @@
 import React, { Component } from "react"
+import { Link } from "react-router-dom"
 
+import { withStyles } from "@material-ui/core/styles"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
@@ -9,12 +11,10 @@ import AssignmentIcon from "@material-ui/icons/Assignment"
 import ViewList from "@material-ui/icons/ViewList"
 import PersonIcon from "@material-ui/icons/Person"
 import Drawer from "@material-ui/core/Drawer"
-import { withStyles } from "@material-ui/core/styles"
-import { Link } from "react-router-dom"
 
 const styles = theme => ({
   drawerPaper: {
-    position: "relative",
+    position: "fixed",
     width: 240
   },
   toolbar: theme.mixins.toolbar
@@ -27,7 +27,7 @@ class SideMenu extends Component {
       <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
         <div className={classes.toolbar} />
         <List component="nav">
-          <ListItem button component={Link} to="/lessons">
+          <ListItem button component={Link} to="/assignments">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>

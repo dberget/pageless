@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react"
 import LessonStepper from "./lessonStepper"
+import { Link } from "react-router-dom"
 
 import { withStyles } from "@material-ui/core/styles"
 import classnames from "classnames"
@@ -59,9 +60,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   h3: {
-    margin: 0,
-    marginTop: ".5rem",
-    marginBottom: ".5rem"
+    margin: ".5rem 0 .5rem 0"
   },
   button: { padding: "inherit" }
 })
@@ -103,7 +102,13 @@ class LessonCard extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.actions} disableActionSpacing>
-            <Button classes={classes.button} variant="raised" color="primary">
+            <Button
+              component={Link}
+              to="/course"
+              className={classes.button}
+              variant="raised"
+              color="primary"
+            >
               Begin Course
             </Button>
             <IconButton
