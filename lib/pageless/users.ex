@@ -24,7 +24,15 @@ defmodule Pageless.Users do
   @doc """
   Gets a single user.
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user_by_id(id) do
+    case Repo.get(User, id) do
+      %User{} = user ->
+        {:ok, user}
+
+      _ ->
+        {:error, "User not found"}
+    end
+  end
 
   @doc """
   Gets a single user by their email.

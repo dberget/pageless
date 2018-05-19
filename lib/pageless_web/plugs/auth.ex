@@ -11,6 +11,7 @@ defmodule PagelessWeb.Auth do
   alias Pageless.Repo
   alias Pageless.Users
   alias Pageless.Users.User
+  alias PagelessWeb.Router.Helpers
 
   @doc """
   A plug that looks up the currently logged in user for the current company
@@ -19,12 +20,12 @@ defmodule PagelessWeb.Auth do
   """
   def fetch_current_user_by_session(conn, _opts \\ []) do
     cond do
-      # This is a backdoor that makes auth testing easier
+      # # This is a backdoor that makes auth testing easier
       user = conn.assigns[:current_user] ->
         sign_in(conn, user)
 
       user_id = get_session(conn, :user_id) ->
-        with {:ok, user} <- Users.get_user!(user_id),
+        with {:ok, user} <- Users.get_user_by_id(user_id),
              true <- user.session_salt == get_session(conn, :salt) do
           sign_in(conn, user)
         else
@@ -67,7 +68,7 @@ defmodule PagelessWeb.Auth do
       conn
     else
       conn
-      |> redirect(to: PagelessWeb.Router.Helpers.session_path(conn, :new))
+      |> redirect(to: Helpers.session_path(conn, :new))
       |> halt()
     end
   end
@@ -77,7 +78,7 @@ defmodule PagelessWeb.Auth do
   """
   def sign_in(conn, user) do
     conn
-    |> put_current_user(user)
+    |> assign(:current_user, user)
     |> put_session(:user_id, user.id)
     |> put_session(:salt, user.session_salt)
   end

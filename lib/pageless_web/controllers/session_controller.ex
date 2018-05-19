@@ -15,7 +15,7 @@ defmodule PagelessWeb.SessionController do
       {:ok, conn} ->
         conn
         |> put_flash(:info, "Welcome back!")
-        |> redirect(to: page_path(conn, :index))
+        |> redirect(to: app_path(conn, :index))
 
       {:error, _reason, conn} ->
         conn
@@ -24,10 +24,16 @@ defmodule PagelessWeb.SessionController do
     end
   end
 
+  def delete(conn, _params) do
+    conn
+    |> PagelessWeb.Auth.sign_out()
+    |> redirect(to: page_path(conn, :index))
+  end
+
   defp redirect_if_signed_in(conn, _opts) do
-    if conn.assigns.current_user do
+    if conn.path_info !== ["logout"] && conn.assigns.current_user do
       conn
-      |> redirect(to: page_path(conn, :index))
+      |> redirect(to: app_path(conn, :index))
       |> halt()
     else
       conn
