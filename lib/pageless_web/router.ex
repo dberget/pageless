@@ -1,0 +1,38 @@
+defmodule PagelessWeb.Router do
+  use PagelessWeb, :router
+
+  pipeline :anonymous_browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug :fetch_current_user_by_session
+  end
+
+  pipeline :authenticated_browser do
+    plug :anonymous_browser
+    plug :authenticate_user
+  end
+
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/", PagelessWeb do
+    pipe_through :anonymous_browser
+
+    get "/", PageController, :index
+
+    get "/login", SessionController, :new
+    post("/login", SessionController, :create)
+
+    delete("logout", SessionController, :delete)
+  end
+
+  scope "/", PagelessWeb do
+    pipe_through :authenticated_browser
+
+    get "/app", AppController, :index
+  end
+end

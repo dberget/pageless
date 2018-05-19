@@ -29,7 +29,9 @@ class Menu extends Component {
           >
             Pageless
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button component={Link} to="/logout" color="inherit">
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     )
