@@ -8,13 +8,15 @@
     <meta name="author" content="">
     <meta name="csrf_token" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
 
+    <%= if assigns[:user_id] do %>
+     <script>window.userToken = "<%= assigns[:user_id] %>" </script>
+    <% end %>
+    
+
     <%= if assigns[:api_token] do %>
      <meta name="api_token" content="<%= @api_token %>">
     <% end %>
 
-    <%= if assigns[:company_id] do %>
-     <meta name="company_id" content="<%= @company_id %>">
-    <% end %>
 
     <title>Pageless</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">

@@ -27,12 +27,14 @@ defmodule PagelessWeb.Router do
     get "/login", SessionController, :new
     post("/login", SessionController, :create)
 
-    delete("logout", SessionController, :delete)
+    get("/logout", SessionController, :delete)
+    delete("/logout", SessionController, :delete)
   end
 
   scope "/", PagelessWeb do
     pipe_through :authenticated_browser
 
     get "/app", AppController, :index
+    get "/app/:path", AppController, :index
   end
 end

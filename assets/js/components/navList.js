@@ -22,18 +22,18 @@ const styles = theme => ({
 
 class SideMenu extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, match } = this.props
     return (
       <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
         <div className={classes.toolbar} />
         <List component="nav">
-          <ListItem button component={Link} to="/assignments">
+          <ListItem button component={Link} to="/app/assignments">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="My Assignments" />
           </ListItem>
-          <ListItem button component={Link} to="/courses">
+          <ListItem button component={Link} to="/app/courses">
             <ListItemIcon>
               <ViewList />
             </ListItemIcon>

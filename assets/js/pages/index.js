@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import socket from "../socket.js"
 
 import Menu from "../components/menu"
 import LessonCard from "../components/lessonCard"
@@ -33,19 +34,35 @@ const styles = theme => ({
 })
 
 class App extends Component {
+  state = { user: {} }
+
+  componentDidMount() {
+    let channel = socket.channel(`user: ${window.userToken}`, {})
+    this.setState({ channel: channel })
+
+    channel
+      .join()
+      .receive("ok", resp => {
+        this.setState({ user: resp.user })
+      })
+      .receive("error", resp => {
+        console.log("Unable to join", resp)
+      })
+  }
+
   render() {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <Menu />
+        <Menu user={this.state.user} />
         <SideMenu />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route exact path="/" component={Home} />
-          <Route path="/lesson" component={Lesson} />
-          <Route path="/assignments" component={Assignments} />
-          <Route path="/courses" component={AllCourses} />
-          <Route path="/course" component={Course} />
+          <Route exact path="/app" component={Home} />
+          <Route path="/app/lesson" component={Lesson} />
+          <Route path="/app/assignments" component={Assignments} />
+          <Route path="/app/courses" component={AllCourses} />
+          <Route path="/app/course" component={Course} />
         </main>
       </div>
     )

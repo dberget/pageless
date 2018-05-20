@@ -10,17 +10,20 @@ import { withStyles } from "@material-ui/core/styles"
 const styles = theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1
+  },
+  marginAuto: {
+    marginRight: "auto"
   }
 })
 
 class Menu extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, user } = this.props
     return (
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography
-            style={{ flex: 1 }}
+            className={classes.marginAuto}
             variant="title"
             color="inherit"
             noWrap
@@ -29,7 +32,10 @@ class Menu extends Component {
           >
             Pageless
           </Typography>
-          <Button component={Link} to="/logout" color="inherit">
+          <Typography color="inherit">
+            {user.firstName} {user.lastName}
+          </Typography>
+          <Button href="/logout" color="inherit">
             Logout
           </Button>
         </Toolbar>

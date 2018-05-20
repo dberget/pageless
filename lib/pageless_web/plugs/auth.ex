@@ -79,6 +79,7 @@ defmodule PagelessWeb.Auth do
   def sign_in(conn, user) do
     conn
     |> assign(:current_user, user)
+    |> assign(:user_id, user.id)
     |> put_session(:user_id, user.id)
     |> put_session(:salt, user.session_salt)
   end
@@ -181,7 +182,7 @@ defmodule PagelessWeb.Auth do
   Returns the secret key base to use for signing JSON Web Tokens.
   """
   def jwt_secret do
-    Application.get_env(:Pageless, Pageless.Endpoint)[:secret_key_base]
+    Application.get_env(:pageless, PagelessWeb.Endpoint)[:secret_key_base]
   end
 
   defp verify_bearer_token(conn) do
