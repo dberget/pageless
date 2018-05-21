@@ -36,5 +36,6 @@ defmodule PagelessWeb.Router do
 
     get "/app", AppController, :index
     get "/app/:path", AppController, :index
+    get "/app/:path/:id", AppController, :index
   end
 end

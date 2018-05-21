@@ -8,17 +8,20 @@ defmodule Pageless.Paths.Path do
 
   schema "paths" do
     field :description, :string
+    field :title, :string
 
     belongs_to :company, Company
     has_many :lessons, Lesson
     has_many :assignments, Assignment
+    many_to_many :users, Pageless.Users.User, join_through: "assignments"
+
     timestamps()
   end
 
   @doc false
   def changeset(path, attrs) do
     path
-    |> cast(attrs, [:description, :company_id])
+    |> cast(attrs, [:description, :company_id, :title])
     |> validate_required([:company_id])
   end
 end

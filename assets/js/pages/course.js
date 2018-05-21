@@ -25,31 +25,17 @@ const styles = theme => ({
   }
 })
 
-function getSteps() {
-  return ["Select campaign settings", "Create an ad group", "Create an ad"]
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`
-    case 1:
-      return "An ad group contains one or more ads which target a shared set of keywords."
-    case 2:
-      return `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`
-    default:
-      return "Unknown step"
-  }
-}
-
 class Course extends React.Component {
-  state = {
-    activeStep: 0
+  constructor() {
+    super()
+
+    this.state = {
+      activeStep: 0
+    }
+  }
+
+  componentDidMount() {
+    this.props.getLessons(this.props.match.params.id)
   }
 
   handleNext = () => {
@@ -71,55 +57,61 @@ class Course extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
-    const steps = getSteps()
+    const { classes, match, lessons } = this.props
     const { activeStep } = this.state
 
     return (
-      <div className={classes.root}>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((label, index) => {
-            return (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-                <StepContent>
-                  <Typography>{getStepContent(index)}</Typography>
-                  <div className={classes.actionsContainer}>
-                    <div>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={this.handleBack}
-                        className={classes.button}
-                      >
-                        Back
-                      </Button>
+      <React.Fragment>
+        {lessons == [] ? (
+          <div />
+        ) : (
+          <div className={classes.root}>
+            <Stepper activeStep={activeStep} orientation="vertical">
+              {lessons.map((lesson, index) => {
+                return (
+                  <Step key={lesson.title}>
+                    <StepLabel>{lesson.title}</StepLabel>
+                    <StepContent>
+                      <Typography>{lesson.description}</Typography>
+                      <div className={classes.actionsContainer}>
+                        <div>
+                          <Button
+                            disabled={activeStep === 0}
+                            onClick={this.handleBack}
+                            className={classes.button}
+                          >
+                            Back
+                          </Button>
 
-                      <Button
-                        variant="raised"
-                        color="primary"
-                        component={Link}
-                        to="lesson"
-                        onClick={this.handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? "Finish" : "View"}
-                      </Button>
-                    </div>
-                  </div>
-                </StepContent>
-              </Step>
-            )
-          })}
-        </Stepper>
-        {activeStep === steps.length && (
-          <Paper square elevation={0} className={classes.resetContainer}>
-            <Typography>All steps completed - you&quot;re finished</Typography>
-            <Button onClick={this.handleReset} className={classes.button}>
-              Reset
-            </Button>
-          </Paper>
+                          <Button
+                            variant="raised"
+                            color="primary"
+                            component={Link}
+                            to={`/app/lesson/${lesson.id}`}
+                            onClick={this.handleNext}
+                            className={classes.button}
+                          >
+                            {activeStep === lessons.length ? "Finish" : "View"}
+                          </Button>
+                        </div>
+                      </div>
+                    </StepContent>
+                  </Step>
+                )
+              })}
+            </Stepper>
+            {activeStep === lessons.length &&
+              lessons.length > 0 && (
+                <Paper square elevation={0} className={classes.resetContainer}>
+                  <Typography>All steps completed - you're finished</Typography>
+                  <Button onClick={this.handleReset} className={classes.button}>
+                    Reset
+                  </Button>
+                </Paper>
+              )}
+          </div>
         )}
-      </div>
+      </React.Fragment>
     )
   }
 }

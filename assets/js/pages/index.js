@@ -34,19 +34,43 @@ const styles = theme => ({
 })
 
 class App extends Component {
-  state = { user: {} }
+  state = { channel: {}, user: {}, paths: [], lessons: [], lesson: {} }
 
-  componentDidMount() {
+  componentWillMount() {
     let channel = socket.channel(`user: ${window.userToken}`, {})
     this.setState({ channel: channel })
 
     channel
       .join()
       .receive("ok", resp => {
-        this.setState({ user: resp.user })
+        this.setState({
+          user: {
+            firstName: resp.user.firstName,
+            lastName: resp.user.lastName,
+            id: resp.user.id,
+            email: resp.user.email
+          },
+          paths: resp.user.paths
+        })
       })
       .receive("error", resp => {
         console.log("Unable to join", resp)
+      })
+  }
+
+  getLessons = id => {
+    this.state.channel
+      .push("get_lessons", { path_id: id })
+      .receive("ok", resp => {
+        this.setState({ lessons: resp.lessons })
+      })
+  }
+
+  getLesson = id => {
+    this.state.channel
+      .push("get_lesson", { lesson_id: id })
+      .receive("ok", resp => {
+        this.setState({ lesson: resp.lesson })
       })
   }
 
@@ -59,10 +83,33 @@ class App extends Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Route exact path="/app" component={Home} />
-          <Route path="/app/lesson" component={Lesson} />
-          <Route path="/app/assignments" component={Assignments} />
+          <Route
+            path="/app/assignments"
+            render={routeprops => (
+              <Assignments {...routeprops} assignments={this.state.paths} />
+            )}
+          />
+          <Route
+            path="/app/course/:id"
+            render={routeprops => (
+              <Course
+                {...routeprops}
+                getLessons={this.getLessons}
+                lessons={this.state.lessons}
+              />
+            )}
+          />
+          <Route
+            path="/app/lesson/:id"
+            render={routeprops => (
+              <Lesson
+                {...routeprops}
+                getLesson={this.getLesson}
+                lesson={this.state.lesson}
+              />
+            )}
+          />
           <Route path="/app/courses" component={AllCourses} />
-          <Route path="/app/course" component={Course} />
         </main>
       </div>
     )

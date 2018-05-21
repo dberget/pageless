@@ -8,6 +8,7 @@ defmodule Pageless.Assignments.Assignment do
 
     belongs_to(:user, User)
     belongs_to(:path, Path)
+
     timestamps()
   end
 

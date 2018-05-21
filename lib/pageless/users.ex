@@ -7,15 +7,11 @@ defmodule Pageless.Users do
   alias Pageless.Repo
 
   alias Pageless.Users.User
+  alias Pageless.Assignments.Assignment
+  alias Pageless.Paths.Path
 
   @doc """
   Returns the list of users.
-
-  ## Examples
-
-      iex> list_users()
-      [%User{}, ...]
-
   """
   def list_users do
     Repo.all(User)
@@ -34,6 +30,23 @@ defmodule Pageless.Users do
     end
   end
 
+  def get_user_assignments(id) do
+    query = from a in Assignment, where: a.user_id == ^id
+
+    Repo.all(query)
+  end
+
+  # def get_user_paths(id) do
+  #   query = from p in Path, join: a in Assignment, where: a.user_id == ^id, select: p
+
+  #   Repo.all(query)
+  # end
+
+  def preload_all(user) do
+    user
+    |> Repo.preload(paths: [:lessons])
+  end
+
   @doc """
   Gets a single user by their email.
   """
@@ -42,15 +55,6 @@ defmodule Pageless.Users do
 
   @doc """
   Creates a user.
-
-  ## Examples
-
-      iex> create_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> create_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def create_user(attrs \\ %{}) do
     %User{}
@@ -60,15 +64,6 @@ defmodule Pageless.Users do
 
   @doc """
   Updates a user.
-
-  ## Examples
-
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
-
-      iex> update_user(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def update_user(%User{} = user, attrs) do
     user
@@ -78,15 +73,6 @@ defmodule Pageless.Users do
 
   @doc """
   Deletes a User.
-
-  ## Examples
-
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
-
   """
   def delete_user(%User{} = user) do
     Repo.delete(user)
@@ -94,12 +80,6 @@ defmodule Pageless.Users do
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
-
-  ## Examples
-
-      iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
-
   """
   def change_user(%User{} = user) do
     User.create_changeset(user, %{})

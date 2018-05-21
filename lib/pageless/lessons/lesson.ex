@@ -6,6 +6,7 @@ defmodule Pageless.Lessons.Lesson do
 
   schema "lessons" do
     field :description, :string
+    field :title, :string
     field :type, :string
     field :content, :string
 
@@ -16,7 +17,7 @@ defmodule Pageless.Lessons.Lesson do
   @doc false
   def changeset(lesson, attrs) do
     lesson
-    |> cast(attrs, [:description, :type, :content, :path_id])
+    |> cast(attrs, [:description, :type, :content, :path_id, :title])
     |> validate_required(attrs, [:description, :type, :content, :path_id])
   end
 end

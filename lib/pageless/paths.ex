@@ -7,11 +7,28 @@ defmodule Pageless.Paths do
   alias Pageless.Repo
 
   alias Pageless.Paths.Path
+  alias Pageless.Lessons.Lesson
 
   @doc """
   Gets a single path.
   """
   def get_path!(id), do: Repo.get!(Path, id)
+
+  @doc """
+  Gets all lessons given path.
+  """
+  def get_path_lessons(path_id) when is_integer(path_id) do
+    query = from l in Lesson, where: l.path_id == ^path_id
+
+    Repo.all(query)
+  end
+
+  def get_path_lessons(path_id) do
+    id = String.to_integer(path_id)
+    query = from l in Lesson, where: l.path_id == ^id
+
+    Repo.all(query)
+  end
 
   @doc """
   Creates a path.

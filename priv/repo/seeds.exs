@@ -30,7 +30,8 @@ people_names = [
   "Billy Williams",
   "Cap Anson",
   "Mordecai Brown",
-  "Ernie Banks"
+  "Ernie Banks",
+  "David Berget"
 ]
 
 people =
@@ -41,8 +42,9 @@ people =
       User.create_changeset(%User{
         first_name: first_name,
         last_name: last_name,
-        email: first_name <> last_name <> "@gmail.com",
-        password: Enum.take_random(?a..?z, 10),
+        email: String.downcase(first_name) <> String.downcase(last_name) <> "@gmail.com",
+        password: "password",
+        password_hash: Comeonin.Bcrypt.hashpwsalt("password"),
         state: Enum.random(["ACTIVE", "DISABLED"]),
         role: Enum.random(["ADMIN", "LEARNER"]),
         company: Enum.random(companies)
@@ -64,13 +66,14 @@ paths =
     path_descriptions,
     &Repo.insert!(%Path{
       description: &1,
+      title: "Sample Path",
       company: Enum.random(companies)
     })
   )
 
 # lessons
 
-lesson_descriptions = [
+lesson_details = [
   "This is lesson 1",
   "Onboarding Training lesson",
   "Your Lesson"
@@ -78,9 +81,10 @@ lesson_descriptions = [
 
 lessons =
   Enum.map(
-    path_descriptions,
+    lesson_details,
     &Repo.insert!(%Lesson{
       description: &1,
+      title: "Sample Lesson",
       type: Enum.random(["VIDEO", "ARTICLE", "ELEARNING", "OTHER"]),
       content: Enum.take_random(?a..?z, 10) |> to_string,
       path: Enum.random(paths)

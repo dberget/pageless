@@ -73,7 +73,7 @@ class LessonCard extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, data } = this.props
     return (
       <div>
         <Card>
@@ -86,25 +86,22 @@ class LessonCard extends Component {
                 </IconButton>
               </Fragment>
             }
-            title={<h3 className={classes.h3}>Getting Started 101</h3>}
+            title={<h3 className={classes.h3}>{data.title}</h3>}
             subheader={
               <Fragment>
-                Lessons: 3 <div className={classes.stats} /> Seat Time: 15
-                Minutes
+                Lessons: {data.lessons.length} <div className={classes.stats} />
+                Seat Time: 15 Minutes
               </Fragment>
             }
             classes={{ title: classes.title }}
           />
           <CardContent>
-            <Typography component="p">
-              This course will get you up to speed in your new role, and get you
-              well on your way to being a succesful member of the team.
-            </Typography>
+            <Typography component="p">{data.description}</Typography>
           </CardContent>
           <CardActions className={classes.actions} disableActionSpacing>
             <Button
               component={Link}
-              to="/course"
+              to={`/app/course/${data.id}`}
               className={classes.button}
               variant="raised"
               color="primary"
