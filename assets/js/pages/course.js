@@ -30,12 +30,19 @@ class Course extends React.Component {
     super()
 
     this.state = {
-      activeStep: 0
+      activeStep: 0,
+      is_loading: true
     }
   }
 
-  componentDidMount() {
-    this.props.getLessons(this.props.match.params.id)
+  componentWillMount() {
+    this.getLessons(this.props.match.params.id)
+  }
+
+  getLessons = id => {
+    channelGlobal.push("get_lessons", { path_id: id }).receive("ok", resp => {
+      this.setState({ lessons: resp.lessons, is_loading: false })
+    })
   }
 
   handleNext = () => {
@@ -57,14 +64,12 @@ class Course extends React.Component {
   }
 
   render() {
-    const { classes, match, lessons } = this.props
-    const { activeStep } = this.state
+    const { classes, match } = this.props
+    const { activeStep, lessons, is_loading } = this.state
 
     return (
       <React.Fragment>
-        {lessons == [] ? (
-          <div />
-        ) : (
+        {is_loading ? null : (
           <div className={classes.root}>
             <Stepper activeStep={activeStep} orientation="vertical">
               {lessons.map((lesson, index) => {

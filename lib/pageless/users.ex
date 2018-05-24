@@ -8,7 +8,6 @@ defmodule Pageless.Users do
 
   alias Pageless.Users.User
   alias Pageless.Assignments.Assignment
-  alias Pageless.Paths.Path
 
   @doc """
   Returns the list of users.
@@ -35,12 +34,6 @@ defmodule Pageless.Users do
 
     Repo.all(query)
   end
-
-  # def get_user_paths(id) do
-  #   query = from p in Path, join: a in Assignment, where: a.user_id == ^id, select: p
-
-  #   Repo.all(query)
-  # end
 
   def preload_all(user) do
     user

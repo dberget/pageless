@@ -37,10 +37,7 @@ class App extends Component {
   state = { channel: {}, user: {}, paths: [], lessons: [], lesson: {} }
 
   componentWillMount() {
-    let channel = socket.channel(`user: ${window.userToken}`, {})
-    this.setState({ channel: channel })
-
-    channel
+    channelGlobal
       .join()
       .receive("ok", resp => {
         this.setState({
@@ -55,22 +52,6 @@ class App extends Component {
       })
       .receive("error", resp => {
         console.log("Unable to join", resp)
-      })
-  }
-
-  getLessons = id => {
-    this.state.channel
-      .push("get_lessons", { path_id: id })
-      .receive("ok", resp => {
-        this.setState({ lessons: resp.lessons })
-      })
-  }
-
-  getLesson = id => {
-    this.state.channel
-      .push("get_lesson", { lesson_id: id })
-      .receive("ok", resp => {
-        this.setState({ lesson: resp.lesson })
       })
   }
 
@@ -89,26 +70,8 @@ class App extends Component {
               <Assignments {...routeprops} assignments={this.state.paths} />
             )}
           />
-          <Route
-            path="/app/course/:id"
-            render={routeprops => (
-              <Course
-                {...routeprops}
-                getLessons={this.getLessons}
-                lessons={this.state.lessons}
-              />
-            )}
-          />
-          <Route
-            path="/app/lesson/:id"
-            render={routeprops => (
-              <Lesson
-                {...routeprops}
-                getLesson={this.getLesson}
-                lesson={this.state.lesson}
-              />
-            )}
-          />
+          <Route path="/app/course/:id" component={Course} />
+          <Route path="/app/lesson/:id" component={Lesson} />
           <Route path="/app/courses" component={AllCourses} />
         </main>
       </div>
