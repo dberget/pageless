@@ -15,6 +15,11 @@ defmodule PagelessWeb.Router do
     plug :authenticate_user
   end
 
+  pipeline :admin_browser do
+    plug :anonymous_browser
+    plug :validate_admin
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -29,6 +34,13 @@ defmodule PagelessWeb.Router do
 
     get("/logout", SessionController, :delete)
     delete("/logout", SessionController, :delete)
+  end
+
+  scope "/", PagelessWeb do
+    pipe_through :admin_browser
+
+    get "/admin", AppController, :admin
+    get "/admin/:path", AppController, :admin
   end
 
   scope "/", PagelessWeb do

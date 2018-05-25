@@ -11,9 +11,12 @@ module.exports = (env, argv) => ({
       new OptimizeCSSAssetsPlugin({})
     ]
   },
-  entry: ["babel-polyfill", "./js/app.js"],
+  entry: {
+    app: "./js/app.js",
+    admin: "./js/admin.js"
+  },
   output: {
-    filename: "app.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "../priv/static/js")
   },
   module: {

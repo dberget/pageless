@@ -84,6 +84,16 @@ defmodule PagelessWeb.Auth do
     |> put_session(:salt, user.session_salt)
   end
 
+  def validate_admin(conn, _opts \\ []) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].role == "ADMIN" do
+      conn
+    else
+      conn
+      |> redirect(to: Helpers.session_path(conn, :new))
+      |> halt()
+    end
+  end
+
   @doc """
   Signs a user out.
   """

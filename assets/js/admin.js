@@ -4,7 +4,7 @@ import "./socket"
 
 import React from "react"
 import ReactDOM from "react-dom"
-import App from "./pages/index"
+import App from "./admin_app/pages/index"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { BrowserRouter } from "react-router-dom"
 
@@ -16,6 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <App />
       </BrowserRouter>
     </React.Fragment>,
-    document.getElementById("app")
+    document.getElementById("admin_app")
   )
 })
