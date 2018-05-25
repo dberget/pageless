@@ -15,7 +15,6 @@ defmodule PagelessWeb.AppController do
 
   def admin(conn, _params) do
     user = conn.assigns[:current_user]
-    IO.inspect(conn)
 
     conn
     |> assign(:api_token, PagelessWeb.Auth.generate_signed_jwt(user))
@@ -24,6 +23,7 @@ defmodule PagelessWeb.AppController do
 
   defp get_subdomain(conn, _opts) do
     subdomain = String.split(conn.host, ".") |> hd()
+
     assign(conn, :subdomain, subdomain)
   end
 end

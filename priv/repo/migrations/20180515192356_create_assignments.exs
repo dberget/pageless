@@ -3,7 +3,7 @@ defmodule Pageless.Repo.Migrations.CreateAssignments do
 
   def change do
     execute(
-      "CREATE TYPE assignment_status AS ENUM ('COMPLETE','INCOMPLETE', 'REQUIRED', 'OTHER')"
+      "CREATE TYPE assignment_status AS ENUM ('COMPLETE','INCOMPLETE', 'REQUIRED', 'OTHER', 'OPTIONAL')"
     )
 
     create table(:assignments) do

@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button"
 import Paper from "@material-ui/core/Paper"
 import Typography from "@material-ui/core/Typography"
 import { Link } from "react-router-dom"
+import phoenixChannel from "../../socket"
 
 const styles = theme => ({
   root: {
@@ -40,7 +41,7 @@ class Course extends React.Component {
   }
 
   getLessons = id => {
-    channelGlobal.push("get_lessons", { path_id: id }).receive("ok", resp => {
+    phoenixChannel.push("get_lessons", { path_id: id }).receive("ok", resp => {
       this.setState({ lessons: resp.lessons, is_loading: false })
     })
   }

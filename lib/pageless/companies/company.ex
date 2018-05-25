@@ -3,6 +3,7 @@ defmodule Pageless.Companies.Company do
   import Ecto.Changeset
   alias Pageless.Paths.Path
   alias Pageless.Users.User
+  alias Pageless.Courses.Course
 
   schema "companies" do
     field :state, :string
@@ -11,6 +12,7 @@ defmodule Pageless.Companies.Company do
 
     has_many :user, User
     has_many :paths, Path
+    has_many :courses, Course
     timestamps()
   end
 

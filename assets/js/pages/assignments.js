@@ -8,8 +8,6 @@ const styles = theme => ({
   }
 })
 
-const assignments = [1, 2, 3, 4]
-
 const AssignmentsList = props => {
   return props.assignments.map(assignment => (
     <div className={props.classes.container}>

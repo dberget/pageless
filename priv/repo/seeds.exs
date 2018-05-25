@@ -76,7 +76,12 @@ paths =
 lesson_details = [
   "This is lesson 1",
   "Onboarding Training lesson",
-  "Your Lesson"
+  "Your Lesson 1",
+  "Your Lesson 2",
+  "Your Lesson 3",
+  "Your Lesson 4",
+  "Your Lesson 5",
+  "Your Lesson 6"
 ]
 
 lessons =
@@ -86,8 +91,7 @@ lessons =
       description: &1,
       title: "Sample Lesson",
       type: Enum.random(["VIDEO", "ARTICLE", "ELEARNING", "OTHER"]),
-      content: Enum.take_random(?a..?z, 10) |> to_string,
-      path: Enum.random(paths)
+      content: Enum.take_random(?a..?z, 100) |> to_string
     })
   )
 

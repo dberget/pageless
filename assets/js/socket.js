@@ -11,6 +11,6 @@ const socket = new Socket("/socket", {
 })
 
 socket.connect()
-window.channelGlobal = socket.channel(`user: ${window.userToken}`, {})
+const phoenixChannel = socket.channel(`user: ${window.userToken}`, {})
 
-export default socket
+export default phoenixChannel

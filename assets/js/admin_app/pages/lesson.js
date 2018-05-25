@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { withStyles } from "@material-ui/core"
+import phoenixChannel from "../../socket"
 
 const styles = theme => ({})
 
@@ -11,7 +12,7 @@ class Lesson extends Component {
   }
 
   getLesson = id => {
-    channelGlobal.push("get_lesson", { lesson_id: id }).receive("ok", resp => {
+    phoenixChannel.push("get_lesson", { lesson_id: id }).receive("ok", resp => {
       this.setState({ lesson: resp.lesson, is_loading: false })
     })
   }

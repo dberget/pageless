@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import phoenixChannel from "../socket"
 
 import Menu from "../components/menu"
 import LessonCard from "../components/lessonCard"
@@ -36,7 +37,7 @@ class App extends Component {
   state = { channel: {}, user: {}, paths: [], lessons: [], lesson: {} }
 
   componentWillMount() {
-    channelGlobal
+    phoenixChannel
       .join()
       .receive("ok", resp => {
         this.setState({
