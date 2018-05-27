@@ -6,7 +6,7 @@ defmodule Pageless.PathsTest do
   describe "paths" do
     alias Pageless.Paths.Path
 
-    @valid_attrs %{}
+    @valid_attrs %{:title, :description, :steps}
     @update_attrs %{}
     @invalid_attrs %{}
 

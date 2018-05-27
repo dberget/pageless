@@ -11,6 +11,7 @@ defmodule Pageless.Repo.Migrations.CreateLesson do
       add :description, :text
       add :type, :content_type
       add :content, :text
+      add :company_id, references(:companies, on_delete: :delete_all)
 
       timestamps()
     end

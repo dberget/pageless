@@ -1,11 +1,22 @@
-alias Pageless.{Users.User, Assignments.Assignment, Companies.Company, Paths.Path, Lessons.Lesson}
+alias Pageless.{
+  Users.User,
+  Assignments.Assignment,
+  Companies.Company,
+  Paths.Path,
+  Lessons.Lesson,
+  Courses.Course,
+  Courses.CourseLesson,
+  Paths.PathStep
+}
+
 alias Pageless.Repo
 
+Repo.delete_all(Course)
 Repo.delete_all(User)
-Repo.delete_all(Assignment)
-Repo.delete_all(Company)
 Repo.delete_all(Path)
+Repo.delete_all(Assignment)
 Repo.delete_all(Lesson)
+Repo.delete_all(Company)
 
 company_names = ["Acme", "Looney Tunes", "eLevate Interactive"]
 
@@ -71,6 +82,25 @@ paths =
     })
   )
 
+# courses
+
+course_descriptions = [
+  "This is a course",
+  "Onboarding Training Course",
+  "Your Course",
+  "An awesome course"
+]
+
+courses =
+  Enum.map(
+    course_descriptions,
+    &Repo.insert!(%Course{
+      description: &1,
+      title: "Sample Course",
+      company: Enum.random(companies)
+    })
+  )
+
 # lessons
 
 lesson_details = [
@@ -91,6 +121,7 @@ lessons =
       description: &1,
       title: "Sample Lesson",
       type: Enum.random(["VIDEO", "ARTICLE", "ELEARNING", "OTHER"]),
+      company: Enum.random(companies),
       content: Enum.take_random(?a..?z, 100) |> to_string
     })
   )
@@ -104,6 +135,18 @@ Enum.each(people, fn person ->
       user: person,
       path: path,
       status: Enum.random(["COMPLETE", "INCOMPLETE", "REQUIRED", "OTHER"])
+    })
+  end)
+end)
+
+# Course Lessons
+
+Enum.each(lessons, fn lesson ->
+  courses
+  |> Enum.each(fn course ->
+    Repo.insert!(%CourseLesson{
+      course: course,
+      lesson: lesson
     })
   end)
 end)

@@ -21,8 +21,7 @@ defmodule Pageless.Users.User do
     field :session_salt, :string
 
     belongs_to :company, Company
-    has_many :assignments, Assignment
-    many_to_many :paths, Pageless.Paths.Path, join_through: "assignments"
+    many_to_many :paths, Pageless.Paths.Path, join_through: Assignment
 
     timestamps()
   end

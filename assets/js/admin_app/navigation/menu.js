@@ -28,7 +28,7 @@ class Menu extends Component {
             color="inherit"
             noWrap
             component={Link}
-            to="/"
+            to="/admin"
           >
             Pageless
           </Typography>

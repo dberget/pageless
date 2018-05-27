@@ -6,8 +6,9 @@ defmodule Pageless.Paths do
   import Ecto.Query, warn: false
   alias Pageless.Repo
 
-  alias Pageless.Paths.Path
+  alias Pageless.Paths.{Path, PathStep}
   alias Pageless.Lessons.Lesson
+  alias Pageless.Courses.Course
 
   @doc """
   Gets a single path.
@@ -15,19 +16,20 @@ defmodule Pageless.Paths do
   def get_path!(id), do: Repo.get!(Path, id)
 
   @doc """
-  Gets all lessons given path.
+  Get all steps for path.
   """
-  def get_path_lessons(path_id) when is_integer(path_id) do
-    query = from l in Lesson, where: l.path_id == ^path_id
+  def get_path_steps(path_id) do
+    id = String.to_integer(path_id)
+    query = from ps in PathStep, where: ps.path_id == ^id, order_by: :sort_id
 
-    Repo.all(query)
+    query
+    |> Repo.all()
+    |> load_lesson_or_course()
   end
 
-  def get_path_lessons(path_id) do
-    id = String.to_integer(path_id)
-    query = from l in Lesson, where: l.path_id == ^id
-
-    Repo.all(query)
+  def load_lesson_or_course(steps) do
+    steps
+    |> Enum.map(&load_resource/1)
   end
 
   @doc """
@@ -49,10 +51,14 @@ defmodule Pageless.Paths do
   end
 
   @doc """
-  Deletes a Path.
+  Creates a pathstep.
   """
-  def delete_path(%Path{} = path) do
-    Repo.delete(path)
+  def create_a_step_in_path(step) do
+    params = step |> Map.take([:lesson_id, :course_id, :sort_id])
+
+    %PathStep{}
+    |> PathStep.changeset(params)
+    |> Repo.insert()
   end
 
   @doc """
@@ -60,5 +66,13 @@ defmodule Pageless.Paths do
   """
   def change_path(%Path{} = path) do
     Path.changeset(path, %{})
+  end
+
+  defp load_resource(%{type: "LESSON", lesson_id: id}) do
+    Repo.get!(Lesson, id)
+  end
+
+  defp load_resource(%{type: "COURSE", course_id: id}) do
+    Repo.get!(Course, id) |> Repo.preload(:lessons)
   end
 end

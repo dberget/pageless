@@ -2,10 +2,10 @@ defmodule Pageless.Lessons.Lesson do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Pageless.Paths.Path
-  alias Pageless.Paths
-  alias Pageless.Courses
   alias Pageless.Courses.Course
+  alias Pageless.Paths.PathStep
+  alias Pageless.Paths.Path
+  alias Pageless.Courses.CourseLesson
 
   schema "lessons" do
     field :description, :string
@@ -13,8 +13,9 @@ defmodule Pageless.Lessons.Lesson do
     field :type, :string
     field :content, :string
 
-    many_to_many :courses, Course, join_through: Courses.CourseLessons
-    many_to_many :paths, Path, join_through: Paths.PathLessons
+    belongs_to :company, Pageless.Companies.Company
+    many_to_many :courses, Course, join_through: CourseLesson
+    many_to_many :paths, Path, join_through: PathStep
 
     timestamps()
   end
