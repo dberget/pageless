@@ -13,6 +13,13 @@ defmodule Pageless.Lessons do
   """
   def get_lesson!(id), do: Repo.get!(Lesson, id)
 
+  def get_company_lessons(company_id) do
+    query = from l in Lesson, where: l.company_id == ^company_id
+
+    query
+    |> Repo.all()
+  end
+
   @doc """
   Creates a lessons.
   """

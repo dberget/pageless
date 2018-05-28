@@ -27,17 +27,23 @@ class SideMenu extends Component {
       <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
         <div className={classes.toolbar} />
         <List component="nav">
-          <ListItem button component={Link} to="/admin/assignments">
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Assignments" />
-          </ListItem>
-          <ListItem button component={Link} to="/admin/courses">
+          <ListItem button component={Link} to="/lesson">
             <ListItemIcon>
               <ViewList />
             </ListItemIcon>
-            <ListItemText primary="Courses" />
+            <ListItemText primary="Lesson" />
+          </ListItem>
+          <ListItem button component={Link} to="/course">
+            <ListItemIcon>
+              <ViewList />
+            </ListItemIcon>
+            <ListItemText primary="Course" />
+          </ListItem>
+          <ListItem button component={Link} to="/path">
+            <ListItemIcon>
+              <ViewList />
+            </ListItemIcon>
+            <ListItemText primary="Path" />
           </ListItem>
         </List>
       </Drawer>

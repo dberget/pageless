@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import { withStyles } from "@material-ui/core"
-import phoenixChannel from "../socket"
+import phoenixChannel from "../../socket"
 
 const styles = theme => ({})
 
-class Lesson extends Component {
+class ShowLesson extends Component {
   state = { lesson: {}, is_loading: true }
 
   componentWillMount() {
@@ -36,4 +36,4 @@ class Lesson extends Component {
   }
 }
 
-export default withStyles(styles)(Lesson)
+export default withStyles(styles)(ShowLesson)

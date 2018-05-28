@@ -4,7 +4,7 @@ import "./socket"
 
 import React from "react"
 import ReactDOM from "react-dom"
-import App from "./pages/index"
+import App from "./portal/pages/index"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { BrowserRouter } from "react-router-dom"
 

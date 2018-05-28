@@ -1,15 +1,12 @@
 import React, { Component } from "react"
-import phoenixChannel from "../../socket"
+import phoenixChannel from "../socket"
 
-import Menu from "../navigation/menu"
-import LessonCard from "../../components/lessonCard"
-import SideMenu from "../navigation/navList"
+import Menu from "./navigation/menu"
+import SideMenu from "./navigation/navList"
 
-import { Home } from "./home"
-import { AllCourses } from "./allCourses"
-import { Assignments } from "./assignments"
-import Lesson from "./lesson"
-import Course from "./course"
+import Lesson from "./lesson/index"
+import Course from "./course/index"
+import Path from "./path/index"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Route, Switch } from "react-router-dom"
@@ -45,6 +42,7 @@ class App extends Component {
             firstName: resp.user.firstName,
             lastName: resp.user.lastName,
             id: resp.user.id,
+            company_id: resp.user.company_id,
             email: resp.user.email
           },
           paths: resp.user.paths
@@ -63,16 +61,12 @@ class App extends Component {
         <SideMenu />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route exact path="/admin" component={Home} />
-          <Route
-            path="/admin/assignments"
-            render={routeprops => (
-              <Assignments {...routeprops} assignments={this.state.paths} />
-            )}
-          />
-          <Route path="/admin/course/:id" component={Course} />
-          <Route path="/admin/lesson/:id" component={Lesson} />
-          <Route path="/admin/courses" component={AllCourses} />
+          <Switch>
+            <Route exact path="/" render={() => <div>Admin Home Page</div>} />
+            <Route path="/course" component={Course} />
+            <Route path="/lesson" component={Lesson} />
+            <Route path="/path" component={Path} />
+          </Switch>
         </main>
       </div>
     )

@@ -1,9 +1,9 @@
 import React, { Component } from "react"
-import phoenixChannel from "../socket"
+import phoenixChannel from "../../socket"
 
-import Menu from "../components/menu"
-import LessonCard from "../components/lessonCard"
-import SideMenu from "../components/navList"
+import Menu from "../../components/menu"
+import LessonCard from "../../components/lessonCard"
+import SideMenu from "../../components/navList"
 
 import { Home } from "./home"
 import { AllCourses } from "./allCourses"
