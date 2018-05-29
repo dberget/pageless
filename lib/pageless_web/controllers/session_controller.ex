@@ -15,7 +15,7 @@ defmodule PagelessWeb.SessionController do
       {:ok, conn} ->
         conn
         |> put_flash(:info, "Welcome back!")
-        |> redirect(to: app_path(conn, :index))
+        |> redirect(to: app_path(conn, :admin))
 
       {:error, _reason, conn} ->
         conn

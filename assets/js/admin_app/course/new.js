@@ -104,7 +104,7 @@ class newCourse extends Component {
             margin="normal"
           />
           {this.state.all_lessons.map(lesson => (
-            <Card fullWidth className={classes.card}>
+            <Card className={classes.card}>
               <CardContent>
                 <Typography className={classes.title} color="textSecondary">
                   {lesson.title}

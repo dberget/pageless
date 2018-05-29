@@ -1,6 +1,7 @@
 import css from "../css/app.css"
 import "phoenix_html"
 import "./socket"
+import "typeface-roboto"
 
 import React from "react"
 import ReactDOM from "react-dom"

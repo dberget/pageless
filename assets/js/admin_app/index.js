@@ -23,7 +23,6 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
     minWidth: 0,
     marginLeft: 240
   },
@@ -31,7 +30,7 @@ const styles = theme => ({
 })
 
 class App extends Component {
-  state = { channel: {}, user: {}, paths: [], lessons: [], lesson: {} }
+  state = { channel: {}, user: {} }
 
   componentWillMount() {
     phoenixChannel
@@ -44,8 +43,7 @@ class App extends Component {
             id: resp.user.id,
             company_id: resp.user.company_id,
             email: resp.user.email
-          },
-          paths: resp.user.paths
+          }
         })
       })
       .receive("error", resp => {
