@@ -2,7 +2,11 @@ import React from "react"
 import { withStyles } from "@material-ui/core/styles"
 
 const styles = {
-  container: { display: "flex", padding: "3rem" }
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "3rem"
+  }
 }
 
 const Container = ({ classes, children }) => {

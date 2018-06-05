@@ -1,38 +1,37 @@
 import React, { Component } from "react"
 import phoenixChannel from "../../socket"
-import { withRouter } from "react-router-dom"
+import { Route, withRouter, Switch, NavLink, Link } from "react-router-dom"
+import Container from "../navigation/container"
 
-import TextField from "@material-ui/core/TextField"
 import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
 import { Button } from "@material-ui/core"
 import Save from "@material-ui/icons/Save"
-import Card from "@material-ui/core/Card"
-import CardActions from "@material-ui/core/CardActions"
-import CardContent from "@material-ui/core/CardContent"
 import Typography from "@material-ui/core/Typography"
+import LessonList from "../../components/lessonList"
+import LessonSelect from "../../components/lessonSelect"
+import { NewCourseInfo } from "../../components/NewCourseInfo"
 
 const styles = theme => ({
   formContainer: {
     display: "flex",
-    flexWrap: "wrap",
+    flexDirection: "column",
     width: "100%"
   },
-  card: {
-    minWidth: 275,
-    width: "100%",
-    margin: ".5rem 0px"
+  container: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column"
   },
   form: {
     display: "flex",
+    flexDirection: "column",
     flexWrap: "wrap",
-    width: "50%",
-    margin: "auto"
+    Width: "500px"
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: "50%"
+    marginRight: theme.spacing.unit
   },
   menu: {
     width: 200
@@ -40,26 +39,62 @@ const styles = theme => ({
   leftIcon: {
     marginRight: theme.spacing.unit
   },
-  button: {
-    marginLeft: "auto",
-    marginTop: "2rem"
-  }
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "flex-end"
+  },
+  button: { margin: "0 2px" }
 })
 
-class newCourse extends Component {
-  state = { form: { title: "", description: "", lessons: [] }, all_lessons: [] }
+class NewCourse extends Component {
+  state = {
+    title: "title",
+    description: "desc",
+    selectedLessons: [],
+    allLessons: [],
+    activeStep: 0
+  }
+
+  handleNext = () => {
+    const { activeStep } = this.state
+
+    this.setState(prevState => ({
+      ...prevState,
+      activeStep: activeStep + 1
+    }))
+  }
+
+  handleBack = () => {
+    const { activeStep } = this.state
+    this.setState(prevState => ({
+      ...prevState,
+      activeStep: activeStep - 1
+    }))
+  }
 
   componentDidMount = () => {
     phoenixChannel
       .push("get_company_lessons", { company_id: 1 })
       .receive("ok", resp => {
-        this.setState({ all_lessons: resp.lessons })
+        this.setState({ allLessons: resp.lessons })
       })
+  }
+
+  handleSelect = lesson => {
+    let { selectedLessons } = this.state
+
+    if (selectedLessons.indexOf(lesson) === -1) {
+      selectedLessons = [...selectedLessons, lesson]
+    }
+
+    this.setState({
+      selectedLessons
+    })
   }
 
   save = () => {
     phoenixChannel
-      .push("save_course", { lesson: this.state })
+      .push("save_course", { course: this.state.form })
       .receive("ok", resp => {
         this.props.history.push("/")
       })
@@ -70,62 +105,73 @@ class newCourse extends Component {
       [name]: event.target.value
     })
   }
+
   render() {
-    const { classes } = this.props
+    const { classes, match } = this.props
+    const { activeStep, allLessons } = this.state
+
+    const Buttons = () => (
+      <div className={classes.buttonContainer}>
+        <Button
+          onClick={() => this.handleBack()}
+          variant="raised"
+          color="primary"
+          className={classes.button}
+          component={Link}
+          disabled={activeStep == 0}
+          to={`${match.path}/${activeStep - 1 || ""}`}
+        >
+          Prev
+        </Button>
+        <Button
+          onClick={() => this.handleNext()}
+          variant="raised"
+          color="primary"
+          className={classes.button}
+          component={Link}
+          to={`${match.path}/${activeStep + 1}`}
+        >
+          Continue
+        </Button>
+      </div>
+    )
+
     return (
       <div className={classes.formContainer}>
+        <Buttons />
         <form className={classes.form} noValidate autoComplete="off">
-          <TextField
-            id="title"
-            label="Course Title"
-            className={classes.textField}
-            value={this.state.title}
-            onChange={this.handleChange("title")}
-            margin="normal"
-          />
-          <Button
-            onClick={() => this.save()}
-            variant="raised"
-            color="primary"
-            className={classes.button}
-          >
-            <Save className={classes.leftIcon} />
-            Save Course
-          </Button>
-          <TextField
-            multiline
-            rows="4"
-            id="description"
-            label="Description"
-            fullWidth
-            onChange={this.handleChange("description")}
-            value={this.state.description}
-            className={classes.textField}
-            margin="normal"
-          />
-          {this.state.all_lessons.map(lesson => (
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary">
-                  {lesson.title}
-                </Typography>
-                <Typography variant="headline" component="h2">
-                  {lesson.type}
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                  {lesson.description}
-                </Typography>
-                <Typography component="p">{lesson.content}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Preview</Button>
-              </CardActions>
-            </Card>
-          ))}
+          <Switch>
+            <Route
+              exact
+              path={`${match.path}`}
+              render={() => (
+                <NewCourseInfo
+                  title={this.state.title}
+                  description={this.state.description}
+                  handleChange={this.handleChange}
+                  classes={classes}
+                />
+              )}
+            />
+            <Route
+              path={`${match.path}/1`}
+              render={() => (
+                <React.Fragment>
+                  <LessonSelect
+                    handleSelect={lesson => this.handleSelect(lesson)}
+                    items={allLessons}
+                  />
+                  <div className={classes.container}>
+                    <LessonList lessons={this.state.selectedLessons} />
+                  </div>
+                </React.Fragment>
+              )}
+            />
+          </Switch>
         </form>
       </div>
     )
   }
 }
 
-export default withStyles(styles)(newCourse)
+export default withStyles(styles)(NewCourse)

@@ -10,6 +10,7 @@ import Path from "./path/index"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Route, Switch } from "react-router-dom"
+import Container from "./navigation/container"
 
 const styles = theme => ({
   "@global a": {
@@ -17,7 +18,6 @@ const styles = theme => ({
   },
   root: {
     flexGrow: 1,
-    overflow: "hidden",
     display: "flex"
   },
   content: {
@@ -28,6 +28,12 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar
 })
+
+const Home = () => (
+  <Container>
+    <div>Admin Home Page</div>
+  </Container>
+)
 
 class App extends Component {
   state = { channel: {}, user: {} }
@@ -60,7 +66,7 @@ class App extends Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route exact path="/" render={() => <div>Admin Home Page</div>} />
+            <Route exact path="/" render={() => <Home />} />
             <Route path="/course" component={Course} />
             <Route path="/lesson" component={Lesson} />
             <Route path="/path" component={Path} />

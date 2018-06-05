@@ -18,9 +18,9 @@ defmodule Pageless.Paths.PathStep do
   @doc false
   def changeset(step, attrs) do
     step
-    |> cast(attrs, [:sort_id, :type, :path_id, :lesson_id, :course_id])
+    |> cast(attrs, [:sort_id, :path_id, :lesson_id, :course_id])
     |> add_type()
-    |> validate_required([:sort_id, :type])
+    |> validate_required([:sort_id])
   end
 
   defp add_type(cs) do

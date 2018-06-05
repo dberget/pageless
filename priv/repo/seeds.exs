@@ -119,7 +119,7 @@ lessons =
     lesson_details,
     &Repo.insert!(%Lesson{
       description: &1,
-      title: "Sample Lesson",
+      title: &1,
       type: Enum.random(["VIDEO", "ARTICLE", "ELEARNING", "OTHER"]),
       company: Enum.random(companies),
       content: Enum.take_random(?a..?z, 100) |> to_string

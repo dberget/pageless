@@ -42,6 +42,7 @@ defmodule PagelessWeb.Router do
     get "/admin", AppController, :admin
     get "/admin/:path", AppController, :admin
     get "/admin/:path/:subpath", AppController, :admin
+    get "/admin/:path/:subpath/:page", AppController, :admin
   end
 
   scope "/", PagelessWeb do

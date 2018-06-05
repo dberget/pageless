@@ -8,8 +8,7 @@ import ButtonBase from "@material-ui/core/ButtonBase"
 const styles = {
   root: {
     display: "flex",
-    flexGrow: 1,
-    justifyContent: "center"
+    flexGrow: 1
   },
   button: {
     height: 48
@@ -46,6 +45,8 @@ class SubMenu extends Component {
           >
             {resource} Home
           </NavLink>
+        </ButtonBase>
+        <ButtonBase className={classes.button} component="button">
           <NavLink
             activeClassName={classes.selected}
             className={classes.menuLink}
@@ -54,6 +55,7 @@ class SubMenu extends Component {
             New {resource}
           </NavLink>
         </ButtonBase>
+        {this.props.children}
       </Paper>
     )
   }
