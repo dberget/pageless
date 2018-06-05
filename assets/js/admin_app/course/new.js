@@ -20,6 +20,7 @@ const styles = theme => ({
   },
   container: {
     display: "flex",
+    marginTop: theme.spacing.unit,
     alignItems: "center",
     flexDirection: "column"
   },
@@ -43,7 +44,10 @@ const styles = theme => ({
     display: "flex",
     justifyContent: "flex-end"
   },
-  button: { margin: "0 2px" }
+  button: { margin: "0 2px" },
+  header: {
+    marginTop: "-25px"
+  }
 })
 
 class NewCourse extends Component {
@@ -157,6 +161,7 @@ class NewCourse extends Component {
               path={`${match.path}/1`}
               render={() => (
                 <React.Fragment>
+                  <h2 className={classes.header}> {this.state.title} </h2>
                   <LessonSelect
                     handleSelect={lesson => this.handleSelect(lesson)}
                     items={allLessons}

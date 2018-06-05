@@ -17,7 +17,7 @@ const styles = theme => ({
   form: {
     display: "flex",
     flexWrap: "wrap",
-    width: "50%",
+    width: "70%",
     margin: "auto"
   },
   textField: {
@@ -51,7 +51,9 @@ class NewLesson extends Component {
     phoenixChannel
       .push("save_lesson", { lesson: this.state })
       .receive("ok", resp => {
-        this.props.history.push("/")
+        this.props.onSave
+          ? this.props.onSave()
+          : this.setState({ title: "", description: "", content: "", type: "" })
       })
   }
 

@@ -4,14 +4,18 @@ import TextField from "@material-ui/core/TextField"
 import { withStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
 import { MenuItem } from "@material-ui/core"
+import InputAdornment from "@material-ui/core/InputAdornment"
+import Add from "@material-ui/icons/AddCircleOutline"
+import IconButton from "@material-ui/core/IconButton"
+import Modal from "@material-ui/core/Modal"
+import NewLesson from "../admin_app/lesson/new"
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
     margin: "auto"
   },
   input: {
-    minWidth: 400
+    width: 550
   },
   paper: {
     zIndex: 100,
@@ -24,10 +28,28 @@ const styles = theme => ({
   container: {
     position: "relative",
     flexGrow: 1
+  },
+  modalBox: {
+    maxHeight: "calc(100% - 100px)",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    padding: theme.spacing.unit * 2,
+    transform: "translate(-50%, -50%)"
   }
 })
 
 class LessonSelect extends Component {
+  state = { open: false }
+
+  handleOpen = () => {
+    this.setState({ open: true })
+  }
+
+  handleClose = () => {
+    this.setState({ open: false })
+  }
+
   render() {
     const { items, handleSelect, classes } = this.props
     return (
@@ -47,11 +69,24 @@ class LessonSelect extends Component {
           }) => (
             <div className={classes.container}>
               <TextField
+                autoFocus
                 id="add-lesson"
                 label="Add Lesson"
                 {...getInputProps()}
                 className={classes.input}
               />
+              <IconButton>
+                <Add onClick={() => this.handleOpen()} />
+              </IconButton>
+              <Modal
+                className={classes.modal}
+                open={this.state.open}
+                onClose={this.handleClose}
+              >
+                <Paper className={classes.modalBox}>
+                  <NewLesson onSave={() => this.handleClose()} />
+                </Paper>
+              </Modal>
               {isOpen ? (
                 <Paper className={classes.paper} square>
                   {items

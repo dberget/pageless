@@ -43,6 +43,9 @@ defmodule PagelessWeb.UserChannel do
   end
 
   def handle_in("save_lesson", %{"lesson" => lesson_params}, socket) do
+    lesson_params =
+      Map.put(lesson_params, "company_id", socket.assigns[:current_user].user.company_id)
+
     Pageless.Lessons.create_lesson(lesson_params)
 
     {:reply, :ok, socket}
