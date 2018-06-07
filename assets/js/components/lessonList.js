@@ -10,6 +10,7 @@ import { CardHeader } from "@material-ui/core"
 import RemoveCircleOutline from "@material-ui/icons/RemoveCircleOutline"
 import PageViewOutline from "@material-ui/icons/PageView"
 import IconButton from "@material-ui/core/IconButton"
+import Modal from "@material-ui/core/Modal"
 
 const styles = theme => ({
   card: {
@@ -23,10 +24,10 @@ const styles = theme => ({
   }
 })
 
-const LessonList = ({ lessons, classes }) =>
+const LessonList = ({ lessons, classes, handleRemove, handlePreview }) =>
   lessons
     ? lessons.map((lesson, index) => (
-        <Card className={classes.card}>
+        <Card key={lesson.id} className={classes.card}>
           <CardHeader
             classes={{ title: classes.title }}
             title={lesson.title}
@@ -38,11 +39,17 @@ const LessonList = ({ lessons, classes }) =>
             </Typography>
           </CardContent>
           <CardActions className={classes.actions} disableActionSpacing>
-            <IconButton aria-label="Preview Lesson">
+            <IconButton
+              onClick={() => handlePreview(lesson)}
+              aria-label="Preview Lesson"
+            >
               <PageViewOutline />
             </IconButton>
-            <IconButton aria-label="Remove Lesson">
-              <RemoveCircleOutline color="red" />
+            <IconButton
+              onClick={() => handleRemove(lesson)}
+              aria-label="Remove Lesson"
+            >
+              <RemoveCircleOutline />
             </IconButton>
           </CardActions>
         </Card>

@@ -21,6 +21,12 @@ defmodule PagelessWeb.AppController do
     |> render("admin.html")
   end
 
+  def upload(conn, params) do
+    IO.inspect(params)
+
+    send_resp(conn, 201, "")
+  end
+
   defp get_subdomain(conn, _opts) do
     subdomain = String.split(conn.host, ".") |> hd()
 

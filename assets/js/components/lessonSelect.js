@@ -3,10 +3,9 @@ import Downshift from "downshift"
 import TextField from "@material-ui/core/TextField"
 import { withStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
-import { MenuItem } from "@material-ui/core"
-import InputAdornment from "@material-ui/core/InputAdornment"
-import Add from "@material-ui/icons/AddCircleOutline"
-import IconButton from "@material-ui/core/IconButton"
+import { MenuItem, Tooltip } from "@material-ui/core"
+import Add from "@material-ui/icons/Add"
+import Button from "@material-ui/core/Button"
 import Modal from "@material-ui/core/Modal"
 import NewLesson from "../admin_app/lesson/new"
 
@@ -36,6 +35,9 @@ const styles = theme => ({
     left: "50%",
     padding: theme.spacing.unit * 2,
     transform: "translate(-50%, -50%)"
+  },
+  fab: {
+    margin: theme.spacing.unit * 2
   }
 })
 
@@ -75,9 +77,20 @@ class LessonSelect extends Component {
                 {...getInputProps()}
                 className={classes.input}
               />
-              <IconButton>
-                <Add onClick={() => this.handleOpen()} />
-              </IconButton>
+              <Tooltip
+                placement="top"
+                title="Create New Lesson"
+                position="absolute"
+              >
+                <Button
+                  onClick={() => this.handleOpen()}
+                  variant="fab"
+                  className={classes.fab}
+                  color="primary"
+                >
+                  <Add />
+                </Button>
+              </Tooltip>
               <Modal
                 className={classes.modal}
                 open={this.state.open}

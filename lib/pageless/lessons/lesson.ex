@@ -23,7 +23,7 @@ defmodule Pageless.Lessons.Lesson do
   @doc false
   def changeset(lesson, attrs) do
     lesson
-    |> cast(attrs, [:description, :type, :content, :title])
-    |> validate_required([:description, :title, :type, :content])
+    |> cast(attrs, [:description, :type, :content, :title, :company_id])
+    |> validate_required([:description, :title, :type, :content, :company_id])
   end
 end

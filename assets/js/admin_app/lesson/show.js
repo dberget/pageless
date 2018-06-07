@@ -7,8 +7,10 @@ const styles = theme => ({})
 class ShowLesson extends Component {
   state = { lesson: {}, is_loading: true }
 
-  componentWillMount() {
-    this.getLesson(this.props.match.params.id)
+  componentDidMount() {
+    this.props.lesson
+      ? this.setState({ lesson: this.props.lesson, is_loading: false })
+      : this.getLesson(this.props.match.params.id)
   }
 
   getLesson = id => {

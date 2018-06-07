@@ -1,12 +1,13 @@
 import React, { Component } from "react"
 import phoenixChannel from "../../socket"
-import { withRouter } from "react-router-dom"
 
 import TextField from "@material-ui/core/TextField"
 import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
 import { Button } from "@material-ui/core"
 import Save from "@material-ui/icons/Save"
+import MessageSnackbar from "../../components/snackbar"
+import { getCsrfToken } from "../../token"
 
 const styles = theme => ({
   formContainer: {
@@ -45,16 +46,64 @@ const lessonTypes = [
 ]
 
 class NewLesson extends Component {
-  state = { title: "", description: "", content: "", type: "" }
+  state = {
+    title: "",
+    description: "",
+    content: "",
+    type: "",
+    file: {},
+    snackbar: false
+  }
 
   saveLesson = () => {
-    phoenixChannel
-      .push("save_lesson", { lesson: this.state })
-      .receive("ok", resp => {
-        this.props.onSave
-          ? this.props.onSave()
-          : this.setState({ title: "", description: "", content: "", type: "" })
-      })
+    var formData = new FormData()
+    var fileField = document.querySelector("input[type='file']")
+    const token = getCsrfToken()
+
+    formData.append("name", "testname")
+    formData.append("avatar", fileField.files[0])
+
+    fetch(`http://localhost:4000/upload`, {
+      method: "PUT",
+      body: formData,
+      credentials: "same-origin",
+      headers: {
+        "x-csrf-token": token
+      }
+    })
+  }
+
+  // saveLesson = () => {
+  //   var fr = new FileReader()
+
+  //   fr.addEventListener("loadend", function() {
+  //     let base64String = btoa(String.fromCharCode(...new Uint8Array(fr.result)))
+
+  //     phoenixChannel
+  //       .push("save_file", { data: base64String })
+  //       .receive("ok", resp => console.log("ok"))
+  //   })
+
+  // fr.readAsArrayBuffer(this.state.file)
+
+  // phoenixChannel
+  //   .push("save_lesson", { lesson: this.state })
+  //   .receive("ok", resp => {
+  //     this.props.onSave ? this.props.onSave() : null
+  //     this.setState({
+  //       title: "",
+  //       description: "",
+  //       content: "",
+  //       type: "",
+  //       file: ""
+  //     })
+  //     this.showSnackbar()
+  //   })
+  // }
+
+  showSnackbar = () => {
+    this.setState({ snackbar: true })
+    setTimeout(() => this.setState({ snackbar: false }), 5000)
   }
 
   handleChange = name => event => {
@@ -62,6 +111,11 @@ class NewLesson extends Component {
       [name]: event.target.value
     })
   }
+
+  handleFileChange = name => event => {
+    this.setState({ file: event.target.files[0] })
+  }
+
   render() {
     const { classes } = this.props
     return (
@@ -98,14 +152,24 @@ class NewLesson extends Component {
             ))}
           </TextField>
           {this.state.type ? (
-            <TextField
-              id="content"
-              label={`${this.state.type} URL`}
-              className={classes.textField}
-              value={this.state.content}
-              onChange={this.handleChange("content")}
-              margin="normal"
-            />
+            <React.Fragment>
+              <TextField
+                id="content"
+                label={`${this.state.type} URL`}
+                className={classes.textField}
+                value={this.state.content}
+                onChange={this.handleChange("content")}
+                margin="normal"
+              />
+              <TextField
+                id="file"
+                type="file"
+                label={`Upload File`}
+                className={classes.textField}
+                onChange={this.handleFileChange("file")}
+                margin="normal"
+              />
+            </React.Fragment>
           ) : null}
           <TextField
             multiline
@@ -129,6 +193,10 @@ class NewLesson extends Component {
             Save Lesson
           </Button>
         </form>
+        <MessageSnackbar
+          open={this.state.snackbar}
+          message={"Lesson Saved Successfully"}
+        />
       </div>
     )
   }

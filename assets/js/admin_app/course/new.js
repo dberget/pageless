@@ -1,16 +1,15 @@
 import React, { Component } from "react"
 import phoenixChannel from "../../socket"
-import { Route, withRouter, Switch, NavLink, Link } from "react-router-dom"
-import Container from "../navigation/container"
+import { Route, Switch, Link } from "react-router-dom"
 
-import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
 import { Button } from "@material-ui/core"
-import Save from "@material-ui/icons/Save"
-import Typography from "@material-ui/core/Typography"
 import LessonList from "../../components/lessonList"
 import LessonSelect from "../../components/lessonSelect"
 import { NewCourseInfo } from "../../components/NewCourseInfo"
+import Modal from "@material-ui/core/Modal"
+import ShowLesson from "../lesson/show"
+import Paper from "@material-ui/core/Paper"
 
 const styles = theme => ({
   formContainer: {
@@ -47,6 +46,15 @@ const styles = theme => ({
   button: { margin: "0 2px" },
   header: {
     marginTop: "-25px"
+  },
+  modalBox: {
+    maxHeight: "calc(100% - 100px)",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    padding: theme.spacing.unit * 5,
+    overflow: "scroll",
+    transform: "translate(-50%, -50%)"
   }
 })
 
@@ -56,7 +64,8 @@ class NewCourse extends Component {
     description: "desc",
     selectedLessons: [],
     allLessons: [],
-    activeStep: 0
+    activeStep: 0,
+    open: false
   }
 
   handleNext = () => {
@@ -77,11 +86,9 @@ class NewCourse extends Component {
   }
 
   componentDidMount = () => {
-    phoenixChannel
-      .push("get_company_lessons", { company_id: 1 })
-      .receive("ok", resp => {
-        this.setState({ allLessons: resp.lessons })
-      })
+    phoenixChannel.push("get_company_lessons").receive("ok", resp => {
+      this.setState({ allLessons: resp.lessons })
+    })
   }
 
   handleSelect = lesson => {
@@ -94,6 +101,22 @@ class NewCourse extends Component {
     this.setState({
       selectedLessons
     })
+  }
+
+  handleRemove = lesson_to_remove => {
+    let { selectedLessons } = this.state
+
+    selectedLessons = selectedLessons.filter(
+      lesson => lesson !== lesson_to_remove
+    )
+
+    this.setState({
+      selectedLessons
+    })
+  }
+
+  handlePreview = lesson => {
+    this.setState({ open: !this.state.open, previewLesson: lesson })
   }
 
   save = () => {
@@ -167,7 +190,16 @@ class NewCourse extends Component {
                     items={allLessons}
                   />
                   <div className={classes.container}>
-                    <LessonList lessons={this.state.selectedLessons} />
+                    <Modal onClose={this.handlePreview} open={this.state.open}>
+                      <Paper className={classes.modalBox}>
+                        <ShowLesson lesson={this.state.previewLesson} />
+                      </Paper>
+                    </Modal>
+                    <LessonList
+                      handleRemove={lesson => this.handleRemove(lesson)}
+                      lessons={this.state.selectedLessons}
+                      handlePreview={lesson => this.handlePreview(lesson)}
+                    />
                   </div>
                 </React.Fragment>
               )}
