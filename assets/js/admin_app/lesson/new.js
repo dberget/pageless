@@ -47,77 +47,66 @@ const lessonTypes = [
 
 class NewLesson extends Component {
   state = {
-    title: "",
-    description: "",
-    content: "",
-    type: "",
-    file: {},
+    form: {
+      title: "",
+      description: "",
+      content: "",
+      type: ""
+    },
     snackbar: false
   }
 
-  saveLesson = () => {
-    var formData = new FormData()
+  saveFile = () => {
+    let data = new FormData()
     var fileField = document.querySelector("input[type='file']")
     const token = getCsrfToken()
 
-    formData.append("name", "testname")
-    formData.append("avatar", fileField.files[0])
+    data.append("file", fileField.files[0])
 
-    fetch(`http://localhost:4000/upload`, {
+    fetch(`/upload`, {
       method: "PUT",
-      body: formData,
+      body: data,
       credentials: "same-origin",
       headers: {
         "x-csrf-token": token
       }
-    })
+    }).then(this.showSnackbar("File Uploaded Successfully"))
   }
 
-  // saveLesson = () => {
-  //   var fr = new FileReader()
+  saveLesson = () => {
+    const token = getCsrfToken()
+    const { form } = this.state
 
-  //   fr.addEventListener("loadend", function() {
-  //     let base64String = btoa(String.fromCharCode(...new Uint8Array(fr.result)))
+    fetch(`/upload`, {
+      method: "PUT",
+      body: JSON.stringify(form),
+      credentials: "same-origin",
+      headers: {
+        "content-type": "application/json",
+        "x-csrf-token": token
+      }
+    }).then(this.showSnackbar("Lesson Saved Successfully"))
+  }
 
-  //     phoenixChannel
-  //       .push("save_file", { data: base64String })
-  //       .receive("ok", resp => console.log("ok"))
-  //   })
+  showSnackbar = message => {
+    this.setState({ snackbar: true, message: message })
 
-  // fr.readAsArrayBuffer(this.state.file)
-
-  // phoenixChannel
-  //   .push("save_lesson", { lesson: this.state })
-  //   .receive("ok", resp => {
-  //     this.props.onSave ? this.props.onSave() : null
-  //     this.setState({
-  //       title: "",
-  //       description: "",
-  //       content: "",
-  //       type: "",
-  //       file: ""
-  //     })
-  //     this.showSnackbar()
-  //   })
-  // }
-
-  showSnackbar = () => {
-    this.setState({ snackbar: true })
     setTimeout(() => this.setState({ snackbar: false }), 5000)
   }
 
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value
+      form: {
+        ...this.state.form,
+        [name]: event.target.value
+      }
     })
-  }
-
-  handleFileChange = name => event => {
-    this.setState({ file: event.target.files[0] })
   }
 
   render() {
     const { classes } = this.props
+    const { form } = this.state
+
     return (
       <div className={classes.formContainer}>
         <form className={classes.form} noValidate autoComplete="off">
@@ -126,7 +115,7 @@ class NewLesson extends Component {
             label="Lesson Title"
             className={classes.textField}
             fullWidth
-            value={this.state.title}
+            value={form.title}
             onChange={this.handleChange("title")}
             margin="normal"
           />
@@ -135,7 +124,7 @@ class NewLesson extends Component {
             select
             label="Select Type"
             className={classes.textField}
-            value={this.state.type}
+            value={form.type}
             onChange={this.handleChange("type")}
             SelectProps={{
               MenuProps: {
@@ -151,13 +140,13 @@ class NewLesson extends Component {
               </MenuItem>
             ))}
           </TextField>
-          {this.state.type ? (
+          {form.type ? (
             <React.Fragment>
               <TextField
                 id="content"
-                label={`${this.state.type} URL`}
+                label={`${form.type} URL`}
                 className={classes.textField}
-                value={this.state.content}
+                value={form.content}
                 onChange={this.handleChange("content")}
                 margin="normal"
               />
@@ -166,9 +155,17 @@ class NewLesson extends Component {
                 type="file"
                 label={`Upload File`}
                 className={classes.textField}
-                onChange={this.handleFileChange("file")}
                 margin="normal"
               />
+              <Button
+                onClick={() => this.saveFile()}
+                variant="raised"
+                color="primary"
+                className={classes.button}
+              >
+                <Save className={classes.leftIcon} />
+                Upload File
+              </Button>
             </React.Fragment>
           ) : null}
           <TextField
@@ -178,7 +175,7 @@ class NewLesson extends Component {
             label="Description"
             fullWidth
             onChange={this.handleChange("description")}
-            value={this.state.description}
+            value={form.description}
             className={classes.textField}
             margin="normal"
           />
@@ -195,7 +192,7 @@ class NewLesson extends Component {
         </form>
         <MessageSnackbar
           open={this.state.snackbar}
-          message={"Lesson Saved Successfully"}
+          message={this.state.message}
         />
       </div>
     )
