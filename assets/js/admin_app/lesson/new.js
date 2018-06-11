@@ -1,13 +1,15 @@
 import React, { Component } from "react"
-import phoenixChannel from "../../socket"
 
 import TextField from "@material-ui/core/TextField"
 import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
-import { Button } from "@material-ui/core"
+import { Button, Typography } from "@material-ui/core"
 import Save from "@material-ui/icons/Save"
+import CloudUpload from "@material-ui/icons/CloudUpload"
 import MessageSnackbar from "../../components/snackbar"
 import { getCsrfToken } from "../../token"
+import Grid from "@material-ui/core/Grid"
+import capture from "../../utils/screenshot"
 
 const styles = theme => ({
   formContainer: {
@@ -32,8 +34,9 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   button: {
-    marginLeft: "auto",
-    marginTop: "2rem"
+    position: "absolute",
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
   }
 })
 
@@ -53,10 +56,11 @@ class NewLesson extends Component {
       content: "",
       type: ""
     },
+    fileAdded: false,
     snackbar: false
   }
 
-  saveFile = () => {
+  uploadFile = () => {
     let data = new FormData()
     var fileField = document.querySelector("input[type='file']")
     const token = getCsrfToken()
@@ -70,14 +74,19 @@ class NewLesson extends Component {
       headers: {
         "x-csrf-token": token
       }
-    }).then(this.showSnackbar("File Uploaded Successfully"))
+    })
+      .then(this.showSnackbar("File Uploaded Successfully"))
+      .catch(onrejected => this.showSnackbar(onrejected.message))
   }
 
   saveLesson = () => {
     const token = getCsrfToken()
-    const { form } = this.state
+    const { form, fileUploaded } = this.state
 
-    fetch(`/upload`, {
+    var fileField = document.querySelector("input[type='file']")
+    console.log(fileField)
+
+    fetch(`/save`, {
       method: "PUT",
       body: JSON.stringify(form),
       credentials: "same-origin",
@@ -94,13 +103,21 @@ class NewLesson extends Component {
     setTimeout(() => this.setState({ snackbar: false }), 5000)
   }
 
-  handleChange = name => event => {
+  handleChange = (name, callback = false) => event => {
     this.setState({
       form: {
         ...this.state.form,
         [name]: event.target.value
       }
     })
+
+    if (typeof callback === "function") {
+      callback()
+    }
+  }
+
+  getScreenshot() {
+    console.log("screenshot")
   }
 
   render() {
@@ -117,6 +134,17 @@ class NewLesson extends Component {
             fullWidth
             value={form.title}
             onChange={this.handleChange("title")}
+            margin="normal"
+          />
+          <TextField
+            multiline
+            rows="4"
+            id="description"
+            label="Description"
+            fullWidth
+            onChange={this.handleChange("description")}
+            value={form.description}
+            className={classes.textField}
             margin="normal"
           />
           <TextField
@@ -140,45 +168,46 @@ class NewLesson extends Component {
               </MenuItem>
             ))}
           </TextField>
-          {form.type ? (
-            <React.Fragment>
+          <Grid container spacing={8} alignItems="flex-end">
+            <Grid item>
               <TextField
                 id="content"
-                label={`${form.type} URL`}
+                label={`URL`}
+                disabled={!form.type}
                 className={classes.textField}
                 value={form.content}
-                onChange={this.handleChange("content")}
+                onChange={this.handleChange("content", () =>
+                  this.getScreenshot()
+                )}
                 margin="normal"
               />
+            </Grid>
+            <Grid item>
+              <Typography variant="button" gutterBottom>
+                Or
+              </Typography>
+            </Grid>
+            <Grid item>
               <TextField
                 id="file"
+                disabled={!form.type}
                 type="file"
-                label={`Upload File`}
+                onChange={() => this.setState({ fileAdded: true })}
                 className={classes.textField}
                 margin="normal"
               />
+            </Grid>
+            <Grid item>
               <Button
-                onClick={() => this.saveFile()}
-                variant="raised"
+                disabled={!this.state.fileAdded}
+                onClick={() => this.uploadFile()}
                 color="primary"
-                className={classes.button}
               >
-                <Save className={classes.leftIcon} />
-                Upload File
+                <CloudUpload className={classes.leftIcon} />
+                Upload
               </Button>
-            </React.Fragment>
-          ) : null}
-          <TextField
-            multiline
-            rows="4"
-            id="description"
-            label="Description"
-            fullWidth
-            onChange={this.handleChange("description")}
-            value={form.description}
-            className={classes.textField}
-            margin="normal"
-          />
+            </Grid>
+          </Grid>
 
           <Button
             onClick={() => this.saveLesson()}

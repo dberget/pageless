@@ -13,7 +13,7 @@ module.exports = (env, argv) => ({
   },
   entry: {
     app: "./js/app.js",
-    admin: "./js/admin.js"
+    admin: ["babel-polyfill", "./js/admin.js"]
   },
   output: {
     filename: "[name].js",

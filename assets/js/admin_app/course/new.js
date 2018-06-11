@@ -10,6 +10,7 @@ import { NewCourseInfo } from "../../components/NewCourseInfo"
 import Modal from "@material-ui/core/Modal"
 import ShowLesson from "../lesson/show"
 import Paper from "@material-ui/core/Paper"
+import NewLessonModal from "../../components/newLessonModal"
 
 const styles = theme => ({
   formContainer: {
@@ -201,6 +202,7 @@ class NewCourse extends Component {
                       handlePreview={lesson => this.handlePreview(lesson)}
                     />
                   </div>
+                  <NewLessonModal />
                 </React.Fragment>
               )}
             />

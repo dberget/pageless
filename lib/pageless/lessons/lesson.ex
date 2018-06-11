@@ -11,7 +11,7 @@ defmodule Pageless.Lessons.Lesson do
     field :description, :string
     field :title, :string
     field :type, :string
-    field :content, :string
+    embeds_one :content, Content
 
     belongs_to :company, Pageless.Companies.Company
     many_to_many :courses, Course, join_through: CourseLesson

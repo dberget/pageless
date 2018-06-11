@@ -10,7 +10,7 @@ defmodule Pageless.Repo.Migrations.CreateLesson do
       add :title, :string, null: false
       add :description, :text
       add :type, :content_type
-      add :content, :text
+      add :content, :map
       add :company_id, references(:companies, on_delete: :delete_all)
 
       timestamps()

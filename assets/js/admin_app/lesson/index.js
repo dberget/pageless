@@ -39,10 +39,12 @@ class Home extends Component {
     const { classes } = this.props
 
     return (
-      <Grid className={classes.grid} alignItems={"stretch"} container>
-        {this.state.lessons.map(lesson => (
+      <Grid className={classes.grid} container spacing={24}>
+        {lessons.map(lesson => (
           <div className={classes.card}>
-            <LessonCard route={this.props.match.path} lesson={lesson} />
+            <Grid item xs>
+              <LessonCard route={this.props.match.path} lesson={lesson} />
+            </Grid>
           </div>
         ))}
       </Grid>

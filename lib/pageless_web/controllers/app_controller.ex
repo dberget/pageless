@@ -21,10 +21,23 @@ defmodule PagelessWeb.AppController do
     |> render("admin.html")
   end
 
-  def upload(conn, params) do
-    IO.inspect(params)
+  def save(conn, params) do
+    params = Map.put(params, "company_id", conn.assigns[:current_user].company_id)
+    Pageless.Lessons.create_lesson(params)
 
-    send_resp(conn, 201, "")
+    send_resp(conn, 200, "")
+  end
+
+  def upload(conn, params) do
+    # user = conn.assigns[:current_user])
+
+    if upload = params["file"] do
+      {:ok, _path} = File.cp_r(upload.path, "files/#{upload.filename}")
+
+      send_resp(conn, 201, "ok")
+    else
+      send_resp(conn, 400, "error")
+    end
   end
 
   defp get_subdomain(conn, _opts) do
