@@ -104,7 +104,7 @@ courses =
 # lessons
 
 lesson_details = [
-  "This is lesson 1",
+  "This is the first lesson",
   "Onboarding Training lesson",
   "Your Lesson 1",
   "Your Lesson 2",
@@ -124,9 +124,10 @@ lessons =
     &Repo.insert!(%Lesson{
       description: &1,
       title: &1,
-      type: Enum.random(["VIDEO", "ARTICLE", "ELEARNING", "OTHER"]),
+      source_type: Enum.random(["FILE", "URL", "RICHTEXT"]),
+      lesson_type: Enum.random(["VIDEO", "ARTICLE", "ELEARNING", "OTHER"]),
       company: Enum.random(companies),
-      content: Enum.take_random(?a..?z, 100) |> to_string
+      source: Enum.take_random(?a..?z, 100) |> to_string
     })
   )
 
