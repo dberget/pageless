@@ -40,7 +40,11 @@ defmodule PagelessWeb.Router do
     pipe_through :admin_browser
 
     get "/admin", AppController, :admin
+    put("/save", AppController, :save)
+    put("/upload", AppController, :upload)
     get "/admin/:path", AppController, :admin
+    get "/admin/:path/:subpath", AppController, :admin
+    get "/admin/:path/:subpath/:page", AppController, :admin
   end
 
   scope "/", PagelessWeb do

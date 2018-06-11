@@ -21,7 +21,6 @@ const styles = theme => ({
   },
   container: {
     display: "flex",
-    justifyContent: "center",
     padding: theme.spacing.unit
   }
 })

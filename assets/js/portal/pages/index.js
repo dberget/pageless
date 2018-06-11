@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import phoenixChannel from "../../socket"
 
-import Menu from "../navigation/menu"
+import Menu from "../../components/menu"
 import LessonCard from "../../components/lessonCard"
-import SideMenu from "../navigation/navList"
+import SideMenu from "../../components/navList"
 
 import { Home } from "./home"
 import { AllCourses } from "./allCourses"
@@ -20,7 +20,6 @@ const styles = theme => ({
   },
   root: {
     flexGrow: 1,
-    overflow: "hidden",
     display: "flex"
   },
   content: {
@@ -63,16 +62,16 @@ class App extends Component {
         <SideMenu />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route exact path="/admin" component={Home} />
+          <Route exact path="/app" component={Home} />
           <Route
-            path="/admin/assignments"
+            path="/app/assignments"
             render={routeprops => (
               <Assignments {...routeprops} assignments={this.state.paths} />
             )}
           />
-          <Route path="/admin/course/:id" component={Course} />
-          <Route path="/admin/lesson/:id" component={Lesson} />
-          <Route path="/admin/courses" component={AllCourses} />
+          <Route path="/app/course/:id" component={Course} />
+          <Route path="/app/lesson/:id" component={Lesson} />
+          <Route path="/app/courses" component={AllCourses} />
         </main>
       </div>
     )

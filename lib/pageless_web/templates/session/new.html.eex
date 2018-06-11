@@ -2,12 +2,12 @@
 
 <div class="form">
   <div class="form-group">
-    <%= email_input f, :email, class: "form-control", required: "" %>
+    <%= email_input f, :email, class: "form-control", required: "", value: "davidberget@gmail.com" %>
     <%= error_tag f, :email %>
   </div>
 
   <div class="form-group">
-    <%= password_input f, :password, class: "form-control", required: "" %>
+    <%= password_input f, :password, class: "form-control", required: "", value: "password"%>
     <%= error_tag f, :password %>
   </div>
 

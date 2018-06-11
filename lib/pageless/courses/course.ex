@@ -23,6 +23,5 @@ defmodule Pageless.Courses.Course do
   def changeset(path, attrs) do
     path
     |> cast(attrs, [:description, :company_id, :title])
-    |> validate_required([:company_id])
   end
 end

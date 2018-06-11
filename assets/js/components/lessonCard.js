@@ -66,62 +66,37 @@ const styles = theme => ({
 })
 
 class LessonCard extends Component {
-  state = { expanded: false }
-
-  handleExpandClick = () => {
-    this.setState({ expanded: !this.state.expanded })
-  }
-
   render() {
-    const { classes, data } = this.props
+    const { classes, lesson, route } = this.props
     return (
       <div>
         <Card>
           <CardHeader
             action={
               <Fragment>
-                <Chip label={"Required"} className={classes.chip} />
                 <IconButton>
                   <MoreVertIcon />
                 </IconButton>
               </Fragment>
             }
-            title={<h3 className={classes.h3}>{data.title}</h3>}
-            subheader={
-              <Fragment>
-                Lessons: {data.lessons.length} <div className={classes.stats} />
-                Seat Time: 15 Minutes
-              </Fragment>
-            }
+            title={<h3 className={classes.h3}>{lesson.title}</h3>}
+            subheader={<div> {lesson.type} </div>}
             classes={{ title: classes.title }}
           />
           <CardContent>
-            <Typography component="p">{data.description}</Typography>
+            <Typography component="p">{lesson.description}</Typography>
           </CardContent>
           <CardActions className={classes.actions} disableActionSpacing>
             <Button
               component={Link}
-              to={`/app/course/${data.id}`}
+              to={`${route}${lesson.id}`}
               className={classes.button}
               variant="raised"
               color="primary"
             >
-              Begin Course
+              View Lesson
             </Button>
-            <IconButton
-              className={classnames(classes.expand, {
-                [classes.expandOpen]: this.state.expanded
-              })}
-              onClick={this.handleExpandClick}
-              aria-expanded={this.state.expanded}
-              aria-label="Show more"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
           </CardActions>
-          <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-            <LessonStepper />
-          </Collapse>
         </Card>
       </div>
     )

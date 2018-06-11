@@ -1,18 +1,16 @@
 import React, { Component } from "react"
 import phoenixChannel from "../socket"
 
-import Menu from "../components/menu"
-import LessonCard from "../components/lessonCard"
-import SideMenu from "../components/navList"
+import Menu from "./navigation/menu"
+import SideMenu from "./navigation/navList"
 
-import { Home } from "./home"
-import { AllCourses } from "./allCourses"
-import { Assignments } from "./assignments"
-import Lesson from "./lesson"
-import Course from "./course"
+import Lesson from "./lesson/index"
+import Course from "./course/index"
+import Path from "./path/index"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Route, Switch } from "react-router-dom"
+import Container from "./navigation/container"
 
 const styles = theme => ({
   "@global a": {
@@ -20,21 +18,25 @@ const styles = theme => ({
   },
   root: {
     flexGrow: 1,
-    overflow: "hidden",
     display: "flex"
   },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
     minWidth: 0,
     marginLeft: 240
   },
   toolbar: theme.mixins.toolbar
 })
 
+const Home = () => (
+  <Container>
+    <div>Admin Home Page</div>
+  </Container>
+)
+
 class App extends Component {
-  state = { channel: {}, user: {}, paths: [], lessons: [], lesson: {} }
+  state = { channel: {}, user: {} }
 
   componentWillMount() {
     phoenixChannel
@@ -45,9 +47,9 @@ class App extends Component {
             firstName: resp.user.firstName,
             lastName: resp.user.lastName,
             id: resp.user.id,
+            company_id: resp.user.company_id,
             email: resp.user.email
-          },
-          paths: resp.user.paths
+          }
         })
       })
       .receive("error", resp => {
@@ -63,16 +65,12 @@ class App extends Component {
         <SideMenu />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route exact path="/app" component={Home} />
-          <Route
-            path="/app/assignments"
-            render={routeprops => (
-              <Assignments {...routeprops} assignments={this.state.paths} />
-            )}
-          />
-          <Route path="/app/course/:id" component={Course} />
-          <Route path="/app/lesson/:id" component={Lesson} />
-          <Route path="/app/courses" component={AllCourses} />
+          <Switch>
+            <Route exact path="/" render={() => <Home />} />
+            <Route path="/course" component={Course} />
+            <Route path="/lesson" component={Lesson} />
+            <Route path="/path" component={Path} />
+          </Switch>
         </main>
       </div>
     )

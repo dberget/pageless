@@ -3,5 +3,5 @@ export const getApiToken = () => {
 }
 
 export const getCsrfToken = () => {
-  return document.head.querySelector("meta[name='csrf_token']").content
+  return document.head.querySelector("meta[name='_csrf_token']").content
 }

@@ -13,7 +13,7 @@ module.exports = (env, argv) => ({
   },
   entry: {
     app: "./js/app.js",
-    admin: "./js/admin.js"
+    admin: ["babel-polyfill", "./js/admin.js"]
   },
   output: {
     filename: "[name].js",
@@ -27,6 +27,17 @@ module.exports = (env, argv) => ({
         use: {
           loader: "babel-loader"
         }
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]"
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,

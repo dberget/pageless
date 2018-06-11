@@ -9,8 +9,10 @@
   "dependencies": {
     "@material-ui/core": "^1.0.0-rc.0",
     "@material-ui/icons": "^1.0.0-rc.0",
+    "downshift": "^1.31.15",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
+    "puppeteer": "^1.5.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2"
   },
@@ -27,6 +29,7 @@
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
     "mini-css-extract-plugin": "^0.4.0",
     "optimize-css-assets-webpack-plugin": "^4.0.1",
     "prettier": "1.10.2",

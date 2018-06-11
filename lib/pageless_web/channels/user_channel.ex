@@ -34,11 +34,36 @@ defmodule PagelessWeb.UserChannel do
     {:reply, {:ok, %{lesson: lesson}}, socket}
   end
 
+  def handle_in("get_company_lessons", _params, socket) do
+    company_id = socket.assigns[:current_user].user.company_id
+
+    lessons =
+      Pageless.Lessons.get_company_lessons(company_id)
+      |> Enum.map(&filter_steps/1)
+
+    {:reply, {:ok, %{lessons: lessons}}, socket}
+  end
+
+  def handle_in("save_lesson", %{"lesson" => lesson_params}, socket) do
+    params = Map.put(lesson_params, "company_id", socket.assigns[:current_user].user.company_id)
+
+    Pageless.Lessons.create_lesson(params)
+
+    {:reply, :ok, socket}
+  end
+
+  def handle_in("save_file", %{"data" => data}, socket) do
+    IO.inspect(Base.decode64!(data))
+
+    {:reply, :ok, socket}
+  end
+
   defp filter_user(user) do
     %{
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
+      company_id: user.company_id,
       id: user.id,
       paths: Enum.map(user.paths, &filter_paths(&1))
     }

@@ -35,6 +35,14 @@ defmodule Pageless.Users.User do
     |> put_change(:session_salt, generate_salt())
   end
 
+  @doc false
+  def changeset(struct, attrs \\ %{}) do
+    struct
+    |> cast(attrs, [:email, :role, :first_name, :last_name, :password])
+    |> put_password_hash()
+    |> put_change(:session_salt, generate_salt())
+  end
+
   @doc """
   Applies user attribute validations to a changeset.
   """
