@@ -22,6 +22,16 @@ defmodule Pageless.Lessons do
 
   @doc """
   Creates a lessons.
+
+  Required: 
+      :description,
+      :title,
+      :type,
+      :lesson_type,
+      :company_id,
+      :source,
+      :source_type
+
   """
   def create_lesson(attrs \\ %{}) do
     %Lesson{}
