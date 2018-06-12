@@ -35,25 +35,11 @@ defmodule Pageless.Lessons.Lesson do
   def validate(changeset) do
     changeset
     |> validate_required([
-      :description,
       :title,
-      :type,
       :lesson_type,
       :company_id,
       :source,
       :source_type
     ])
-    |> validate_subset(
-      :lesson_type,
-      @lesson_types,
-      message:
-        "#{changeset.lesson_type} not valid. Must be on of #{Enum.map(@lesson_types, &"#{&1}, ")}"
-    )
-    |> validate_subset(
-      :source_type,
-      @source_types,
-      message:
-        "#{changeset.source_type} not valid. Must be on of #{Enum.map(@lesson_types, &"#{&1}, ")}"
-    )
   end
 end

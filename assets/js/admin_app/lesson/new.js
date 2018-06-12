@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 
 import TextField from "@material-ui/core/TextField"
-import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
 import { Button, Typography } from "@material-ui/core"
 import Save from "@material-ui/icons/Save"
@@ -9,26 +8,19 @@ import CloudUpload from "@material-ui/icons/CloudUpload"
 import MessageSnackbar from "../../components/snackbar"
 import { getCsrfToken } from "../../token"
 import Grid from "@material-ui/core/Grid"
-import capture from "../../utils/screenshot"
+import LessonRadioGroup from "../../components/lessonRadioGroup"
 
 const styles = theme => ({
   formContainer: {
     display: "flex",
-    flexWrap: "wrap",
-    width: "100%"
+    flexGrow: 1,
+    flexWrap: "wrap"
   },
   form: {
     display: "flex",
     flexWrap: "wrap",
     width: "70%",
     margin: "auto"
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
-  },
-  menu: {
-    width: 200
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -48,13 +40,21 @@ const lessonTypes = [
   { value: "CLASSROOM", label: "Classroom" }
 ]
 
+const sourceTypes = [
+  { value: "FILE", label: "File" },
+  { value: "URL", label: "Url" },
+  { value: "RICHTEXT", label: "Text" }
+]
+
 class NewLesson extends Component {
   state = {
     form: {
       title: "",
       description: "",
       content: "",
-      type: ""
+      lesson_type: "VIDEO",
+      source_type: "FILE",
+      source: ""
     },
     fileAdded: false,
     snackbar: false
@@ -81,10 +81,7 @@ class NewLesson extends Component {
 
   saveLesson = () => {
     const token = getCsrfToken()
-    const { form, fileUploaded } = this.state
-
-    var fileField = document.querySelector("input[type='file']")
-    console.log(fileField)
+    const { form } = this.state
 
     fetch(`/save`, {
       method: "PUT",
@@ -103,21 +100,13 @@ class NewLesson extends Component {
     setTimeout(() => this.setState({ snackbar: false }), 5000)
   }
 
-  handleChange = (name, callback = false) => event => {
+  handleChange = name => event => {
     this.setState({
       form: {
         ...this.state.form,
         [name]: event.target.value
       }
     })
-
-    if (typeof callback === "function") {
-      callback()
-    }
-  }
-
-  getScreenshot() {
-    console.log("screenshot")
   }
 
   render() {
@@ -129,7 +118,7 @@ class NewLesson extends Component {
         <form className={classes.form} noValidate autoComplete="off">
           <TextField
             id="title"
-            label="Lesson Title"
+            label="Title"
             className={classes.textField}
             fullWidth
             value={form.title}
@@ -147,68 +136,64 @@ class NewLesson extends Component {
             className={classes.textField}
             margin="normal"
           />
-          <TextField
-            id="select-type"
-            select
-            label="Select Type"
-            className={classes.textField}
-            value={form.type}
-            onChange={this.handleChange("type")}
-            SelectProps={{
-              MenuProps: {
-                className: classes.menu
-              }
-            }}
-            helperText="Please select the lesson type"
-            margin="normal"
-          >
-            {lessonTypes.map(option => (
-              <MenuItem key={option.index} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <Grid container spacing={8} alignItems="flex-end">
-            <Grid item>
-              <TextField
-                id="content"
-                label={`URL`}
-                disabled={!form.type}
-                className={classes.textField}
-                value={form.content}
-                onChange={this.handleChange("content", () =>
-                  this.getScreenshot()
-                )}
-                margin="normal"
+          <Grid container direction="row" spacing={16}>
+            <Grid xs={3} item>
+              <LessonRadioGroup
+                handleChange={this.handleChange}
+                value={form.lesson_type}
+                data={lessonTypes}
+                updateField={"lesson_type"}
+                label={"Type"}
               />
             </Grid>
-            <Grid item>
-              <Typography variant="button" gutterBottom>
-                Or
-              </Typography>
-            </Grid>
-            <Grid item>
-              <TextField
-                id="file"
-                disabled={!form.type}
-                type="file"
-                onChange={() => this.setState({ fileAdded: true })}
-                className={classes.textField}
-                margin="normal"
+            <Grid xs={3} item>
+              <LessonRadioGroup
+                handleChange={this.handleChange}
+                value={form.source_type}
+                updateField={"source_type"}
+                data={sourceTypes}
+                label={"Source"}
               />
             </Grid>
-            <Grid item>
-              <Button
-                disabled={!this.state.fileAdded}
-                onClick={() => this.uploadFile()}
-                color="primary"
-              >
-                <CloudUpload className={classes.leftIcon} />
-                Upload
-              </Button>
+            <Grid xs={6} item>
+              <Grid item>
+                <TextField
+                  id="url"
+                  label={`URL`}
+                  disabled={form.source_type !== "URL"}
+                  className={classes.textField}
+                  value={form.source}
+                  onChange={this.handleChange("source")}
+                  margin="normal"
+                />
+              </Grid>
+              <Grid xs item>
+                <TextField
+                  id="file"
+                  disabled={form.source_type !== "FILE"}
+                  type="file"
+                  onChange={() =>
+                    this.setState({
+                      form: {
+                        ...this.state.form,
+                        path_type: "FILE"
+                      }
+                    })
+                  }
+                  className={classes.textField}
+                  margin="normal"
+                />
+                <Button
+                  disabled={form.source_type !== "FILE"}
+                  onClick={() => this.uploadFile()}
+                  color="primary"
+                >
+                  <CloudUpload className={classes.leftIcon} />
+                  Upload
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
-
           <Button
             onClick={() => this.saveLesson()}
             variant="raised"
