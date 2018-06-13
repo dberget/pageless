@@ -67,7 +67,7 @@ class NewLesson extends Component {
 
     data.append("file", fileField.files[0])
 
-    fetch(`/upload`, {
+    fetch(`/api/upload`, {
       method: "PUT",
       body: data,
       credentials: "same-origin",
@@ -75,6 +75,13 @@ class NewLesson extends Component {
         "x-csrf-token": token
       }
     })
+      .then(resp => resp.json())
+      .then(json =>
+        this.setState({
+          fileAdded: true,
+          form: { ...this.state.form, source: json.path }
+        })
+      )
       .then(this.showSnackbar("File Uploaded Successfully"))
       .catch(onrejected => this.showSnackbar(onrejected.message))
   }
@@ -83,7 +90,7 @@ class NewLesson extends Component {
     const token = getCsrfToken()
     const { form } = this.state
 
-    fetch(`/save`, {
+    fetch(`/api/save`, {
       method: "PUT",
       body: JSON.stringify(form),
       credentials: "same-origin",
@@ -176,7 +183,7 @@ class NewLesson extends Component {
                     this.setState({
                       form: {
                         ...this.state.form,
-                        path_type: "FILE"
+                        source_type: "FILE"
                       }
                     })
                   }
@@ -198,6 +205,7 @@ class NewLesson extends Component {
             onClick={() => this.saveLesson()}
             variant="raised"
             color="primary"
+            disabled={!form.source}
             className={classes.button}
           >
             <Save className={classes.leftIcon} />

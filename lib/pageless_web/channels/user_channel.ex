@@ -97,6 +97,8 @@ defmodule PagelessWeb.UserChannel do
   defp filter_lesson(lesson) do
     %{
       content: lesson.source,
+      source_type: lesson.source_type,
+      lesson_type: lesson.lesson_type,
       description: lesson.description,
       id: lesson.id,
       title: lesson.title,

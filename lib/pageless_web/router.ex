@@ -36,12 +36,18 @@ defmodule PagelessWeb.Router do
     delete("/logout", SessionController, :delete)
   end
 
+  scope "/api", PagelessWeb do
+    pipe_through :admin_browser
+
+    put("/save", AppController, :save)
+    put("/upload", AppController, :upload)
+    get "/download/:id", AppController, :download
+  end
+
   scope "/", PagelessWeb do
     pipe_through :admin_browser
 
     get "/admin", AppController, :admin
-    put("/save", AppController, :save)
-    put("/upload", AppController, :upload)
     get "/admin/:path", AppController, :admin
     get "/admin/:path/:subpath", AppController, :admin
     get "/admin/:path/:subpath/:page", AppController, :admin

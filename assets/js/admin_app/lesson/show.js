@@ -1,6 +1,16 @@
 import React, { Component } from "react"
 import { withStyles } from "@material-ui/core"
 import phoenixChannel from "../../socket"
+import LessonFile from "../../components/lessonFile"
+
+const lessonToRender = lesson => {
+  switch (lesson.source_type) {
+    case "FILE":
+      return <LessonFile lesson={lesson} />
+    case "ELEARNING":
+      return <LessonFile lesson={lesson} />
+  }
+}
 
 const styles = theme => ({})
 
@@ -23,18 +33,7 @@ class ShowLesson extends Component {
     const { classes } = this.props
     const { lesson, is_loading } = this.state
 
-    return (
-      <React.Fragment>
-        {is_loading ? null : (
-          <div>
-            <div>Type: {lesson.type}</div>
-            <div>Title: {lesson.title}</div>
-            <div>description: {lesson.description}</div>
-            <div>Content: {lesson.content}</div>
-          </div>
-        )}
-      </React.Fragment>
-    )
+    return is_loading ? null : lessonToRender(lesson)
   }
 }
 

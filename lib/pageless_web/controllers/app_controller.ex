@@ -25,19 +25,24 @@ defmodule PagelessWeb.AppController do
     params = Map.put(params, "company_id", conn.assigns[:current_user].company_id)
     Pageless.Lessons.create_lesson(params)
 
-    send_resp(conn, 200, "")
+    json(conn, "ok")
   end
 
   def upload(conn, params) do
-    # user = conn.assigns[:current_user])
-
     if upload = params["file"] do
-      {:ok, _path} = File.cp_r(upload.path, "files/#{upload.filename}")
+      {:ok, [path]} = File.cp_r(upload.path, "priv/static/files/#{upload.filename}")
 
-      send_resp(conn, 201, "ok")
+      json(conn, %{path: path})
     else
       send_resp(conn, 400, "error")
     end
+  end
+
+  def download(conn, params) do
+    lesson = Pageless.Lessons.get_lesson!(params["id"])
+    path = Application.app_dir(:pageless, lesson.source)
+
+    send_download(conn, {:file, path})
   end
 
   defp get_subdomain(conn, _opts) do
