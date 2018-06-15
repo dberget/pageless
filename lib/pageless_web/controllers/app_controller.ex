@@ -30,18 +30,18 @@ defmodule PagelessWeb.AppController do
 
   def upload(conn, params) do
     if upload = params["file"] do
-      {:ok, [path]} = File.cp(upload.path, "files/#{upload.filename}")
+      {:ok, [path]} = File.cp_r(upload.path, "files/#{upload.filename}")
 
       json(conn, %{path: path})
     else
-      send_resp(conn, 400, "error")
+      json(conn, %{error: "error, no file param"})
     end
   end
 
   def download(conn, params) do
-    lesson = Pageless.Lessons.get_lesson!(params["id"])
+    source = Pageless.Lessons.get_lesson_source(params["id"])
 
-    send_download(conn, {:file, lesson.source})
+    send_download(conn, {:file, source})
   end
 
   defp get_subdomain(conn, _opts) do
