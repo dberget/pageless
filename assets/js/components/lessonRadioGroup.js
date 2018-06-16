@@ -37,6 +37,7 @@ class LessonRadioGroup extends React.Component {
           >
             {this.props.data.map(type => (
               <FormControlLabel
+                key={type.value}
                 value={type.value}
                 control={<Radio />}
                 label={type.label}

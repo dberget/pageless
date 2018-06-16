@@ -24,7 +24,7 @@ const styles = theme => ({
 
 const LessonList = ({ lessons, classes, handleRemove, handlePreview }) =>
   lessons
-    ? lessons.map((lesson, index) => (
+    ? lessons.map(lesson => (
         <Card key={lesson.id} className={classes.card}>
           <CardHeader
             classes={{ title: classes.title }}
@@ -38,13 +38,13 @@ const LessonList = ({ lessons, classes, handleRemove, handlePreview }) =>
           </CardContent>
           <CardActions className={classes.actions} disableActionSpacing>
             <IconButton
-              onClick={() => handlePreview(lesson)}
+              onClick={() => (handlepreview ? handlePreview(lesson) : null)}
               aria-label="Preview Lesson"
             >
               <PageViewOutline />
             </IconButton>
             <IconButton
-              onClick={() => handleRemove(lesson)}
+              onClick={() => (handleRemove ? handleRemove(lesson) : null)}
               aria-label="Remove Lesson"
             >
               <RemoveCircleOutline />

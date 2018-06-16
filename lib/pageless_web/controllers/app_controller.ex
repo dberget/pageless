@@ -21,9 +21,16 @@ defmodule PagelessWeb.AppController do
     |> render("admin.html")
   end
 
-  def save(conn, params) do
+  def create_lesson(conn, params) do
     params = Map.put(params, "company_id", conn.assigns[:current_user].company_id)
     Pageless.Lessons.create_lesson(params)
+
+    json(conn, "ok")
+  end
+
+  def create_course(conn, params) do
+    params = Map.put(params, "company_id", conn.assigns[:current_user].company_id)
+    Pageless.Courses.create_course(params)
 
     json(conn, "ok")
   end

@@ -34,7 +34,7 @@ class NewLessonModal extends Component {
   }
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Tooltip placement="top" title="Create New Lesson" position="absolute">
           <Button
             onClick={() => this.handleOpen()}
@@ -54,7 +54,7 @@ class NewLessonModal extends Component {
             <NewLesson onSave={() => this.handleClose()} />
           </Paper>
         </Modal>
-      </div>
+      </React.Fragment>
     )
   }
 }

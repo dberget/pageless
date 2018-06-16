@@ -13,6 +13,17 @@ defmodule Pageless.Courses do
   """
   def get_course!(id), do: Repo.get!(Course, id)
 
+  def get_company_courses(company_id) do
+    query = from c in Course, where: c.company_id == ^company_id
+
+    query
+    |> Repo.all()
+  end
+
+  def get_course_with_lessons(id) do
+    Repo.get!(Course, id) |> Repo.preload(:lessons)
+  end
+
   @doc """
    gets lessons in course.
   """
@@ -41,6 +52,14 @@ defmodule Pageless.Courses do
     course
     |> Course.changeset(attrs)
     |> Repo.update()
+  end
+
+  def create_course_lesson(attrs) do
+    params = attrs |> Map.take([:lesson_id, :course_id, :sort_id])
+
+    %CourseLesson{}
+    |> CourseLesson.changeset(params)
+    |> Repo.insert()
   end
 
   @doc """

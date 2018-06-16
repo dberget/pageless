@@ -39,8 +39,10 @@ defmodule PagelessWeb.Router do
   scope "/api", PagelessWeb do
     pipe_through :admin_browser
 
-    put("/save", AppController, :save)
+    put("/course", AppController, :create_course)
+    put("/lesson", AppController, :create_lesson)
     put("/upload", AppController, :upload)
+
     get "/download/:id", AppController, :download
   end
 

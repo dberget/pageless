@@ -1,18 +1,29 @@
 import React, { Component } from "react"
-import { withStyles } from "@material-ui/core"
 import phoenixChannel from "../../socket"
 import LessonFile from "../../components/lessonFile"
+import ELearningViewer from "../../components/eLearningViewer"
+import LessonRichText from "../../components/lessonRichText"
+import VideoViewer from "../../components/videoViewer"
 
 const lessonToRender = lesson => {
   switch (lesson.source_type) {
     case "FILE":
       return <LessonFile lesson={lesson} />
-    case "ELEARNING":
-      return <LessonFile lesson={lesson} />
+    case "TEXT":
+      return <LessonRichText lesson={lesson} />
+    case "URL":
+      return handleUrl(lesson)
   }
 }
 
-const styles = theme => ({})
+const handleUrl = lesson => {
+  switch (lesson.lesson_type) {
+    case "ELEARNING":
+      return <ELearningViewer lesson={lesson} />
+    case "VIDEO":
+      return <VideoViewer lesson={lesson} />
+  }
+}
 
 class ShowLesson extends Component {
   state = { lesson: {}, is_loading: true }
@@ -30,11 +41,10 @@ class ShowLesson extends Component {
   }
 
   render() {
-    const { classes } = this.props
     const { lesson, is_loading } = this.state
 
     return is_loading ? null : lessonToRender(lesson)
   }
 }
 
-export default withStyles(styles)(ShowLesson)
+export default ShowLesson

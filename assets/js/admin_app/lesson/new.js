@@ -10,6 +10,20 @@ import { getCsrfToken } from "../../token"
 import Grid from "@material-ui/core/Grid"
 import LessonRadioGroup from "../../components/lessonRadioGroup"
 
+const lessonTypes = [
+  { value: "VIDEO", label: "Video" },
+  { value: "ARTICLE", label: "Article" },
+  { value: "ELEARNING", label: "eLearning" },
+  { value: "OTHER", label: "Other" },
+  { value: "CLASSROOM", label: "Classroom" }
+]
+
+const sourceTypes = [
+  { value: "FILE", label: "File" },
+  { value: "URL", label: "Url" },
+  { value: "RICHTEXT", label: "Text" }
+]
+
 const styles = theme => ({
   formContainer: {
     display: "flex",
@@ -25,29 +39,18 @@ const styles = theme => ({
   leftIcon: {
     marginRight: theme.spacing.unit
   },
-  button: {
+  buttonGroup: {
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2
+  },
+  button: {
+    margin: "0 4px"
   }
 })
 
-const lessonTypes = [
-  { value: "VIDEO", label: "Video" },
-  { value: "ARTICLE", label: "Article" },
-  { value: "ELEARNING", label: "eLearning" },
-  { value: "OTHER", label: "Other" },
-  { value: "CLASSROOM", label: "Classroom" }
-]
-
-const sourceTypes = [
-  { value: "FILE", label: "File" },
-  { value: "URL", label: "Url" },
-  { value: "RICHTEXT", label: "Text" }
-]
-
 class NewLesson extends Component {
-  state = {
+  initialState = {
     form: {
       title: "",
       description: "",
@@ -56,9 +59,10 @@ class NewLesson extends Component {
       source_type: "FILE",
       source: ""
     },
-    fileAdded: false,
-    snackbar: false
+    fileAdded: false
   }
+
+  state = this.initialState
 
   uploadFile = () => {
     let data = new FormData()
@@ -90,7 +94,7 @@ class NewLesson extends Component {
     const token = getCsrfToken()
     const { form } = this.state
 
-    fetch(`/api/save`, {
+    fetch(`/api/lesson`, {
       method: "PUT",
       body: JSON.stringify(form),
       credentials: "same-origin",
@@ -98,7 +102,24 @@ class NewLesson extends Component {
         "content-type": "application/json",
         "x-csrf-token": token
       }
-    }).then(this.showSnackbar("Lesson Saved Successfully"))
+    })
+      .then(this.showSnackbar("Lesson Saved Successfully"))
+      .then(() => this.setState(this.initialState))
+  }
+
+  saveLessonDraft = () => {
+    const token = getCsrfToken()
+    const { form } = this.state
+
+    fetch(`/api/lesson`, {
+      method: "PUT",
+      body: JSON.stringify(form),
+      credentials: "same-origin",
+      headers: {
+        "content-type": "application/json",
+        "x-csrf-token": token
+      }
+    }).then(this.showSnackbar("Lesson Draft Saved"))
   }
 
   showSnackbar = message => {
@@ -174,7 +195,7 @@ class NewLesson extends Component {
                   margin="normal"
                 />
               </Grid>
-              <Grid xs item>
+              <div className={classes.inputSet}>
                 <TextField
                   id="file"
                   disabled={form.source_type !== "FILE"}
@@ -187,7 +208,6 @@ class NewLesson extends Component {
                       }
                     })
                   }
-                  className={classes.textField}
                   margin="normal"
                 />
                 <Button
@@ -198,19 +218,28 @@ class NewLesson extends Component {
                   <CloudUpload className={classes.leftIcon} />
                   Upload
                 </Button>
-              </Grid>
+              </div>
             </Grid>
           </Grid>
-          <Button
-            onClick={() => this.saveLesson()}
-            variant="raised"
-            color="primary"
-            disabled={!form.source}
-            className={classes.button}
-          >
-            <Save className={classes.leftIcon} />
-            Save Lesson
-          </Button>
+          <div className={classes.buttonGroup}>
+            <Button
+              onClick={() => this.saveLessonDraft()}
+              variant="outlined"
+              className={classes.button}
+            >
+              Save Draft
+            </Button>
+            <Button
+              onClick={() => this.saveLesson()}
+              variant="raised"
+              color="primary"
+              disabled={!form.source}
+              className={classes.button}
+            >
+              <Save className={classes.leftIcon} />
+              Save & New
+            </Button>
+          </div>
         </form>
         <MessageSnackbar
           open={this.state.snackbar}

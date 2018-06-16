@@ -7,13 +7,7 @@ import LessonCard from "../../components/lessonCard"
 import Container from "../navigation/container"
 import SubMenu from "../navigation/subMenu"
 import Grid from "@material-ui/core/Grid"
-
 import { withStyles } from "@material-ui/core/styles"
-import Card from "@material-ui/core/Card"
-import Button from "@material-ui/core/Button"
-import CardActions from "@material-ui/core/CardActions"
-import CardContent from "@material-ui/core/CardContent"
-import Typography from "@material-ui/core/Typography"
 
 const styles = theme => ({
   card: {
@@ -26,12 +20,11 @@ const styles = theme => ({
 
 class Home extends Component {
   state = { lessons: [], is_loading: true }
+
   componentDidMount = () => {
-    phoenixChannel
-      .push("get_company_lessons", { company_id: 1 })
-      .receive("ok", resp => {
-        this.setState({ lessons: resp.lessons, is_loading: false })
-      })
+    phoenixChannel.push("get_company_lessons").receive("ok", resp => {
+      this.setState({ lessons: resp.lessons, is_loading: false })
+    })
   }
 
   render() {

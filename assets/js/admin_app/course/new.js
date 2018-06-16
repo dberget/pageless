@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import phoenixChannel from "../../socket"
 import { Route, Switch, Link } from "react-router-dom"
+import { getCsrfToken } from "../../token"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Button } from "@material-ui/core"
@@ -13,38 +14,19 @@ import Paper from "@material-ui/core/Paper"
 import NewLessonModal from "../../components/newLessonModal"
 
 const styles = theme => ({
-  formContainer: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%"
-  },
-  container: {
-    display: "flex",
-    marginTop: theme.spacing.unit,
-    alignItems: "center",
-    flexDirection: "column"
-  },
   form: {
     display: "flex",
     flexDirection: "column",
     flexWrap: "wrap",
-    Width: "500px"
+    width: "800px"
   },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit
   },
   menu: {
-    width: 200
+    width: 300
   },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "flex-end"
-  },
-  button: { margin: "0 2px" },
   header: {
     marginTop: "-25px"
   },
@@ -56,14 +38,22 @@ const styles = theme => ({
     padding: theme.spacing.unit * 5,
     overflow: "scroll",
     transform: "translate(-50%, -50%)"
+  },
+  buttonGroup: {
+    position: "absolute",
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
+  },
+  button: {
+    margin: "0 4px"
   }
 })
 
 class NewCourse extends Component {
   state = {
-    title: "title",
-    description: "desc",
-    selectedLessons: [],
+    title: "Lesson Title",
+    description: "description goes here",
+    lessons: [],
     allLessons: [],
     activeStep: 0,
     open: false
@@ -93,26 +83,24 @@ class NewCourse extends Component {
   }
 
   handleSelect = lesson => {
-    let { selectedLessons } = this.state
+    let { lessons } = this.state
 
-    if (selectedLessons.indexOf(lesson) === -1) {
-      selectedLessons = [...selectedLessons, lesson]
+    if (lessons.indexOf(lesson) === -1) {
+      lessons = [...lessons, lesson]
     }
 
     this.setState({
-      selectedLessons
+      lessons
     })
   }
 
   handleRemove = lesson_to_remove => {
-    let { selectedLessons } = this.state
+    let { lessons } = this.state
 
-    selectedLessons = selectedLessons.filter(
-      lesson => lesson !== lesson_to_remove
-    )
+    lessons = lessons.filter(lesson => lesson !== lesson_to_remove)
 
     this.setState({
-      selectedLessons
+      lessons
     })
   }
 
@@ -120,12 +108,19 @@ class NewCourse extends Component {
     this.setState({ open: !this.state.open, previewLesson: lesson })
   }
 
-  save = () => {
-    phoenixChannel
-      .push("save_course", { course: this.state.form })
-      .receive("ok", resp => {
-        this.props.history.push("/")
-      })
+  saveCourse = () => {
+    const token = getCsrfToken()
+    const { title, description, lessons } = this.state
+
+    fetch(`/api/course`, {
+      method: "PUT",
+      body: JSON.stringify({ title, description, lessons }),
+      credentials: "same-origin",
+      headers: {
+        "content-type": "application/json",
+        "x-csrf-token": token
+      }
+    }).then(this.props.history.push("/"))
   }
 
   handleChange = name => event => {
@@ -139,76 +134,91 @@ class NewCourse extends Component {
     const { activeStep, allLessons } = this.state
 
     const Buttons = () => (
-      <div className={classes.buttonContainer}>
+      <div className={classes.buttonGroup}>
+        <Button
+          onClick={() => this.saveCourse()}
+          variant="outlined"
+          className={classes.button}
+        >
+          Save Draft
+        </Button>
         <Button
           onClick={() => this.handleBack()}
-          variant="raised"
-          color="primary"
-          className={classes.button}
-          component={Link}
-          disabled={activeStep == 0}
           to={`${match.path}/${activeStep - 1 || ""}`}
-        >
-          Prev
-        </Button>
-        <Button
-          onClick={() => this.handleNext()}
-          variant="raised"
-          color="primary"
-          className={classes.button}
           component={Link}
-          to={`${match.path}/${activeStep + 1}`}
+          variant="outlined"
+          color="secondary"
+          disabled={activeStep == 0}
+          className={classes.button}
         >
-          Continue
+          Previous
         </Button>
+        {activeStep == 1 ? (
+          <Button
+            onClick={() => this.saveCourse()}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
+            Save
+          </Button>
+        ) : (
+          <Button
+            onClick={() => this.handleNext()}
+            to={`${match.path}/${activeStep + 1}`}
+            component={Link}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
+            Next
+          </Button>
+        )}
       </div>
     )
 
     return (
-      <div className={classes.formContainer}>
-        <Buttons />
-        <form className={classes.form} noValidate autoComplete="off">
-          <Switch>
-            <Route
-              exact
-              path={`${match.path}`}
-              render={() => (
-                <NewCourseInfo
-                  title={this.state.title}
-                  description={this.state.description}
-                  handleChange={this.handleChange}
-                  classes={classes}
+      <form className={classes.form} noValidate autoComplete="off">
+        <Switch>
+          <Route
+            exact
+            path={`${match.path}`}
+            render={() => (
+              <NewCourseInfo
+                title={this.state.title}
+                description={this.state.description}
+                handleChange={this.handleChange}
+                classes={classes}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/1`}
+            render={() => (
+              <React.Fragment>
+                <h2 className={classes.header}> {this.state.title} </h2>
+                <LessonSelect
+                  handleSelect={lesson => this.handleSelect(lesson)}
+                  items={allLessons}
                 />
-              )}
-            />
-            <Route
-              path={`${match.path}/1`}
-              render={() => (
-                <React.Fragment>
-                  <h2 className={classes.header}> {this.state.title} </h2>
-                  <LessonSelect
-                    handleSelect={lesson => this.handleSelect(lesson)}
-                    items={allLessons}
-                  />
-                  <div className={classes.container}>
-                    <Modal onClose={this.handlePreview} open={this.state.open}>
-                      <Paper className={classes.modalBox}>
-                        <ShowLesson lesson={this.state.previewLesson} />
-                      </Paper>
-                    </Modal>
-                    <LessonList
-                      handleRemove={lesson => this.handleRemove(lesson)}
-                      lessons={this.state.selectedLessons}
-                      handlePreview={lesson => this.handlePreview(lesson)}
-                    />
-                  </div>
-                  <NewLessonModal />
-                </React.Fragment>
-              )}
-            />
-          </Switch>
-        </form>
-      </div>
+                <div className={classes.container}>
+                  <Modal onClose={this.handlePreview} open={this.state.open}>
+                    <Paper className={classes.modalBox}>
+                      <ShowLesson lesson={this.state.previewLesson} />
+                    </Paper>
+                  </Modal>
+                </div>
+                <LessonList
+                  handleRemove={lesson => this.handleRemove(lesson)}
+                  lessons={this.state.lessons}
+                  handlePreview={lesson => this.handlePreview(lesson)}
+                />
+              </React.Fragment>
+            )}
+          />
+        </Switch>
+        <Buttons />
+      </form>
     )
   }
 }

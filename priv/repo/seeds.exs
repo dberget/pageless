@@ -57,7 +57,7 @@ people =
         password: "password",
         password_hash: Comeonin.Bcrypt.hashpwsalt("password"),
         state: Enum.random(["ACTIVE", "DISABLED"]),
-        role: Enum.random(["ADMIN", "LEARNER"]),
+        role: "ADMIN",
         company: Enum.random(companies)
       })
 

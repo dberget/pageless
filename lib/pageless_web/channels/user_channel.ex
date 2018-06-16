@@ -10,21 +10,39 @@ defmodule PagelessWeb.UserChannel do
     {:ok, %{user: user}, socket}
   end
 
-  def handle_in("get_path", %{"path_id" => path_id}, socket) do
-    steps =
-      Pageless.Paths.get_path_steps(path_id)
-      |> Enum.map(&filter_steps/1)
+  # def handle_in("get_path", %{"path_id" => path_id}, socket) do
+  #   steps =
+  #     Pageless.Paths.get_path_steps(path_id)
+  #     |> Enum.map(&filter_steps/1)
 
-    {:reply, {:ok, %{path: steps}}, socket}
+  #   {:reply, {:ok, %{path: steps}}, socket}
+  # end
+
+  def handle_in("get_company_courses", _params, socket) do
+    company_id = socket.assigns[:current_user].user.company_id
+
+    courses =
+      Pageless.Courses.get_company_courses(company_id)
+      |> Enum.map(&filter_courses/1)
+
+    {:reply, {:ok, %{courses: courses}}, socket}
   end
 
-  def handle_in("get_lessons", %{"path_id" => path_id}, socket) do
-    lessons =
-      Pageless.Paths.get_path_steps(path_id)
-      |> Enum.map(&filter_steps/1)
+  def handle_in("get_course", %{"course_id" => course_id}, socket) do
+    course =
+      Pageless.Courses.get_course_with_lessons(course_id)
+      |> filter_course()
 
-    {:reply, {:ok, %{lessons: lessons}}, socket}
+    {:reply, {:ok, %{course: course}}, socket}
   end
+
+  # def handle_in("get_lessons", %{"path_id" => path_id}, socket) do
+  #   lessons =
+  #     Pageless.Paths.get_path_steps(path_id)
+  #     |> Enum.map(&filter_steps/1)
+
+  #   {:reply, {:ok, %{lessons: lessons}}, socket}
+  # end
 
   def handle_in("get_lesson", %{"lesson_id" => lesson_id}, socket) do
     lesson =
@@ -65,9 +83,28 @@ defmodule PagelessWeb.UserChannel do
     }
   end
 
+  def filter_courses(course) do
+    %{
+      title: course.title,
+      description: course.description,
+      id: course.id
+    }
+  end
+
+  def filter_course(course) do
+    IO.inspect(course)
+
+    %{
+      description: course.description,
+      title: course.title,
+      id: course.id,
+      lessons: Enum.map(course.lessons, &filter_lesson(&1))
+    }
+  end
+
   def filter_steps(%Pageless.Courses.Course{} = step) do
     %{
-      lessons: Enum.map(step.lessons, &filter_lessons(&1)),
+      lessons: Enum.map(step.lessons, &filter_lesson(&1)),
       description: step.description,
       id: step.id,
       title: step.title
