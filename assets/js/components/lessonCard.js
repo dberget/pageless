@@ -1,27 +1,18 @@
 import React, { Component, Fragment } from "react"
-import LessonStepper from "./lessonStepper"
 import { Link } from "react-router-dom"
 
 import { withStyles } from "@material-ui/core/styles"
-import classnames from "classnames"
 import Card from "@material-ui/core/Card"
 import CardHeader from "@material-ui/core/CardHeader"
-import CardMedia from "@material-ui/core/CardMedia"
 import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
-import Avatar from "@material-ui/core/Avatar"
 import IconButton from "@material-ui/core/IconButton"
-import Collapse from "@material-ui/core/Collapse"
 import red from "@material-ui/core/colors/red"
-import FavoriteIcon from "@material-ui/icons/Favorite"
-import ShareIcon from "@material-ui/icons/Share"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import lessonStepper from "./lessonStepper"
-import Chip from "@material-ui/core/Chip"
-import { Divider } from "@material-ui/core"
+import Assessment from "@material-ui/icons/Assessment"
+import OptionsMenu from "./OptionsMenu"
 
 const styles = theme => ({
   card: {
@@ -62,22 +53,32 @@ const styles = theme => ({
   h3: {
     margin: ".5rem 0 .5rem 0"
   },
-  button: { padding: "inherit" }
+  buttonRight: { marginLeft: "auto" }
 })
 
 class LessonCard extends Component {
+  state = { optionsEl: null }
+
+  handleShow = event => {
+    this.setState({ optionsEl: event.currentTarget })
+  }
+
+  handleClose = () => {
+    this.setState({ optionsEl: null })
+  }
   render() {
     const { classes, lesson, route } = this.props
+    const { optionsEl } = this.state
     return (
       <div>
         <Card>
           <CardHeader
             action={
-              <Fragment>
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              </Fragment>
+              <OptionsMenu
+                handleShow={this.handleShow}
+                handleClose={this.handleClose}
+                show={optionsEl}
+              />
             }
             title={<h3 className={classes.h3}>{lesson.title}</h3>}
             subheader={<div> {lesson.type} </div>}
@@ -91,11 +92,19 @@ class LessonCard extends Component {
               component={Link}
               to={`${route}${lesson.id}`}
               className={classes.button}
-              variant="raised"
+              variant="outlined"
+              color="secondary"
+            >
+              View
+            </Button>
+            <IconButton
+              component={Link}
+              to={`${route}${lesson.id}`}
+              className={classes.buttonRight}
               color="primary"
             >
-              View Lesson
-            </Button>
+              <Assessment />
+            </IconButton>
           </CardActions>
         </Card>
       </div>

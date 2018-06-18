@@ -12,6 +12,8 @@ import Drawer from "@material-ui/core/Drawer"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import Dashboard from "@material-ui/icons/dashboard"
 import Work from "@material-ui/icons/work"
+import Person from "@material-ui/icons/person"
+import Pages from "@material-ui/icons/pages"
 
 const styles = theme => ({
   drawerPaper: {
@@ -34,6 +36,12 @@ class SideMenu extends Component {
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
+          <ListItem button component={Link} to="/">
+            <ListItemIcon>
+              <Person />
+            </ListItemIcon>
+            <ListItemText primary="Users" />
+          </ListItem>
           <ListItem button component={Link} to="/lesson">
             <ListItemIcon>
               <ViewList />
@@ -42,7 +50,7 @@ class SideMenu extends Component {
           </ListItem>
           <ListItem button component={Link} to="/course">
             <ListItemIcon>
-              <ViewList />
+              <Pages />
             </ListItemIcon>
             <ListItemText primary="Course" />
           </ListItem>

@@ -11,9 +11,6 @@ import New from "./new"
 import View from "./show"
 
 const styles = theme => ({
-  card: {
-    margin: "3px"
-  },
   grid: {
     margin: "1rem 0"
   }
@@ -35,11 +32,9 @@ class CourseHome extends Component {
     return (
       <Grid className={classes.grid} container spacing={24}>
         {courses.map(course => (
-          <div className={classes.card}>
-            <Grid item xs>
-              <CourseCard route={this.props.match.path} course={course} />
-            </Grid>
-          </div>
+          <Grid item xs={12} md={4}>
+            <CourseCard route={this.props.match.path} course={course} />
+          </Grid>
         ))}
       </Grid>
     )

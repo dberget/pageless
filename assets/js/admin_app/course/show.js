@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import phoenixChannel from "../../socket"
 import LessonList from "../../components/lessonList"
+import Grid from "@material-ui/core/Grid"
 
 class ShowLesson extends Component {
   state = { course: {}, is_loading: true }
@@ -19,9 +20,12 @@ class ShowLesson extends Component {
 
   render() {
     const { course, is_loading } = this.state
-    console.log(course)
 
-    return is_loading ? null : <LessonList lessons={course.lessons} />
+    return is_loading ? null : (
+      <Grid item="xs">
+        <LessonList lessons={course.lessons} />
+      </Grid>
+    )
   }
 }
 

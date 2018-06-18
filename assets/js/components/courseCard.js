@@ -15,16 +15,15 @@ import IconButton from "@material-ui/core/IconButton"
 import Collapse from "@material-ui/core/Collapse"
 import red from "@material-ui/core/colors/red"
 import FavoriteIcon from "@material-ui/icons/Favorite"
-import ShareIcon from "@material-ui/icons/Share"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import Chip from "@material-ui/core/Chip"
+import Menu from "@material-ui/core/Menu"
+import MenuItem from "@material-ui/core/MenuItem"
+import Share from "@material-ui/icons/share"
 import { Divider } from "@material-ui/core"
+import OptionsMenu from "./optionsMenu"
 
 const styles = theme => ({
-  card: {
-    maxWidth: 400
-  },
   chip: {
     backgroundColor: red[500],
     color: "white"
@@ -60,42 +59,64 @@ const styles = theme => ({
   h3: {
     margin: ".5rem 0 .5rem 0"
   },
-  button: { padding: "inherit" }
+  buttonRight: {
+    marginLeft: "auto"
+  },
+  optionsMenu: {
+    padding: 5
+  }
 })
 
 class CourseCard extends Component {
+  state = { optionsEl: null }
+
+  handleShow = event => {
+    this.setState({ optionsEl: event.currentTarget })
+  }
+
+  handleClose = () => {
+    this.setState({ optionsEl: null })
+  }
   render() {
     const { classes, course, route } = this.props
+    const { optionsEl } = this.state
+
     return (
-      <div>
-        <Card>
-          <CardHeader
-            action={
-              <Fragment>
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              </Fragment>
-            }
-            title={<h3 className={classes.h3}>{course.title}</h3>}
-            classes={{ title: classes.title }}
-          />
-          <CardContent>
-            <Typography component="p">{course.description}</Typography>
-          </CardContent>
-          <CardActions className={classes.actions} disableActionSpacing>
-            <Button
-              component={Link}
-              to={`${route}${course.id}`}
-              className={classes.button}
-              variant="raised"
-              color="primary"
-            >
-              View course
-            </Button>
-          </CardActions>
-        </Card>
-      </div>
+      <Card className={classes.card}>
+        <CardHeader
+          action={
+            <OptionsMenu
+              handleShow={this.handleShow}
+              handleClose={this.handleClose}
+              show={optionsEl}
+            />
+          }
+          title={<h3 className={classes.h3}>{course.title}</h3>}
+          classes={{ title: classes.title }}
+        />
+        <CardContent>
+          <Typography component="p">{course.description}</Typography>
+        </CardContent>
+        <CardActions className={classes.actions} disableActionSpacing>
+          <Button
+            component={Link}
+            to={`${route}${course.id}`}
+            className={classes.button}
+            variant="outlined"
+            color="secondary"
+          >
+            View
+          </Button>
+          <IconButton
+            component={Link}
+            to={`${route}${course.id}`}
+            className={classes.buttonRight}
+            color="primary"
+          >
+            <Share />
+          </IconButton>
+        </CardActions>
+      </Card>
     )
   }
 }

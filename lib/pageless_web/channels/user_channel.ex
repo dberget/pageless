@@ -10,13 +10,13 @@ defmodule PagelessWeb.UserChannel do
     {:ok, %{user: user}, socket}
   end
 
-  # def handle_in("get_path", %{"path_id" => path_id}, socket) do
-  #   steps =
-  #     Pageless.Paths.get_path_steps(path_id)
-  #     |> Enum.map(&filter_steps/1)
+  def handle_in("get_path", %{"path_id" => path_id}, socket) do
+    steps =
+      Pageless.Paths.get_path_steps(path_id)
+      |> Enum.map(&filter_steps/1)
 
-  #   {:reply, {:ok, %{path: steps}}, socket}
-  # end
+    {:reply, {:ok, %{path: steps}}, socket}
+  end
 
   def handle_in("get_company_courses", _params, socket) do
     company_id = socket.assigns[:current_user].user.company_id
@@ -36,13 +36,13 @@ defmodule PagelessWeb.UserChannel do
     {:reply, {:ok, %{course: course}}, socket}
   end
 
-  # def handle_in("get_lessons", %{"path_id" => path_id}, socket) do
-  #   lessons =
-  #     Pageless.Paths.get_path_steps(path_id)
-  #     |> Enum.map(&filter_steps/1)
+  def handle_in("get_lessons", %{"path_id" => path_id}, socket) do
+    lessons =
+      Pageless.Paths.get_path_steps(path_id)
+      |> Enum.map(&filter_steps/1)
 
-  #   {:reply, {:ok, %{lessons: lessons}}, socket}
-  # end
+    {:reply, {:ok, %{lessons: lessons}}, socket}
+  end
 
   def handle_in("get_lesson", %{"lesson_id" => lesson_id}, socket) do
     lesson =
@@ -92,8 +92,6 @@ defmodule PagelessWeb.UserChannel do
   end
 
   def filter_course(course) do
-    IO.inspect(course)
-
     %{
       description: course.description,
       title: course.title,

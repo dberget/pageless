@@ -34,11 +34,9 @@ class Home extends Component {
     return (
       <Grid className={classes.grid} container spacing={24}>
         {lessons.map(lesson => (
-          <div className={classes.card}>
-            <Grid item xs>
-              <LessonCard route={this.props.match.path} lesson={lesson} />
-            </Grid>
-          </div>
+          <Grid item xs={12} md={4}>
+            <LessonCard route={this.props.match.path} lesson={lesson} />
+          </Grid>
         ))}
       </Grid>
     )

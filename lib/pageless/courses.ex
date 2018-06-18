@@ -4,6 +4,7 @@ defmodule Pageless.Courses do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Pageless.Repo
 
   alias Pageless.Courses.{Course, CourseLesson}
@@ -36,30 +37,49 @@ defmodule Pageless.Courses do
     |> Repo.all()
   end
 
-  @doc """
-  Creates a course.
-  """
-  def create_course(attrs \\ %{}) do
-    %Course{}
-    |> Course.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a course.
-  """
-  def update_course(%course{} = course, attrs) do
+  def update_course(%Course{} = course, attrs) do
     course
     |> Course.changeset(attrs)
     |> Repo.update()
   end
 
-  def create_course_lesson(attrs) do
-    params = attrs |> Map.take([:lesson_id, :course_id, :sort_id])
+  @doc """
+  Creates a course.
+  """
+  def create_course(%{"lessons" => lessons} = params) do
+    Multi.new()
+    |> Multi.insert(:course, create_course_changeset(params))
+    |> Multi.run(:course_lesson, fn %{course: course} ->
+      {:ok, lessons} = create_course_lessons(course.id, lessons)
 
-    %CourseLesson{}
-    |> CourseLesson.changeset(params)
-    |> Repo.insert()
+      {count, _} = Repo.insert_all(CourseLesson, lessons)
+
+      IO.inspect(count)
+      {:ok, count}
+    end)
+    |> Repo.transaction()
+  end
+
+  def create_course_changeset(attrs \\ %{}) do
+    %Course{}
+    |> Course.changeset(attrs)
+  end
+
+  def create_course_lessons(course_id, lessons) do
+    timestamp = NaiveDateTime.utc_now()
+
+    lessons =
+      Enum.map(
+        lessons,
+        &%{
+          course_id: course_id,
+          lesson_id: &1["id"],
+          inserted_at: timestamp,
+          updated_at: timestamp
+        }
+      )
+
+    {:ok, lessons}
   end
 
   @doc """
