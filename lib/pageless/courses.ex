@@ -51,10 +51,8 @@ defmodule Pageless.Courses do
     |> Multi.insert(:course, create_course_changeset(params))
     |> Multi.run(:course_lesson, fn %{course: course} ->
       {:ok, lessons} = create_course_lessons(course.id, lessons)
-
       {count, _} = Repo.insert_all(CourseLesson, lessons)
 
-      IO.inspect(count)
       {:ok, count}
     end)
     |> Repo.transaction()
