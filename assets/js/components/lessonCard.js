@@ -10,51 +10,24 @@ import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import IconButton from "@material-ui/core/IconButton"
 import red from "@material-ui/core/colors/red"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
 import Assessment from "@material-ui/icons/Assessment"
-import OptionsMenu from "./OptionsMenu"
+import OptionsMenu from "./optionsMenu"
 
-const styles = theme => ({
+const styles = {
   card: {
     maxWidth: 400
-  },
-  chip: {
-    backgroundColor: red[500],
-    color: "white"
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%" // 16:9
   },
   actions: {
     display: "flex"
   },
-  expand: {
-    transform: "rotate(0deg)",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    }),
-    marginLeft: "auto"
-  },
-  expandOpen: {
-    transform: "rotate(180deg)"
-  },
   title: {
     fontSize: "1rem"
-  },
-  stats: {
-    borderLeftStyle: "solid",
-    borderLeft: 1,
-    display: "inline",
-    color: "inherit",
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
   },
   h3: {
     margin: ".5rem 0 .5rem 0"
   },
   buttonRight: { marginLeft: "auto" }
-})
+}
 
 class LessonCard extends Component {
   state = { optionsEl: null }

@@ -14,7 +14,10 @@ defmodule Pageless.Lessons do
   def get_lesson!(id), do: Repo.get!(Lesson, id)
 
   def get_lesson_source(id) do
-    from l in Lesson, where: l.lesson_id == ^id, select: l.source
+    query = from l in Lesson, where: l.id == ^id, select: l.source
+
+    query
+    |> Repo.one()
   end
 
   def get_company_lessons(company_id) do

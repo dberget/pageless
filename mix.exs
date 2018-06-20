@@ -4,8 +4,8 @@ defmodule Pageless.Mixfile do
   def project do
     [
       app: :pageless,
-      version: "0.0.1",
-      elixir: "~> 1.4",
+      version: "0.0.9",
+      elixir: "~> 1.6.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -36,7 +36,8 @@ defmodule Pageless.Mixfile do
       {:phoenix, "~> 1.3.2"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
-      {:comeonin, "~> 3.0"},
+      {:comeonin, "~> 4.1"},
+      {:bcrypt_elixir, "~> 1.0"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
@@ -46,6 +47,7 @@ defmodule Pageless.Mixfile do
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.12"},
+      {:distillery, "~> 1.5"},
       {:sweet_xml, "~> 0.6"}
     ]
   end

@@ -36,7 +36,7 @@ class SideMenu extends Component {
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-          <ListItem button component={Link} to="/">
+          <ListItem button component={Link} to="/users">
             <ListItemIcon>
               <Person />
             </ListItemIcon>

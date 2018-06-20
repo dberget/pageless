@@ -11,6 +11,7 @@ defmodule Pageless.Courses.Course do
   schema "courses" do
     field :description, :string
     field :title, :string
+    field :slug, :string
 
     belongs_to :company, Company
     many_to_many :lessons, Lesson, join_through: CourseLesson
@@ -22,6 +23,6 @@ defmodule Pageless.Courses.Course do
   @doc false
   def changeset(path, attrs) do
     path
-    |> cast(attrs, [:description, :company_id, :title])
+    |> cast(attrs, [:description, :company_id, :title, :slug])
   end
 end

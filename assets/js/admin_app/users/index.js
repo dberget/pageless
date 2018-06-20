@@ -16,41 +16,34 @@ const styles = theme => ({
   }
 })
 
-class CourseHome extends Component {
-  state = { courses: [], is_loading: true }
+class UsersHome extends Component {
+  state = { users: [], is_loading: true }
 
   componentDidMount = () => {
-    phoenixChannel.push("get_company_courses").receive("ok", resp => {
-      this.setState({ courses: resp.courses, is_loading: false })
-    })
+    // phoenixChannel.push("get_company_courses").receive("ok", resp => {
+    //   this.setState({ courses: resp.courses, is_loading: false })
+    // })
   }
 
   render() {
-    const { courses, is_loading } = this.state
+    const { users } = this.state
     const { classes } = this.props
 
-    return (
-      <Grid className={classes.grid} container spacing={24}>
-        {is_loading
-          ? null
-          : courses.map(course => (
-              <Grid key={course.id} item xs={12} md={4}>
-                <CourseCard route={this.props.match.path} course={course} />
-              </Grid>
-            ))}
-      </Grid>
-    )
+    return <div>users home</div>
   }
 }
-const Home = withStyles(styles)(CourseHome)
 
-const Course = ({ match, classes }) => {
+const Users = ({ match, classes }) => {
   return (
     <Fragment>
-      <SubMenu resource="course" />
+      <SubMenu resource="users" />
       <Container>
         <Switch>
-          <Route exact path={`${match.path}/`} component={Home} />
+          <Route
+            exact
+            path={`${match.path}/`}
+            component={withStyles(styles)(UsersHome)}
+          />
           <Route path={`${match.path}/new`} component={New} />
           <Route path={`${match.path}/:id`} component={View} />
         </Switch>
@@ -59,4 +52,4 @@ const Course = ({ match, classes }) => {
   )
 }
 
-export default Course
+export default Users

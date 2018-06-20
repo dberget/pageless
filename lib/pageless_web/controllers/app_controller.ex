@@ -21,22 +21,6 @@ defmodule PagelessWeb.AppController do
     |> render("admin.html")
   end
 
-  def create_lesson(conn, params) do
-    params = Map.put(params, "company_id", conn.assigns[:current_user].company_id)
-
-    Pageless.Lessons.create_lesson(params)
-
-    json(conn, "ok")
-  end
-
-  def create_course(conn, params) do
-    params
-    |> Map.put("company_id", conn.assigns[:current_user].company_id)
-    |> Pageless.Courses.create_course()
-
-    json(conn, "ok")
-  end
-
   def upload(conn, params) do
     if upload = params["file"] do
       {:ok, [path]} = File.cp_r(upload.path, "files/#{upload.filename}")

@@ -1,8 +1,6 @@
-import React, { Component, Fragment } from "react"
+import React, { Fragment } from "react"
 import IconButton from "@material-ui/core/IconButton"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import Share from "@material-ui/icons/share"
-
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 

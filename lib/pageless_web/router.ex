@@ -36,14 +36,14 @@ defmodule PagelessWeb.Router do
     delete("/logout", SessionController, :delete)
   end
 
-  scope "/api", PagelessWeb do
+  scope "/api", PagelessWeb.Api do
     pipe_through :admin_browser
 
-    put("/course", AppController, :create_course)
-    put("/lesson", AppController, :create_lesson)
-    put("/upload", AppController, :upload)
+    put("/course", CourseController, :create)
+    put("/lesson", LessonController, :create)
+    put("/upload", LessonController, :upload)
 
-    get "/download/:id", AppController, :download
+    get "/download/:id", LessonController, :download
   end
 
   scope "/", PagelessWeb do
@@ -59,7 +59,6 @@ defmodule PagelessWeb.Router do
     pipe_through :authenticated_browser
 
     get "/app", AppController, :index
-    get "/app/:path", AppController, :index
-    get "/app/:path/:id", AppController, :index
+    get "/app/:course", AppController, :index
   end
 end

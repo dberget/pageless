@@ -13,6 +13,13 @@ import ShowLesson from "../lesson/show"
 import Paper from "@material-ui/core/Paper"
 import NewLessonModal from "../../components/newLessonModal"
 
+const slugify = name => {
+  return name
+    .toLowerCase()
+    .slice(0, 20)
+    .replace(/[^a-z0-9]+/g, "-")
+}
+
 const styles = theme => ({
   form: {
     display: "flex",
@@ -46,13 +53,17 @@ const styles = theme => ({
   },
   button: {
     margin: "0 4px"
+  },
+  adornment: {
+    marginRight: 0
   }
 })
 
 class NewCourse extends Component {
   state = {
-    title: "Lesson Title",
-    description: "description goes here",
+    title: "",
+    url: "",
+    description: "",
     lessons: [],
     allLessons: [],
     activeStep: 0,
@@ -112,9 +123,11 @@ class NewCourse extends Component {
     const token = getCsrfToken()
     const { title, description, lessons } = this.state
 
+    const url = slugify(title)
+
     fetch(`/api/course`, {
       method: "PUT",
-      body: JSON.stringify({ title, description, lessons }),
+      body: JSON.stringify({ title, description, lessons, url: url }),
       credentials: "same-origin",
       headers: {
         "content-type": "application/json",
@@ -186,6 +199,7 @@ class NewCourse extends Component {
             render={() => (
               <NewCourseInfo
                 title={this.state.title}
+                url={this.state.title}
                 description={this.state.description}
                 handleChange={this.handleChange}
                 classes={classes}

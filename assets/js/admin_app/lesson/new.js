@@ -2,7 +2,7 @@ import React, { Component } from "react"
 
 import TextField from "@material-ui/core/TextField"
 import { withStyles } from "@material-ui/core/styles"
-import { Button, Typography } from "@material-ui/core"
+import { Button } from "@material-ui/core"
 import Save from "@material-ui/icons/Save"
 import CloudUpload from "@material-ui/icons/CloudUpload"
 import MessageSnackbar from "../../components/snackbar"

@@ -7,6 +7,7 @@ import SideMenu from "./navigation/navList"
 import Lesson from "./lesson/index"
 import Course from "./course/index"
 import Path from "./path/index"
+import Users from "./users/index"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Route, Switch } from "react-router-dom"
@@ -47,7 +48,6 @@ class App extends Component {
             firstName: resp.user.firstName,
             lastName: resp.user.lastName,
             id: resp.user.id,
-            company_id: resp.user.company_id,
             email: resp.user.email
           }
         })
@@ -68,6 +68,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" render={() => <Home />} />
             <Route path="/course" component={Course} />
+            <Route path="/users" component={Users} />
             <Route path="/lesson" component={Lesson} />
             <Route path="/path" component={Path} />
           </Switch>

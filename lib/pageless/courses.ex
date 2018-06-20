@@ -25,6 +25,16 @@ defmodule Pageless.Courses do
     Repo.get!(Course, id) |> Repo.preload(:lessons)
   end
 
+  def get_course_by_slug(slug) do
+    case Repo.get_by(Course, %{slug: slug}) do
+      %Course{} = course ->
+        {:ok, %{course: course}}
+
+      _ ->
+        {:error, "course not found"}
+    end
+  end
+
   @doc """
    gets lessons in course.
   """
@@ -53,7 +63,13 @@ defmodule Pageless.Courses do
       {:ok, lessons} = create_course_lessons(course.id, lessons)
       {count, _} = Repo.insert_all(CourseLesson, lessons)
 
-      {:ok, count}
+      case count == length(lessons) do
+        true ->
+          {:ok, count}
+
+        false ->
+          {:error, IO.inspect("#{length(lessons) - count} lessons failed to save")}
+      end
     end)
     |> Repo.transaction()
   end

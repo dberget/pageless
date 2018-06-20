@@ -29,7 +29,7 @@ defmodule Pageless.Users.User do
   @doc false
   def create_changeset(struct, attrs \\ %{}) do
     struct
-    |> cast(attrs, [:email, :first_name, :last_name, :password])
+    |> cast(attrs, [:email, :role, :first_name, :last_name, :password])
     |> validate()
     |> put_password_hash()
     |> put_change(:session_salt, generate_salt())

@@ -7,6 +7,7 @@ defmodule Pageless.Repo.Migrations.AddingCourses do
     create table(:courses) do
       add :description, :text
       add :title, :string
+      add :slug, :string
       add :company_id, references(:companies, on_delete: :delete_all)
 
       timestamps()

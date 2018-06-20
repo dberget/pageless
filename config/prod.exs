@@ -15,7 +15,9 @@ use Mix.Config
 # which you typically run after static files are built.
 config :pageless, PagelessWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
+  http: [port: {:system, "PORT"}],
+  url: [host: "pageless.app", port: 81],
+  root: ".",
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
