@@ -8,7 +8,6 @@ import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
 import Typography from "@material-ui/core/Typography"
 import IconButton from "@material-ui/core/IconButton"
-import red from "@material-ui/core/colors/red"
 import PlayArrow from "@material-ui/icons/PlayArrow"
 import Share from "@material-ui/icons/share"
 import OptionsMenu from "./optionsMenu"
@@ -43,7 +42,7 @@ class CourseCard extends Component {
     const { optionsEl } = this.state
 
     return (
-      <Card className={classes.card}>
+      <Card raised>
         <CardHeader
           action={
             <OptionsMenu

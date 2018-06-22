@@ -9,11 +9,12 @@ import { CardHeader, Grid } from "@material-ui/core"
 import RemoveCircleOutline from "@material-ui/icons/RemoveCircleOutline"
 import PageViewOutline from "@material-ui/icons/PageView"
 import IconButton from "@material-ui/core/IconButton"
+import ListView from "./listView"
 
 const styles = theme => ({
   card: {
     width: 550,
-    margin: ".5rem 0px"
+    margin: ".5rem 0"
   },
   title: { fontSize: "1.2rem", fontWeight: 500 },
   actions: {
@@ -22,7 +23,7 @@ const styles = theme => ({
   }
 })
 
-const LessonList = ({ lessons, classes, handleRemove, handlePreview }) =>
+const LessonList = ({ lessons, classes }) =>
   lessons
     ? lessons.map(lesson => (
         <Card key={lesson.id} className={classes.card}>
@@ -36,20 +37,7 @@ const LessonList = ({ lessons, classes, handleRemove, handlePreview }) =>
               {lesson.description}
             </Typography>
           </CardContent>
-          <CardActions className={classes.actions} disableActionSpacing>
-            <IconButton
-              onClick={() => (handlepreview ? handlePreview(lesson) : null)}
-              aria-label="Preview Lesson"
-            >
-              <PageViewOutline />
-            </IconButton>
-            <IconButton
-              onClick={() => (handleRemove ? handleRemove(lesson) : null)}
-              aria-label="Remove Lesson"
-            >
-              <RemoveCircleOutline />
-            </IconButton>
-          </CardActions>
+          <CardActions className={classes.actions} disableActionSpacing />
         </Card>
       ))
     : null

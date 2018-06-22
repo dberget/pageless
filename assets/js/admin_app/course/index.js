@@ -9,12 +9,21 @@ import CourseCard from "../../components/courseCard"
 
 import New from "./new"
 import View from "./show"
+import SearchBar from "../../components/searchBar"
 
 const styles = theme => ({
   grid: {
     margin: "1rem 0"
   }
 })
+
+const filterTypes = [
+  { value: "VIDEO", label: "Video" },
+  { value: "ARTICLE", label: "Article" },
+  { value: "ELEARNING", label: "eLearning" },
+  { value: "OTHER", label: "Other" },
+  { value: "CLASSROOM", label: "Classroom" }
+]
 
 class CourseHome extends Component {
   state = { courses: [], is_loading: true }
@@ -25,12 +34,21 @@ class CourseHome extends Component {
     })
   }
 
+  handleChange = name => event => {
+    this.setState({
+      filter: {
+        [name]: event.target.value
+      }
+    })
+  }
+
   render() {
     const { courses, is_loading } = this.state
     const { classes } = this.props
 
     return (
       <Grid className={classes.grid} container spacing={24}>
+        <SearchBar filterTypes={filterTypes} handleChange={this.handleChange} />
         {is_loading
           ? null
           : courses.map(course => (
@@ -44,7 +62,7 @@ class CourseHome extends Component {
 }
 const Home = withStyles(styles)(CourseHome)
 
-const Course = ({ match, classes }) => {
+const Course = ({ match }) => {
   return (
     <Fragment>
       <SubMenu resource="course" />

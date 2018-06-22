@@ -10,7 +10,7 @@ const styles = theme => ({
     margin: "auto"
   },
   input: {
-    width: 550
+    width: "100%"
   },
   paper: {
     zIndex: 100,

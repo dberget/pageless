@@ -4,7 +4,7 @@ defmodule Pageless.Mixfile do
   def project do
     [
       app: :pageless,
-      version: "0.0.9",
+      version: "0.0.91",
       elixir: "~> 1.6.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),

@@ -36,17 +36,15 @@ class SubMenu extends Component {
     const { classes, resource } = this.props
     return (
       <Paper className={classes.root}>
-        <ButtonBase className={classes.button} component="button">
-          <NavLink
-            exact
-            activeClassName={classes.selected}
-            className={classes.menuLink}
-            to={`/${resource}`}
-          >
-            {resource} Home
-          </NavLink>
-        </ButtonBase>
-        <ButtonBase className={classes.button} component="button">
+        <NavLink
+          exact
+          activeClassName={classes.selected}
+          className={classes.menuLink}
+          to={`/${resource}`}
+        >
+          {resource} Home
+        </NavLink>
+        <ButtonBase className={classes.button} component="a">
           <NavLink
             activeClassName={classes.selected}
             className={classes.menuLink}

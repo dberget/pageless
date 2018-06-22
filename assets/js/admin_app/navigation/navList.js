@@ -46,19 +46,13 @@ class SideMenu extends Component {
             <ListItemIcon>
               <ViewList />
             </ListItemIcon>
-            <ListItemText primary="Lesson" />
+            <ListItemText primary="Lessons" />
           </ListItem>
           <ListItem button component={Link} to="/course">
             <ListItemIcon>
               <Pages />
             </ListItemIcon>
-            <ListItemText primary="Course" />
-          </ListItem>
-          <ListItem button component={Link} to="/path">
-            <ListItemIcon>
-              <Work />
-            </ListItemIcon>
-            <ListItemText primary="Path" />
+            <ListItemText primary="Courses" />
           </ListItem>
         </List>
       </Drawer>

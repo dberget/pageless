@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import phoenixChannel from "../../socket"
 import { Route, Switch, Link } from "react-router-dom"
 import { getCsrfToken } from "../../token"
@@ -11,7 +11,7 @@ import { NewCourseInfo } from "../../components/NewCourseInfo"
 import Modal from "@material-ui/core/Modal"
 import ShowLesson from "../lesson/show"
 import Paper from "@material-ui/core/Paper"
-import NewLessonModal from "../../components/newLessonModal"
+import Grid from "@material-ui/core/Grid"
 
 const slugify = name => {
   return name
@@ -34,20 +34,17 @@ const styles = theme => ({
   menu: {
     width: 300
   },
-  header: {
-    marginTop: "-25px"
-  },
-  modalBox: {
-    maxHeight: "calc(100% - 100px)",
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    padding: theme.spacing.unit * 5,
-    overflow: "scroll",
-    transform: "translate(-50%, -50%)"
-  },
+  // modalBox: {
+  //   maxHeight: "calc(100% - 100px)",
+  //   position: "fixed",
+  //   top: "50%",
+  //   left: "50%",
+  //   padding: theme.spacing.unit * 5,
+  //   overflow: "scroll",
+  //   transform: "translate(-50%, -50%)"
+  // },
   buttonGroup: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2
   },
@@ -209,25 +206,32 @@ class NewCourse extends Component {
           <Route
             path={`${match.path}/1`}
             render={() => (
-              <React.Fragment>
+              <Fragment>
                 <h2 className={classes.header}> {this.state.title} </h2>
-                <LessonSelect
-                  handleSelect={lesson => this.handleSelect(lesson)}
-                  items={allLessons}
-                />
-                <div className={classes.container}>
-                  <Modal onClose={this.handlePreview} open={this.state.open}>
-                    <Paper className={classes.modalBox}>
-                      <ShowLesson lesson={this.state.previewLesson} />
-                    </Paper>
-                  </Modal>
-                </div>
-                <LessonList
-                  handleRemove={lesson => this.handleRemove(lesson)}
-                  lessons={this.state.lessons}
-                  handlePreview={lesson => this.handlePreview(lesson)}
-                />
-              </React.Fragment>
+                <Grid container spacing={16}>
+                  <Grid item xs={12}>
+                    <LessonSelect
+                      handleSelect={lesson => this.handleSelect(lesson)}
+                      items={allLessons}
+                    />
+                  </Grid>
+                  <div className={classes.container}>
+                    <Modal onClose={this.handlePreview} open={this.state.open}>
+                      <Paper className={classes.modalBox}>
+                        <ShowLesson lesson={this.state.previewLesson} />
+                      </Paper>
+                    </Modal>
+                  </div>
+                  <Grid item xs={12}>
+                    <ListView
+                      handleRemove={lesson => this.handleRemove(lesson)}
+                      handlePreview={lesson => this.handlePreview(lesson)}
+                      items={lessons}
+                      secondary
+                    />
+                  </Grid>
+                </Grid>
+              </Fragment>
             )}
           />
         </Switch>

@@ -22,8 +22,10 @@ class ShowLesson extends Component {
     const { course, is_loading } = this.state
 
     return is_loading ? null : (
-      <Grid item="xs">
-        <LessonList lessons={course.lessons} />
+      <Grid container spacing={24}>
+        <Grid item md={8}>
+          <LessonList lessons={course.lessons} />
+        </Grid>
       </Grid>
     )
   }
