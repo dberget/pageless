@@ -21,10 +21,6 @@ defmodule PagelessWeb.Auth do
   """
   def fetch_current_user_by_session(conn, _opts \\ []) do
     cond do
-      # # This is a backdoor that makes auth testing easier
-      # user = conn.assigns[:current_user] ->
-      #   sign_in(conn, user)
-
       user_id = get_session(conn, :user_id) ->
         with {:ok, user} <- Users.get_user_by_id(user_id),
              true <- user.session_salt == get_session(conn, :salt) do
@@ -107,10 +103,9 @@ defmodule PagelessWeb.Auth do
   If the user is found and password is valid, signs the user in and returns
   an :ok tuple. Otherwise, returns an :error tuple.
   """
-  def sign_in_with_credentials(conn, email, given_pass, _opts \\ []) do
-    IO.inspect(conn)
+  def sign_in_with_credentials(conn, subdomain, email, given_pass, _opts \\ []) do
     user = Users.get_user_by_email(email)
-    {:ok, company} = Companies.get_by_subdomain(conn.assigns[:subdomain])
+    {:ok, company} = Companies.get_by_subdomain(subdomain)
 
     cond do
       user && checkpw(given_pass, user.password_hash) && user.company_id == company.id ->

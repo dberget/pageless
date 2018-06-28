@@ -8,6 +8,7 @@ defmodule PagelessWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user_by_session
+    plug :get_subdomain
   end
 
   pipeline :handle_subdomain do
@@ -52,7 +53,7 @@ defmodule PagelessWeb.Router do
   end
 
   scope "/admin", PagelessWeb do
-    pipe_through [:handle_subdomain, :admin_browser]
+    pipe_through [:admin_browser, :handle_subdomain, :set_api_token]
 
     get "/", AppController, :admin
     get "/:path", AppController, :admin
@@ -61,21 +62,30 @@ defmodule PagelessWeb.Router do
   end
 
   scope "/app", PagelessWeb do
-    pipe_through [:handle_subdomain, :authenticated_browser]
+    pipe_through [:authenticated_browser, :set_api_token]
 
     get "/", AppController, :index
     get "/:course", AppController, :show
   end
 
-  def set_subdomain(conn, _opts) do
-    with domain <- String.split(conn.host, "."),
-         true <- length(domain) > 1,
-         subdomain <- hd(domain) do
-      conn
-      |> assign(:subdomain, subdomain)
-    else
+  def get_subdomain(conn, _opts) do
+    case length(String.split(conn.host, ".")) do
+      2 ->
+        [subdomain | _] = String.split(conn.host, ".")
+        assign(conn, :subdomain, subdomain)
+
       _ ->
         conn
     end
+  end
+
+  def set_subdomain(conn, _) do
+    conn
+    |> assign(:subdomain, get_session(conn, :subdomain))
+  end
+
+  def set_api_token(conn, _opts) do
+    conn
+    |> assign(:api_token, PagelessWeb.Auth.generate_signed_jwt(conn.assigns[:current_user]))
   end
 end

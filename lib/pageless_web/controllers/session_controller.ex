@@ -4,7 +4,6 @@ defmodule PagelessWeb.SessionController do
   use PagelessWeb, :controller
 
   plug :redirect_if_signed_in
-  plug :set_subdomain
 
   def new(conn, _params) do
     if conn.assigns[:subdomain] do
@@ -15,15 +14,14 @@ defmodule PagelessWeb.SessionController do
   end
 
   def create(conn, %{"session" => %{"email" => email, "password" => pass} = params}) do
-    conn =
-      unless conn.assigns[:subdomain],
-        do: assign(conn, :subdomain, params["subdomain"]),
-        else: conn
+    subdomain =
+      if conn.assigns[:subdomain], do: conn.assigns[:subdomain], else: params["subdomain"]
 
-    case PagelessWeb.Auth.sign_in_with_credentials(conn, email, pass) do
+    conn = put_session(conn, :subdomain, subdomain)
+
+    case PagelessWeb.Auth.sign_in_with_credentials(conn, subdomain, email, pass) do
       {:ok, conn} ->
-        conn
-        |> redirect(to: app_path(conn, :admin))
+        redirect(conn, to: app_path(conn, :admin))
 
       {:error, _reason, conn} ->
         conn
@@ -45,18 +43,6 @@ defmodule PagelessWeb.SessionController do
       |> halt()
     else
       conn
-    end
-  end
-
-  def set_subdomain(conn, _opts) do
-    with domain <- String.split(conn.host, "."),
-         true <- length(domain) > 1,
-         subdomain <- hd(domain) do
-      conn
-      |> assign(:subdomain, subdomain)
-    else
-      _ ->
-        conn
     end
   end
 end

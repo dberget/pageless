@@ -5,6 +5,6 @@ defmodule PagelessWeb.PageController do
 
   def index(conn, _params) do
     conn
-    |> render("index.html")
+    |> render(:index)
   end
 end
