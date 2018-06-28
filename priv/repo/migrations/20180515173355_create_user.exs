@@ -8,8 +8,8 @@ defmodule Pageless.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :state, :user_state, null: false, default: "ACTIVE"
       add :email, :text, null: false
-      add :first_name, :text, null: false
-      add :last_name, :text, null: false
+      add :first, :text, null: false
+      add :last, :text, null: false
       add :password_hash, :text
       add :session_salt, :text, null: false, default: "salt"
       add :company_id, references(:companies)

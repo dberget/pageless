@@ -33,7 +33,7 @@ class Menu extends Component {
             Pageless
           </Typography>
           <Typography color="inherit">
-            {user.firstName} {user.lastName}
+            {user.first} {user.last}
           </Typography>
           <Button href="/logout" color="inherit">
             Logout

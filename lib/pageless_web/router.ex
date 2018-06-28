@@ -10,6 +10,10 @@ defmodule PagelessWeb.Router do
     plug :fetch_current_user_by_session
   end
 
+  pipeline :handle_subdomain do
+    plug :set_subdomain
+  end
+
   pipeline :authenticated_browser do
     plug :anonymous_browser
     plug :authenticate_user
@@ -42,23 +46,36 @@ defmodule PagelessWeb.Router do
     put("/course", CourseController, :create)
     put("/lesson", LessonController, :create)
     put("/upload", LessonController, :upload)
+    put("/user", UserController, :create)
 
     get "/download/:id", LessonController, :download
   end
 
-  scope "/", PagelessWeb do
-    pipe_through :admin_browser
+  scope "/admin", PagelessWeb do
+    pipe_through [:handle_subdomain, :admin_browser]
 
-    get "/admin", AppController, :admin
-    get "/admin/:path", AppController, :admin
-    get "/admin/:path/:subpath", AppController, :admin
-    get "/admin/:path/:subpath/:page", AppController, :admin
+    get "/", AppController, :admin
+    get "/:path", AppController, :admin
+    get "/:path/:subpath", AppController, :admin
+    get "/:path/:subpath/:page", AppController, :admin
   end
 
-  scope "/", PagelessWeb do
-    pipe_through :authenticated_browser
+  scope "/app", PagelessWeb do
+    pipe_through [:handle_subdomain, :authenticated_browser]
 
-    get "/app", AppController, :index
-    get "/app/:course", AppController, :index
+    get "/", AppController, :index
+    get "/:course", AppController, :show
+  end
+
+  def set_subdomain(conn, _opts) do
+    with domain <- String.split(conn.host, "."),
+         true <- length(domain) > 1,
+         subdomain <- hd(domain) do
+      conn
+      |> assign(:subdomain, subdomain)
+    else
+      _ ->
+        conn
+    end
   end
 end

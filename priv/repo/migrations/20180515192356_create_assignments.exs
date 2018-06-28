@@ -8,7 +8,7 @@ defmodule Pageless.Repo.Migrations.CreateAssignments do
 
     create table(:assignments) do
       add :user_id, references(:users, on_delete: :delete_all)
-      add :path_id, references(:paths, on_delete: :delete_all)
+      add :course_id, references(:courses, on_delete: :nothing)
       add :status, :assignment_status
 
       timestamps()
@@ -16,8 +16,8 @@ defmodule Pageless.Repo.Migrations.CreateAssignments do
 
     unique_index(
       :assignments,
-      [:user_id, :path_id],
-      name: "assignments_user_id_path_id_unique_index"
+      [:user_id, :course_id],
+      name: "assignments_user_id_course_id_unique_index"
     )
   end
 end

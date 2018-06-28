@@ -1,5 +1,5 @@
 defmodule Pageless.AWS do
   @moduledoc """
-  The AWS  context.
+  The AWS context.
   """
 end

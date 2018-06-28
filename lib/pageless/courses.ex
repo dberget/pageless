@@ -25,10 +25,16 @@ defmodule Pageless.Courses do
     Repo.get!(Course, id) |> Repo.preload(:lessons)
   end
 
-  def get_course_by_slug(slug) do
+  def get_course_by_slug(slug, preload \\ "none") do
     case Repo.get_by(Course, %{slug: slug}) do
       %Course{} = course ->
-        {:ok, %{course: course}}
+        cond do
+          is_atom(preload) ->
+            Pageless.Repo.preload(course, preload)
+
+          false ->
+            course
+        end
 
       _ ->
         {:error, "course not found"}
@@ -38,6 +44,20 @@ defmodule Pageless.Courses do
   @doc """
    gets lessons in course.
   """
+  def get_course_lessons(%Course{} = course) do
+    query = from cl in CourseLesson, where: cl.course_id == ^course.id, order_by: :sort_id
+
+    query
+    |> Repo.all()
+  end
+
+  def get_course_lessons(course_id) when is_bitstring(course_id) do
+    query = from cl in CourseLesson, where: cl.course_id == ^course_id, order_by: :sort_id
+
+    query
+    |> Repo.all()
+  end
+
   def get_course_lessons(course_id) do
     course_id = String.to_integer(course_id)
 

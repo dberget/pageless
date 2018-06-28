@@ -1,0 +1,7 @@
+<div>
+    <% if @conn.assigns[:current_user] do %>
+    <%= link("logout", to: session_path(@conn, :delete)) %>
+    <% else %>
+    <%= link("login", to: session_path(@conn, :new)) %>
+    <% end %>
+<div>

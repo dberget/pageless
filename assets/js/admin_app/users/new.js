@@ -1,18 +1,19 @@
 import React, { Component, Fragment } from "react"
+import { getCsrfToken } from "../../token"
 import phoenixChannel from "../../socket"
 import { Route, Switch, Link } from "react-router-dom"
-import { getCsrfToken } from "../../token"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Button } from "@material-ui/core"
-import TextField from "@material-ui/core/TextField"
+import LessonSelect from "../../components/lessonSelect"
+import NewUserInfo from "../../components/userInfo"
 
 const styles = theme => ({
   form: {
     display: "flex",
     flexDirection: "column",
     flexWrap: "wrap",
-    width: "800px"
+    width: "600px"
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -45,26 +46,31 @@ const styles = theme => ({
 
 class NewUsers extends Component {
   state = {
-    first: "First",
-    last: "Last",
-    email: "user@your-domain.com",
-    courses: [],
+    user: {
+      first: "First",
+      last: "Last",
+      email: "user@email.com",
+      courses: [],
+      department: "",
+      role: "LEARNER"
+    },
+    allCourses: [],
     open: false
   }
 
   componentDidMount = () => {
-    // phoenixChannel.push("get_company_courses").receive("ok", resp => {
-    //   this.setState({ courses: resp.courses })
-    // })
+    phoenixChannel.push("get_company_courses").receive("ok", resp => {
+      this.setState({ allCourses: resp.courses, is_loading: false })
+    })
   }
 
   saveUser = () => {
     const token = getCsrfToken()
-    const { first, last, email, courses } = this.state
+    const { user } = this.state
 
     fetch(`/api/user`, {
       method: "PUT",
-      body: JSON.stringify({ title, description, lessons }),
+      body: JSON.stringify({ user }),
       credentials: "same-origin",
       headers: {
         "content-type": "application/json",
@@ -75,13 +81,28 @@ class NewUsers extends Component {
 
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value
+      user: {
+        ...this.state.user,
+        [name]: event.target.value
+      }
+    })
+  }
+
+  handleSelect = course => {
+    let { courses } = this.state
+
+    if (courses.indexOf(course) === -1) {
+      courses = [...courses, course]
+    }
+
+    this.setState({
+      courses
     })
   }
 
   render() {
     const { classes, match } = this.props
-    const { first, email, last, courses } = this.state
+    const { user, allCourses } = this.state
 
     const Buttons = () => (
       <div className={classes.buttonGroup}>
@@ -98,42 +119,24 @@ class NewUsers extends Component {
 
     return (
       <form className={classes.form} noValidate autoComplete="off">
-        <div>
-          <h4>New User Information</h4>
-          <TextField
-            id="first"
-            label="First"
-            className={classes.textField}
-            value={first}
-            onChange={this.handleChange("first")}
-            margin="normal"
-            InputLabelProps={{
-              shrink: true
-            }}
+        <Switch>
+          <Route
+            exact
+            path={`${match.path}`}
+            render={() => (
+              <NewUserInfo
+                handleChange={this.handleChange}
+                data={user}
+                classes={classes}
+              />
+            )}
           />
-          <TextField
-            id="last"
-            label="Last"
-            onChange={this.handleChange("last")}
-            value={last}
-            className={classes.textField}
-            margin="normal"
-            InputLabelProps={{
-              shrink: true
-            }}
+          <LessonSelect
+            handleSelect={course => this.handleSelect(course)}
+            items={allCourses}
+            classes={classes}
           />
-          <TextField
-            id="email"
-            label="Email"
-            onChange={this.handleChange("email")}
-            value={email}
-            className={classes.textField}
-            margin="normal"
-            InputLabelProps={{
-              shrink: true
-            }}
-          />
-        </div>
+        </Switch>
         <Buttons />
       </form>
     )

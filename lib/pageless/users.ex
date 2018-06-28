@@ -37,7 +37,7 @@ defmodule Pageless.Users do
 
   def preload_all(user) do
     user
-    |> Repo.preload(paths: [:lessons])
+    |> Repo.preload(courses: [:lessons])
   end
 
   @doc """
@@ -52,6 +52,12 @@ defmodule Pageless.Users do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.create_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def invite_user(attrs \\ %{}) do
+    %User{}
+    |> User.invite_changeset(attrs)
     |> Repo.insert()
   end
 

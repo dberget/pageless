@@ -4,6 +4,7 @@ defmodule PagelessWeb.PageController do
   use PagelessWeb, :controller
 
   def index(conn, _params) do
-    redirect(conn, to: session_path(conn, :new))
+    conn
+    |> render("index.html")
   end
 end

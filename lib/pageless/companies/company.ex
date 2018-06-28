@@ -8,7 +8,7 @@ defmodule Pageless.Companies.Company do
   schema "companies" do
     field :state, :string
     field :name, :string
-    field :slug, :string
+    field :subdomain, :string
 
     has_many :user, User
     has_many :paths, Path
@@ -19,13 +19,14 @@ defmodule Pageless.Companies.Company do
   @doc false
   def changeset(company, attrs) do
     company
-    |> change(slug: random_slug())
-    |> cast(attrs, [:state, :name, :slug])
-    |> validate_required([:name, :slug])
+    |> change(subdomain: "company")
+    |> cast(attrs, [:state, :name, :subdomain])
+    |> validate_required([:name, :subdomain])
   end
 
   # TODO: change to user defined slug 
   defp random_slug() do
-    5 |> :crypto.strong_rand_bytes() |> Base.url_encode64() |> binary_part(0, 5)
+    # 5 |> :crypto.strong_rand_bytes() |> Base.url_encode64() |> binary_part(0, 5)
+    "company"
   end
 end

@@ -3,8 +3,6 @@ defmodule PagelessWeb.AppController do
 
   use PagelessWeb, :controller
 
-  plug :get_subdomain
-
   def index(conn, _params) do
     user = conn.assigns[:current_user]
 
@@ -21,25 +19,18 @@ defmodule PagelessWeb.AppController do
     |> render("admin.html")
   end
 
-  def upload(conn, params) do
-    if upload = params["file"] do
-      {:ok, [path]} = File.cp_r(upload.path, "files/#{upload.filename}")
+  def show(conn, params) do
+    user = conn.assigns[:current_user]
+    course = Pageless.Courses.get_course_by_slug(params["course"], :lessons)
 
-      json(conn, %{path: path})
-    else
-      json(conn, %{error: "error, no file param"})
-    end
+    conn
+    |> assign(:api_token, PagelessWeb.Auth.generate_signed_jwt(user))
+    |> render("index.html", course: course)
   end
 
   def download(conn, params) do
     source = Pageless.Lessons.get_lesson_source(params["id"])
 
     send_download(conn, {:file, source})
-  end
-
-  defp get_subdomain(conn, _opts) do
-    subdomain = String.split(conn.host, ".") |> hd()
-
-    assign(conn, :subdomain, subdomain)
   end
 end

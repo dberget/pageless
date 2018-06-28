@@ -10,6 +10,7 @@ defmodule PagelessWeb.Auth do
 
   alias Pageless.Repo
   alias Pageless.Users
+  alias Pageless.Companies
   alias Pageless.Users.User
   alias PagelessWeb.Router.Helpers
 
@@ -21,8 +22,8 @@ defmodule PagelessWeb.Auth do
   def fetch_current_user_by_session(conn, _opts \\ []) do
     cond do
       # # This is a backdoor that makes auth testing easier
-      user = conn.assigns[:current_user] ->
-        sign_in(conn, user)
+      # user = conn.assigns[:current_user] ->
+      #   sign_in(conn, user)
 
       user_id = get_session(conn, :user_id) ->
         with {:ok, user} <- Users.get_user_by_id(user_id),
@@ -46,8 +47,7 @@ defmodule PagelessWeb.Auth do
   - If token is expired, halts and returns a 401 response.
   - If token is for a user not belonging to the company in scope, halts and
     returns a 401 response.
-  - If token is valid, sets the `current_user` on the connection assigns and the
-    absinthe context.
+  - If token is valid, sets the `current_user` on the connection assigns.
   """
   def authenticate_with_token(conn, _opts \\ []) do
     case conn.assigns[:current_user] do
@@ -108,10 +108,12 @@ defmodule PagelessWeb.Auth do
   an :ok tuple. Otherwise, returns an :error tuple.
   """
   def sign_in_with_credentials(conn, email, given_pass, _opts \\ []) do
+    IO.inspect(conn)
     user = Users.get_user_by_email(email)
+    {:ok, company} = Companies.get_by_subdomain(conn.assigns[:subdomain])
 
     cond do
-      user && checkpw(given_pass, user.password_hash) ->
+      user && checkpw(given_pass, user.password_hash) && user.company_id == company.id ->
         {:ok, sign_in(conn, user)}
 
       user ->
@@ -170,7 +172,7 @@ defmodule PagelessWeb.Auth do
   """
   def generate_signed_jwt(user) do
     user
-    |> generate_jwt
+    |> generate_jwt()
     |> sign
     |> get_compact
   end
@@ -182,6 +184,20 @@ defmodule PagelessWeb.Auth do
     signed_token
     |> token
     |> with_signer(hs256(jwt_secret()))
+    |> with_validation("exp", &(&1 > current_time()), "Token expired")
+    |> with_validation("iat", &(&1 <= current_time()))
+    |> with_validation("nbf", &(&1 < current_time()))
+    |> verify
+  end
+
+  @doc """
+  Verifies a signed JSON Web Token (JWT).
+  """
+  def verify_signed_jwt(signed_token, company) do
+    signed_token
+    |> token
+    |> with_signer(hs256(jwt_secret()))
+    |> with_validation("company_access", &(&1.company_id == company.id), "Company Access Denied")
     |> with_validation("exp", &(&1 > current_time()), "Token expired")
     |> with_validation("iat", &(&1 <= current_time()))
     |> with_validation("nbf", &(&1 < current_time()))

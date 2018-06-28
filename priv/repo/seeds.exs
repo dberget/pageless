@@ -18,14 +18,14 @@ Repo.delete_all(Assignment)
 Repo.delete_all(Lesson)
 Repo.delete_all(Company)
 
-company_names = ["Acme", "Looney Tunes", "eLevate Interactive"]
+company_names = ["Looney Tunes", "company"]
 
 companies =
   Enum.map(
     company_names,
     &Repo.insert!(%Company{
       name: &1,
-      slug: 5 |> :crypto.strong_rand_bytes() |> Base.url_encode64() |> binary_part(0, 5)
+      subdomain: &1 |> String.downcase() |> String.replace(" ", "-")
     })
   )
 
@@ -51,8 +51,8 @@ people =
 
     user =
       User.create_changeset(%User{
-        first_name: first_name,
-        last_name: last_name,
+        first: first_name,
+        last: last_name,
         email: String.downcase(first_name) <> String.downcase(last_name) <> "@gmail.com",
         password: "password",
         password_hash: Comeonin.Bcrypt.hashpwsalt("password"),
@@ -131,19 +131,6 @@ lessons =
     })
   )
 
-# assignments
-
-Enum.each(people, fn person ->
-  paths
-  |> Enum.each(fn path ->
-    Repo.insert!(%Assignment{
-      user: person,
-      path: path,
-      status: Enum.random(["COMPLETE", "INCOMPLETE", "REQUIRED", "OTHER"])
-    })
-  end)
-end)
-
 # Course Lessons
 
 Enum.each(lessons, fn lesson ->
@@ -152,6 +139,19 @@ Enum.each(lessons, fn lesson ->
     Repo.insert!(%CourseLesson{
       course: course,
       lesson: lesson
+    })
+  end)
+end)
+
+# assignments
+
+Enum.each(people, fn person ->
+  courses
+  |> Enum.each(fn course ->
+    Repo.insert!(%Assignment{
+      user: person,
+      course: course,
+      status: Enum.random(["COMPLETE", "INCOMPLETE", "REQUIRED", "OTHER"])
     })
   end)
 end)

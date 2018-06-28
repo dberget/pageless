@@ -4,7 +4,6 @@ defmodule PagelessWeb.UserChannel do
   def join("user: " <> _id, _params, socket) do
     user =
       socket.assigns[:current_user].user
-      |> Pageless.Users.preload_all()
       |> filter_user()
 
     {:ok, %{user: user}, socket}
@@ -64,24 +63,23 @@ defmodule PagelessWeb.UserChannel do
 
   defp filter_user(user) do
     %{
-      firstName: user.first_name,
-      lastName: user.last_name,
+      first: user.first,
+      last: user.last,
       email: user.email,
       company_id: user.company_id,
-      id: user.id,
-      paths: Enum.map(user.paths, &filter_paths(&1))
+      id: user.id
     }
   end
 
-  def filter_paths(path) do
-    %{
-      company_id: path.company_id,
-      description: path.description,
-      title: path.title,
-      id: path.id,
-      lessons: Enum.map(path.lessons, &filter_lessons(&1))
-    }
-  end
+  # def filter_courses(course) do
+  #   %{
+  #     company_id: course.company_id,
+  #     description: course.description,
+  #     title: course.title,
+  #     id: course.id,
+  #     lessons: Enum.map(course.lessons, &filter_lessons(&1))
+  #   }
+  # end
 
   def filter_courses(course) do
     %{

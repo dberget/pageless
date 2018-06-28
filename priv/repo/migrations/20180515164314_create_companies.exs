@@ -7,12 +7,12 @@ defmodule Pageless.Repo.Migrations.CreateCompanies do
     create table(:companies) do
       add :state, :company_state, null: false, default: "ACTIVE"
       add :name, :text, null: false
-      add :slug, :string, null: false
+      add :subdomain, :string, null: false
 
       timestamps()
     end
 
-    create(unique_index(:companies, ["lower(slug)"]))
+    create(unique_index(:companies, ["lower(subdomain)"]))
   end
 
   def down do

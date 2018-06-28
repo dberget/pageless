@@ -5,13 +5,13 @@ import { getCsrfToken } from "../../token"
 
 import { withStyles } from "@material-ui/core/styles"
 import { Button } from "@material-ui/core"
-import LessonList from "../../components/lessonList"
 import LessonSelect from "../../components/lessonSelect"
 import { NewCourseInfo } from "../../components/NewCourseInfo"
 import Modal from "@material-ui/core/Modal"
 import ShowLesson from "../lesson/show"
 import Paper from "@material-ui/core/Paper"
 import Grid from "@material-ui/core/Grid"
+import ListView from "../../components/listView"
 
 const slugify = name => {
   return name
@@ -120,11 +120,11 @@ class NewCourse extends Component {
     const token = getCsrfToken()
     const { title, description, lessons } = this.state
 
-    const url = slugify(title)
+    const slug = slugify(title)
 
     fetch(`/api/course`, {
       method: "PUT",
-      body: JSON.stringify({ title, description, lessons, url: url }),
+      body: JSON.stringify({ title, description, lessons, slug: slug }),
       credentials: "same-origin",
       headers: {
         "content-type": "application/json",
@@ -141,7 +141,7 @@ class NewCourse extends Component {
 
   render() {
     const { classes, match } = this.props
-    const { activeStep, allLessons } = this.state
+    const { activeStep, allLessons, lessons } = this.state
 
     const Buttons = () => (
       <div className={classes.buttonGroup}>

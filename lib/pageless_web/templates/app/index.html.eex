@@ -1,1 +1,2 @@
-<div id="app"></div>
+<div>You are on index.html!</div>
+ <% IO.inspect(@course) %>

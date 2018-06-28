@@ -23,12 +23,12 @@ defmodule Pageless.Companies do
   def get_company!(id), do: Repo.get!(Company, id)
 
   @doc """
-  Gets single company by slug
+  Gets single company by subdomain
   """
-  def get_company_by_slug(slug) do
-    case Repo.get_by(Company, %{slug: slug}) do
+  def get_by_subdomain(subdomain) do
+    case Repo.get_by(Company, %{subdomain: subdomain}) do
       %Company{} = company ->
-        {:ok, %{company: company}}
+        {:ok, company}
 
       _ ->
         {:error, "company not found"}

@@ -45,8 +45,8 @@ class App extends Component {
       .receive("ok", resp => {
         this.setState({
           user: {
-            firstName: resp.user.firstName,
-            lastName: resp.user.lastName,
+            first: resp.user.first,
+            last: resp.user.last,
             id: resp.user.id,
             email: resp.user.email
           }

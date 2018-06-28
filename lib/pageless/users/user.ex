@@ -12,8 +12,8 @@ defmodule Pageless.Users.User do
 
   schema "users" do
     field :email, :string
-    field :first_name, :string
-    field :last_name, :string
+    field :first, :string
+    field :last, :string
     field :password, :string, virtual: true
     field :password_hash, :string
     field :role, :string
@@ -21,7 +21,7 @@ defmodule Pageless.Users.User do
     field :session_salt, :string
 
     belongs_to :company, Company
-    many_to_many :paths, Pageless.Paths.Path, join_through: Assignment
+    many_to_many :courses, Pageless.Courses.Course, join_through: Assignment
 
     timestamps()
   end
@@ -29,16 +29,24 @@ defmodule Pageless.Users.User do
   @doc false
   def create_changeset(struct, attrs \\ %{}) do
     struct
-    |> cast(attrs, [:email, :role, :first_name, :last_name, :password])
+    |> cast(attrs, [:email, :role, :first, :last, :password])
     |> validate()
     |> put_password_hash()
     |> put_change(:session_salt, generate_salt())
   end
 
   @doc false
+  def invite_changeset(struct, attrs \\ %{}) do
+    struct
+    |> cast(attrs, [:email, :role, :first, :last, :company_id])
+    |> validate_required([:first, :last, :email, :company_id])
+    |> validate_format(:email, email_format())
+  end
+
+  @doc false
   def changeset(struct, attrs \\ %{}) do
     struct
-    |> cast(attrs, [:email, :role, :first_name, :last_name, :password])
+    |> cast(attrs, [:email, :role, :first, :last, :password])
     |> put_password_hash()
     |> put_change(:session_salt, generate_salt())
   end
@@ -48,10 +56,8 @@ defmodule Pageless.Users.User do
   """
   def validate(changeset) do
     changeset
-    |> validate_required([:first_name, :last_name, :email, :password])
+    |> validate_required([:first, :last, :email, :password])
     |> validate_length(:email, min: 1, max: 254)
-    |> validate_length(:first_name, min: 1, max: 255)
-    |> validate_length(:last_name, min: 1, max: 255)
     |> validate_length(:password, min: 6)
     |> validate_format(:email, email_format())
     |> unique_constraint(:email, name: :users_company_id_email_index)
