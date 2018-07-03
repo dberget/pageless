@@ -22,8 +22,8 @@ defmodule Pageless.Courses do
     |> Repo.all()
   end
 
-  def search_company_courses(company_id, search_term) do
-    Search.find(company_id, Course, search_term)
+  def search_company_courses(company_id, search) do
+    Search.find(company_id, Course, search)
   end
 
   def get_course_with_lessons(id) do

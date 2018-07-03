@@ -8,9 +8,6 @@ import Container from "../navigation/container"
 import SubMenu from "../navigation/subMenu"
 import Grid from "@material-ui/core/Grid"
 import { withStyles } from "@material-ui/core/styles"
-import { TextField } from "@material-ui/core"
-import Checkbox from "@material-ui/core/Checkbox"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
 import SearchBar from "../../components/searchBar"
 
 const styles = theme => ({
@@ -76,7 +73,7 @@ class Home extends Component {
 
     return (
       <Fragment>
-        <Grid className={classes.grid} container spacing={24}>
+        <Grid container spacing={24}>
           <SearchBar
             filterTypes={filterTypes}
             handleChange={this.handleChange}

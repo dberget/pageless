@@ -1,7 +1,11 @@
 import React from "react"
 
-const VideoViewer = () => {
-  return <div>This is the video component</div>
+const VideoViewer = ({ lesson }) => {
+  return (
+    <a href={lesson.content} target="_blank">
+      Watch Video
+    </a>
+  )
 }
 
 export default VideoViewer

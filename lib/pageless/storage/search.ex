@@ -5,11 +5,15 @@ defmodule Pageless.Search do
   import Ecto.Query
   alias Pageless.Repo
 
-  def find(company, resource, %{search: term, topic: topic}) do
+  @defaults %{field_type: nil, search: "", topic: ""}
+
+  def find(company, resource, opts \\ %{}) do
+    opts = Map.merge(@defaults, opts)
+
     resource
     |> base_query(company)
-    |> search_query(term)
-    |> search_field(:lesson_type, topic)
+    |> search_query(opts.search)
+    |> search_field(opts.field_type, opts.topic)
     |> Repo.all()
   end
 
@@ -28,7 +32,7 @@ defmodule Pageless.Search do
     )
   end
 
-  defp search_field(query, _field, ""), do: query
+  defp search_field(query, nil, ""), do: query
 
   defp search_field(query, field, t) do
     from c in query,

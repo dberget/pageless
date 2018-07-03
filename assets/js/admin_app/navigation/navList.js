@@ -13,6 +13,7 @@ import Collapse from "@material-ui/core/Collapse"
 import Build from "@material-ui/icons/Build"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import Dashboard from "@material-ui/icons/dashboard"
+import ViewModule from "@material-ui/icons/ViewModule"
 import Edit from "@material-ui/icons/edit"
 import Person from "@material-ui/icons/person"
 import Pages from "@material-ui/icons/pages"
@@ -53,6 +54,12 @@ class SideMenu extends Component {
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
+          <ListItem button component={Link} to="/course">
+            <ListItemIcon>
+              <Pages />
+            </ListItemIcon>
+            <ListItemText primary="Courses" />
+          </ListItem>
           <ListItem button onClick={this.handleClick}>
             <ListItemIcon>
               <ViewList />
@@ -62,6 +69,17 @@ class SideMenu extends Component {
           </ListItem>
           <Collapse in={this.state.open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+              <ListItem
+                button
+                component={Link}
+                to="/lesson"
+                className={classes.nested}
+              >
+                <ListItemIcon>
+                  <ViewModule />
+                </ListItemIcon>
+                <ListItemText inset primary="All" />
+              </ListItem>
               <ListItem
                 button
                 component={Link}
@@ -86,12 +104,6 @@ class SideMenu extends Component {
               </ListItem>
             </List>
           </Collapse>
-          <ListItem button component={Link} to="/course">
-            <ListItemIcon>
-              <Pages />
-            </ListItemIcon>
-            <ListItemText primary="Courses" />
-          </ListItem>
         </List>
       </Drawer>
     )

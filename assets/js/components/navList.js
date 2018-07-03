@@ -6,9 +6,7 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
-import Divider from "@material-ui/core/Divider"
 import AssignmentIcon from "@material-ui/icons/Assignment"
-import ViewList from "@material-ui/icons/ViewList"
 import PersonIcon from "@material-ui/icons/Person"
 import Drawer from "@material-ui/core/Drawer"
 
@@ -27,17 +25,11 @@ class SideMenu extends Component {
       <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
         <div className={classes.toolbar} />
         <List component="nav">
-          <ListItem button component={Link} to="/app/assignments">
+          <ListItem button component={Link} to="/assignments">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="My Assignments" />
-          </ListItem>
-          <ListItem button component={Link} to="/app/courses">
-            <ListItemIcon>
-              <ViewList />
-            </ListItemIcon>
-            <ListItemText primary="All Courses" />
           </ListItem>
           <ListItem button>
             <ListItemIcon>

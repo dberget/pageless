@@ -1,5 +1,7 @@
 import React from "react"
 import TextField from "@material-ui/core/TextField"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import Checkbox from "@material-ui/core/Checkbox"
 import InputAdornment from "@material-ui/core/InputAdornment"
 
 const slugify = name => {
@@ -8,6 +10,8 @@ const slugify = name => {
     .slice(0, 20)
     .replace(/[^a-z0-9]+/g, "-")
 }
+
+const filterTypes = [{ value: "REQUIRED", label: "Required" }]
 
 export const NewCourseInfo = ({
   title,
@@ -64,5 +68,18 @@ export const NewCourseInfo = ({
         shrink: true
       }}
     />
+    {filterTypes.map(val => (
+      <FormControlLabel
+        label={val.label}
+        key={val.label}
+        control={
+          <Checkbox
+            onChange={handleChange("topic")}
+            value={val.value}
+            color="primary"
+          />
+        }
+      />
+    ))}
   </div>
 )

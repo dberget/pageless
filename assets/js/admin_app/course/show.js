@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import phoenixChannel from "../../socket"
 import LessonList from "../../components/lessonList"
 import Grid from "@material-ui/core/Grid"
+import Container from "../navigation/container"
 
 class ShowLesson extends Component {
   state = { course: {}, is_loading: true }
@@ -23,9 +24,11 @@ class ShowLesson extends Component {
 
     return is_loading ? null : (
       <Grid container spacing={24}>
-        <Grid item md={8}>
-          <LessonList lessons={course.lessons} />
-        </Grid>
+        {course.lessons.map(lesson => (
+          <Grid item sm={3} md={12}>
+            <LessonList lesson={lesson} />
+          </Grid>
+        ))}
       </Grid>
     )
   }

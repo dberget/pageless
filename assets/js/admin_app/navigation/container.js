@@ -5,7 +5,7 @@ const styles = {
   container: {
     display: "flex",
     justifyContent: "center",
-    padding: "1.4rem"
+    padding: "1rem"
   }
 }
 

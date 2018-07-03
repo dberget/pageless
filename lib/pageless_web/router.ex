@@ -65,7 +65,9 @@ defmodule PagelessWeb.Router do
     pipe_through [:authenticated_browser, :set_api_token]
 
     get "/", AppController, :index
-    get "/:course", AppController, :show
+    get "/assignments", AppController, :index
+    get "/lesson/:id", AppController, :index
+    get "/:course", AppController, :index
   end
 
   def get_subdomain(conn, _opts) do

@@ -2,11 +2,9 @@ import React, { Component } from "react"
 import phoenixChannel from "../../socket"
 
 import Menu from "../../components/menu"
-import LessonCard from "../../components/lessonCard"
 import SideMenu from "../../components/navList"
 
 import { Home } from "./home"
-import { AllCourses } from "./allCourses"
 import { Assignments } from "./assignments"
 import Lesson from "./lesson"
 import Course from "./course"
@@ -62,16 +60,12 @@ class App extends Component {
         <SideMenu />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Route exact path="/app" component={Home} />
-          <Route
-            path="/app/assignments"
-            render={routeprops => (
-              <Assignments {...routeprops} assignments={this.state.paths} />
-            )}
-          />
-          <Route path="/app/course/:id" component={Course} />
-          <Route path="/app/lesson/:id" component={Lesson} />
-          <Route path="/app/courses" component={AllCourses} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/assignments" component={Assignments} />
+            <Route path="/lesson/:id" component={Lesson} />
+            <Route path="/:courseSlug" component={Course} />
+          </Switch>
         </main>
       </div>
     )

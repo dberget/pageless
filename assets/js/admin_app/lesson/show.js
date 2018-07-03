@@ -1,29 +1,6 @@
-import React, { Component } from "react"
+import { Component } from "react"
 import phoenixChannel from "../../socket"
-import LessonFile from "../../components/lessonFile"
-import ELearningViewer from "../../components/eLearningViewer"
-import LessonRichText from "../../components/lessonRichText"
-import VideoViewer from "../../components/videoViewer"
-
-const lessonToRender = lesson => {
-  switch (lesson.source_type) {
-    case "FILE":
-      return <LessonFile lesson={lesson} />
-    case "TEXT":
-      return <LessonRichText lesson={lesson} />
-    case "URL":
-      return handleUrl(lesson)
-  }
-}
-
-const handleUrl = lesson => {
-  switch (lesson.lesson_type) {
-    case "ELEARNING":
-      return <ELearningViewer lesson={lesson} />
-    case "VIDEO":
-      return <VideoViewer lesson={lesson} />
-  }
-}
+import renderLesson from "../../components/renderLesson"
 
 class ShowLesson extends Component {
   state = { lesson: {}, is_loading: true }
@@ -43,7 +20,7 @@ class ShowLesson extends Component {
   render() {
     const { lesson, is_loading } = this.state
 
-    return is_loading ? null : lessonToRender(lesson)
+    return is_loading ? null : renderLesson(lesson)
   }
 }
 

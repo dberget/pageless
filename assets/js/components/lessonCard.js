@@ -13,6 +13,7 @@ import Assessment from "@material-ui/icons/Assessment"
 import OptionsMenu from "./optionsMenu"
 
 const styles = {
+  root: {},
   actions: {
     display: "flex"
   },
@@ -21,10 +22,7 @@ const styles = {
   },
   content: {
     overflow: "scroll",
-    height: "5rem"
-  },
-  h3: {
-    margin: ".5rem 0 .5rem 0"
+    height: "4rem"
   },
   buttonRight: { marginLeft: "auto" }
 }
@@ -44,7 +42,7 @@ class LessonCard extends Component {
     const { optionsEl } = this.state
     return (
       <div>
-        <Card raised classes={{ root: classes.root }}>
+        <Card classes={{ root: classes.root }}>
           <CardHeader
             action={
               <OptionsMenu
@@ -53,9 +51,12 @@ class LessonCard extends Component {
                 show={optionsEl}
               />
             }
-            title={<h3 className={classes.h3}>{lesson.title}</h3>}
+            title={
+              <Typography variant="title" noWrap className={classes.title}>
+                {lesson.title}
+              </Typography>
+            }
             subheader={<div> {lesson.type} </div>}
-            classes={{ title: classes.title }}
           />
           <CardContent classes={{ root: classes.content }}>
             <Typography component="p">{lesson.description}</Typography>

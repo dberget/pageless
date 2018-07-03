@@ -18,11 +18,9 @@ const styles = theme => ({
 })
 
 const filterTypes = [
-  { value: "VIDEO", label: "Video" },
-  { value: "ARTICLE", label: "Article" },
-  { value: "ELEARNING", label: "eLearning" },
-  { value: "OTHER", label: "Other" },
-  { value: "CLASSROOM", label: "Classroom" }
+  { value: "REQUIRED", label: "Required" },
+  { value: "Sales", label: "Sales" },
+  { value: "HR", label: "HR" }
 ]
 
 class CourseHome extends Component {

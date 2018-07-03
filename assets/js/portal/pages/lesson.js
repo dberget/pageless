@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { withStyles } from "@material-ui/core"
 import phoenixChannel from "../../socket"
+import renderLesson from "../../components/renderLesson"
 
 const styles = theme => ({})
 
@@ -18,21 +19,9 @@ class Lesson extends Component {
   }
 
   render() {
-    const { classes } = this.props
     const { lesson, is_loading } = this.state
 
-    return (
-      <React.Fragment>
-        {is_loading ? null : (
-          <div>
-            <div>Type: {lesson.type}</div>
-            <div>Title: {lesson.title}</div>
-            <div>description: {lesson.description}</div>
-            <div>Content: {lesson.content}</div>
-          </div>
-        )}
-      </React.Fragment>
-    )
+    return is_loading ? null : renderLesson(lesson)
   }
 }
 

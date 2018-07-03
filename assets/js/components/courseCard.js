@@ -10,9 +10,16 @@ import Typography from "@material-ui/core/Typography"
 import IconButton from "@material-ui/core/IconButton"
 import PlayArrow from "@material-ui/icons/PlayArrow"
 import Share from "@material-ui/icons/share"
+import FileCopy from "@material-ui/icons/ContentCopy"
+import Modal from "@material-ui/core/Modal"
+import Paper from "@material-ui/core/Paper"
 import OptionsMenu from "./optionsMenu"
+import TextField from "@material-ui/core/TextField"
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import MessageSnackbar from "./snackbar"
 
-const styles = {
+const styles = theme => ({
   actions: {
     display: "flex"
   },
@@ -24,25 +31,59 @@ const styles = {
   },
   buttonRight: {
     marginLeft: "auto"
+  },
+  modalBox: {
+    maxHeight: "calc(100% - 100px)",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    width: "33%",
+    padding: theme.spacing.unit * 4,
+    transform: "translate(-50%, -50%)"
+  },
+  selected: {
+    userSelect: "all"
   }
-}
+})
 
 class CourseCard extends Component {
-  state = { optionsEl: null }
+  state = { optionsEl: null, open: false }
 
   handleShow = event => {
     this.setState({ optionsEl: event.currentTarget })
   }
 
+  showSnackbar = message => {
+    this.setState({ snackbar: true, message: message })
+
+    setTimeout(() => this.setState({ snackbar: false }), 5000)
+  }
+
+  handleShareModal = () => {
+    this.setState({ open: true })
+  }
+
+  handleCloseModal = () => {
+    this.setState({ open: false })
+  }
+
   handleClose = () => {
     this.setState({ optionsEl: null })
   }
+
+  copyText = () => {
+    var copyText = document.getElementById("shareUrl")
+    copyText.select()
+    document.execCommand("copy")
+    this.showSnackbar("Copied To Clipboard")
+  }
+
   render() {
     const { classes, course, route } = this.props
     const { optionsEl } = this.state
 
     return (
-      <Card raised>
+      <Card>
         <CardHeader
           action={
             <OptionsMenu
@@ -66,14 +107,39 @@ class CourseCard extends Component {
           >
             <PlayArrow />
           </IconButton>
-          <IconButton
-            component={Link}
-            to={`${route}${course.id}`}
-            color="primary"
-          >
+          <IconButton onClick={this.handleShareModal} color="primary">
             <Share />
           </IconButton>
         </CardActions>
+        <Modal
+          className={classes.modal}
+          open={this.state.open}
+          onClose={this.handleCloseModal}
+        >
+          <Paper className={classes.modalBox}>
+            <Grid container spacing={12} alignItems="flex-end">
+              <Grid sm={10} item>
+                <TextField
+                  label={"Share"}
+                  id={"shareUrl"}
+                  className={classes.selected}
+                  fullWidth
+                  autoFocus
+                  value={`${window.location.hostname}/app/${course.slug}`}
+                />
+              </Grid>
+              <Grid sm={1} item>
+                <IconButton color="primary" onClick={this.copyText}>
+                  <FileCopy />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Modal>
+        <MessageSnackbar
+          open={this.state.snackbar}
+          message={this.state.message}
+        />
       </Card>
     )
   }
