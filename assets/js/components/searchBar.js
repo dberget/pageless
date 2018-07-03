@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField"
 import Checkbox from "@material-ui/core/Checkbox"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
 
-const SearchBar = ({ filterTypes, handleChange }) => {
+const SearchBar = ({ filterTypes, handleChange, checked }) => {
   return (
     <Fragment>
       <Grid item xs={12} lg={6}>
@@ -23,6 +23,7 @@ const SearchBar = ({ filterTypes, handleChange }) => {
               key={val.label}
               control={
                 <Checkbox
+                  checked={val.value == checked}
                   onChange={handleChange("topic")}
                   value={val.value}
                   color="primary"

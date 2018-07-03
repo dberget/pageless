@@ -38,7 +38,7 @@ class Home extends Component {
   }
 
   handleSearch = filters => {
-    if (filters.search.length > 2) {
+    if (filters.topic || filters.search) {
       this.fetchResults(filters)
     } else {
       this.getInitialLessons()
@@ -56,6 +56,10 @@ class Home extends Component {
   handleChange = name => event => {
     let searchTerm = event.target.value
 
+    if (name == "topic" && searchTerm == this.state.filters.topic) {
+      searchTerm = null
+    }
+
     this.setState(
       prevState => ({
         filters: {
@@ -63,18 +67,19 @@ class Home extends Component {
           [name]: searchTerm
         }
       }),
-      this.handleSearch(this.state.filters)
+      () => this.handleSearch(this.state.filters)
     )
   }
 
   render() {
-    const { lessons, is_loading } = this.state
+    const { lessons, is_loading, filters } = this.state
     const { classes } = this.props
 
     return (
       <Fragment>
         <Grid container spacing={24}>
           <SearchBar
+            checked={filters.topic}
             filterTypes={filterTypes}
             handleChange={this.handleChange}
           />

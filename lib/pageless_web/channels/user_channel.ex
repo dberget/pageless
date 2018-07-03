@@ -45,7 +45,6 @@ defmodule PagelessWeb.UserChannel do
 
   def handle_in("search_company_courses", %{"search" => search, "topic" => topic}, socket) do
     company_id = socket.assigns[:current_user].user.company_id
-    IO.inspect(socket.assigns)
 
     courses =
       Pageless.Courses.search_company_courses(company_id, %{search: search, topic: topic})
@@ -84,7 +83,11 @@ defmodule PagelessWeb.UserChannel do
     company_id = socket.assigns[:current_user].user.company_id
 
     lessons =
-      Pageless.Lessons.search_company_lessons(company_id, %{search: search, topic: topic})
+      Pageless.Lessons.search_company_lessons(company_id, %{
+        search: search,
+        topic: topic,
+        filter_field: :lesson_type
+      })
       |> Enum.map(&filter_steps/1)
 
     {:reply, {:ok, %{lessons: lessons}}, socket}
