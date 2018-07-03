@@ -26,7 +26,7 @@ const filterTypes = [
 ]
 
 class CourseHome extends Component {
-  state = { courses: [], is_loading: true }
+  state = { courses: [], is_loading: true, filters: { search: "", topic: "" } }
 
   componentDidMount = () => {
     this.getInitialCourses()
@@ -38,34 +38,34 @@ class CourseHome extends Component {
     })
   }
 
-  handleSearch = searchTerm => {
-    if (searchTerm.length > 2) {
-      this.fetchResults(searchTerm)
+  handleSearch = filters => {
+    if (filters.search.length > 2) {
+      this.fetchResults(filters)
     } else {
       this.getInitialCourses()
     }
   }
 
-  fetchResults(query) {
+  fetchResults({ search, topic }) {
     phoenixChannel
-      .push("search_company_courses", { query: query })
+      .push("search_company_courses", { search, topic })
       .receive("ok", resp => {
         this.setState({ courses: resp.courses })
       })
   }
 
   handleChange = name => event => {
-    event.preventDefault()
-    const searchTerm = event.target.value.trim()
+    let searchTerm = event.target.value
 
-    this.handleSearch(searchTerm)
-
-    this.setState({
-      ...this.state,
-      filter: {
-        [name]: searchTerm
-      }
-    })
+    this.setState(
+      prevState => ({
+        filters: {
+          ...prevState.filters,
+          [name]: searchTerm
+        }
+      }),
+      this.handleSearch(this.state.filters)
+    )
   }
 
   render() {

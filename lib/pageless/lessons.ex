@@ -27,8 +27,8 @@ defmodule Pageless.Lessons do
     |> Repo.all()
   end
 
-  def search_company_lessons(company_id, search_term) do
-    Search.find(company_id, Lesson, search_term)
+  def search_company_lessons(company_id, search) do
+    Search.find(company_id, Lesson, search)
   end
 
   @doc """

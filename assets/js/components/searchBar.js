@@ -23,7 +23,7 @@ const SearchBar = ({ filterTypes, handleChange }) => {
               key={val.label}
               control={
                 <Checkbox
-                  onChange={handleChange(val.value)}
+                  onChange={handleChange("topic")}
                   value={val.value}
                   color="primary"
                 />
