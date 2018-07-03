@@ -55,10 +55,10 @@ defmodule PagelessWeb.Router do
   scope "/admin", PagelessWeb do
     pipe_through [:admin_browser, :handle_subdomain, :set_api_token]
 
-    get "/", AppController, :admin
-    get "/:path", AppController, :admin
-    get "/:path/:subpath", AppController, :admin
-    get "/:path/:subpath/:page", AppController, :admin
+    get "/", AdminController, :index
+    get "/:path", AdminController, :index
+    get "/:path/:subpath", AdminController, :index
+    get "/:path/:subpath/:page", AdminController, :index
   end
 
   scope "/app", PagelessWeb do

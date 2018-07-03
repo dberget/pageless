@@ -6,6 +6,7 @@ defmodule Pageless.Courses do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Pageless.Repo
+  alias Pageless.Search
 
   alias Pageless.Courses.{Course, CourseLesson}
 
@@ -19,6 +20,10 @@ defmodule Pageless.Courses do
 
     query
     |> Repo.all()
+  end
+
+  def search_company_courses(company_id, search_term) do
+    Search.find(company_id, Course, search_term)
   end
 
   def get_course_with_lessons(id) do

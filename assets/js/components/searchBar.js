@@ -8,7 +8,12 @@ const SearchBar = ({ filterTypes, handleChange }) => {
   return (
     <Fragment>
       <Grid item xs={12} lg={6}>
-        <TextField fullWidth label="Search" />
+        <TextField
+          onChange={handleChange("search")}
+          fullWidth
+          label="Search"
+          id="search"
+        />
       </Grid>
       {filterTypes ? (
         <Grid item xs={12} lg={6}>

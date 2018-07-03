@@ -3,9 +3,7 @@
 # libraries are in place when building releases
 FROM ubuntu:16.04
 
-ENV ELIXIR_VERSION 1.6.5
-
-ENV CACHE_BUST 20171114_1054
+ENV CACHE_BUST 20171114_1055
 
 RUN apt-get update
 RUN apt-get install -y apt-transport-https

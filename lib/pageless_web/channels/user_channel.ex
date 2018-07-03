@@ -35,6 +35,16 @@ defmodule PagelessWeb.UserChannel do
     {:reply, {:ok, %{course: course}}, socket}
   end
 
+  def handle_in("search_company_courses", %{"query" => q}, socket) do
+    company_id = socket.assigns[:current_user].user.company_id
+
+    courses =
+      Pageless.Courses.search_company_courses(company_id, q)
+      |> Enum.map(&filter_courses/1)
+
+    {:reply, {:ok, %{courses: courses}}, socket}
+  end
+
   def handle_in("get_lessons", %{"path_id" => path_id}, socket) do
     lessons =
       Pageless.Paths.get_path_steps(path_id)
@@ -56,6 +66,16 @@ defmodule PagelessWeb.UserChannel do
 
     lessons =
       Pageless.Lessons.get_company_lessons(company_id)
+      |> Enum.map(&filter_steps/1)
+
+    {:reply, {:ok, %{lessons: lessons}}, socket}
+  end
+
+  def handle_in("search_company_lessons", %{"query" => q}, socket) do
+    company_id = socket.assigns[:current_user].user.company_id
+
+    lessons =
+      Pageless.Lessons.search_company_lessons(company_id, q)
       |> Enum.map(&filter_steps/1)
 
     {:reply, {:ok, %{lessons: lessons}}, socket}

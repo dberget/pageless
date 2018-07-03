@@ -37,6 +37,7 @@ environment :prod do
   set(include_src: false)
   set(cookie: :"OcTkoSf~]w52zhAthqtC.)rrVu>GaDv7tO}~d:L}5Bz{bMuE@qOraGi8w4P4~}7[")
   set(post_start_hook: "rel/hooks/post_start")
+  set(post_upgrade_hook: "rel/hooks/post_start")
 end
 
 # You may define one or more releases in this file.

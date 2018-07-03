@@ -13,6 +13,8 @@ done
 
 set -e
 
+echo "Running migrations"  
+/var/www/pageless/bin/pageless rpc Elixir.Release.Tasks.migrate
 
 
 echo "migrations complete"

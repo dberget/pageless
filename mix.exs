@@ -4,8 +4,8 @@ defmodule Pageless.Mixfile do
   def project do
     [
       app: :pageless,
-      version: "0.0.91",
-      elixir: "~> 1.6.5",
+      version: "0.0.99",
+      elixir: "~> 1.6.6",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -20,7 +20,7 @@ defmodule Pageless.Mixfile do
   def application do
     [
       mod: {Pageless, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :elixir_make, :parse_trans]
     ]
   end
 
@@ -62,6 +62,7 @@ defmodule Pageless.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      deploy: ["make build-release", "make release"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end

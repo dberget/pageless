@@ -16,9 +16,10 @@ use Mix.Config
 config :pageless, PagelessWeb.Endpoint,
   load_from_system_env: true,
   http: [port: {:system, "PORT"}],
-  url: [host: "pageless.app", port: 81],
+  url: [host: "pageless.app", port: 80],
   root: ".",
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  version: Mix.Project.config()[:version]
 
 # Do not print debug messages in production
 config :logger, level: :info

@@ -29,15 +29,41 @@ class CourseHome extends Component {
   state = { courses: [], is_loading: true }
 
   componentDidMount = () => {
+    this.getInitialCourses()
+  }
+
+  getInitialCourses = () => {
     phoenixChannel.push("get_company_courses").receive("ok", resp => {
       this.setState({ courses: resp.courses, is_loading: false })
     })
   }
 
+  handleSearch = searchTerm => {
+    if (searchTerm.length > 2) {
+      this.fetchResults(searchTerm)
+    } else {
+      this.getInitialCourses()
+    }
+  }
+
+  fetchResults(query) {
+    phoenixChannel
+      .push("search_company_courses", { query: query })
+      .receive("ok", resp => {
+        this.setState({ courses: resp.courses })
+      })
+  }
+
   handleChange = name => event => {
+    event.preventDefault()
+    const searchTerm = event.target.value.trim()
+
+    this.handleSearch(searchTerm)
+
     this.setState({
+      ...this.state,
       filter: {
-        [name]: event.target.value
+        [name]: searchTerm
       }
     })
   }

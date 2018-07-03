@@ -11,15 +11,16 @@
     <%= error_tag f, :password %>
   </div>
 
+<%= if !@conn.assigns[:subdomain] do %>
   <div class="form-group">
     <%= text_input f, :subdomain, class: "form-control", required: "", value: "company"%>
     <%= error_tag f, :subdomain %>
   </div>
-
+<% end %>
 
   <div class="form-group">
     <%= submit "Login", class: "btn" %>
   </div>
-  </div>
+ </div>
 
 <% end %>

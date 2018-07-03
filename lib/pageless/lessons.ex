@@ -4,7 +4,7 @@ defmodule Pageless.Lessons do
   """
 
   import Ecto.Query, warn: false
-  alias Pageless.Repo
+  alias Pageless.{Repo, Search}
 
   alias Pageless.Lessons.Lesson
 
@@ -25,6 +25,10 @@ defmodule Pageless.Lessons do
 
     query
     |> Repo.all()
+  end
+
+  def search_company_lessons(company_id, search_term) do
+    Search.find(company_id, Lesson, search_term)
   end
 
   @doc """

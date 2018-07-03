@@ -11,7 +11,7 @@
     <%= if assigns[:user_id] do %>
      <script>window.userToken = "<%= assigns[:user_id] %>" </script>
     <% end %>
-    
+
 
     <%= if assigns[:api_token] do %>
      <meta name="api_token" content="<%= @api_token %>">

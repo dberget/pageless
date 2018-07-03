@@ -28,30 +28,49 @@ const filterTypes = [
 ]
 
 class Home extends Component {
-  state = { lessons: [], is_loading: true, filter: { filterBy: "" } }
+  state = { lessons: [], is_loading: true }
 
   componentDidMount = () => {
+    this.getInitialLessons()
+  }
+
+  getInitialLessons = () => {
     phoenixChannel.push("get_company_lessons").receive("ok", resp => {
       this.setState({ lessons: resp.lessons, is_loading: false })
     })
   }
 
-  searchLessons = () => {
-    phoenixChannel.push("get_company_lessons").receive("ok", resp => {
-      this.setState({ lessons: resp.lessons, is_loading: false })
-    })
+  handleSearch = searchTerm => {
+    if (searchTerm.length > 2) {
+      this.fetchResults(searchTerm)
+    } else {
+      this.getInitialLessons()
+    }
+  }
+
+  fetchResults(query) {
+    phoenixChannel
+      .push("search_company_lessons", { query: query })
+      .receive("ok", resp => {
+        this.setState({ lessons: resp.lessons })
+      })
   }
 
   handleChange = name => event => {
+    event.preventDefault()
+    const searchTerm = event.target.value.trim()
+    this.handleSearch(searchTerm)
+
     this.setState({
+      ...this.state,
       filter: {
-        [name]: event.target.value
+        [name]: searchTerm
       }
     })
   }
 
   render() {
-    const { lessons } = this.state
+    const { lessons, is_loading } = this.state
     const { classes } = this.props
 
     return (
@@ -61,11 +80,13 @@ class Home extends Component {
             filterTypes={filterTypes}
             handleChange={this.handleChange}
           />
-          {lessons.map(lesson => (
-            <Grid key={lesson.id} item sm={12} md={6} lg={3}>
-              <LessonCard route={this.props.match.path} lesson={lesson} />
-            </Grid>
-          ))}
+          {is_loading
+            ? null
+            : lessons.map(lesson => (
+                <Grid key={lesson.id} item sm={12} md={6} lg={3}>
+                  <LessonCard route={this.props.match.path} lesson={lesson} />
+                </Grid>
+              ))}
         </Grid>
       </Fragment>
     )
