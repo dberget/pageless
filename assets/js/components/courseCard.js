@@ -24,10 +24,9 @@ const styles = theme => ({
     display: "flex"
   },
   title: {
-    fontSize: "1rem"
-  },
-  h3: {
-    margin: ".5rem 0 .5rem 0"
+    fontSize: "1.2rem",
+    margin: ".5rem 0 .5rem 0",
+    fontWeight: "500"
   },
   buttonRight: {
     marginLeft: "auto"
@@ -54,9 +53,9 @@ class CourseCard extends Component {
   }
 
   showSnackbar = message => {
-    this.setState({ snackbar: true, message: message })
-
-    setTimeout(() => this.setState({ snackbar: false }), 5000)
+    this.setState({ snackbar: true, message: message }, () =>
+      setTimeout(() => this.setState({ snackbar: false }), 5000)
+    )
   }
 
   handleShareModal = () => {
@@ -92,7 +91,7 @@ class CourseCard extends Component {
               show={optionsEl}
             />
           }
-          title={<h3 className={classes.h3}>{course.title}</h3>}
+          title={<span>{course.title}</span>}
           classes={{ title: classes.title }}
         />
         <CardContent>

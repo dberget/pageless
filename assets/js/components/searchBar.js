@@ -15,24 +15,24 @@ const SearchBar = ({ filterTypes, handleChange, checked }) => {
           id="search"
         />
       </Grid>
-      {filterTypes ? (
-        <Grid item xs={12} lg={6}>
-          {filterTypes.map(val => (
-            <FormControlLabel
-              label={val.label}
-              key={val.label}
-              control={
-                <Checkbox
-                  checked={val.value == checked}
-                  onChange={handleChange("topic")}
-                  value={val.value}
-                  color="primary"
-                />
-              }
-            />
-          ))}
-        </Grid>
-      ) : null}
+      <Grid item xs={12} lg={6}>
+        {filterTypes
+          ? filterTypes.map(val => (
+              <FormControlLabel
+                label={val.label}
+                key={val.label}
+                control={
+                  <Checkbox
+                    checked={val.value == checked}
+                    onChange={handleChange("topic")}
+                    value={val.value}
+                    color="primary"
+                  />
+                }
+              />
+            ))
+          : null}
+      </Grid>
     </Fragment>
   )
 }

@@ -11,17 +11,15 @@ import Grid from "@material-ui/core/Grid"
 import LessonRadioGroup from "../../components/lessonRadioGroup"
 
 const lessonTypes = [
-  { value: "VIDEO", label: "Video" },
-  { value: "ARTICLE", label: "Article" },
   { value: "ELEARNING", label: "eLearning" },
-  { value: "OTHER", label: "Other" },
-  { value: "CLASSROOM", label: "Classroom" }
+  { value: "ARTICLE", label: "Article" },
+  { value: "VIDEO", label: "Video" },
+  { value: "OTHER", label: "Other" }
 ]
 
 const sourceTypes = [
   { value: "FILE", label: "File" },
-  { value: "URL", label: "Url" },
-  { value: "RICHTEXT", label: "Text" }
+  { value: "URL", label: "Url" }
 ]
 
 const styles = theme => ({
@@ -46,6 +44,10 @@ const styles = theme => ({
   },
   button: {
     margin: "0 4px"
+  },
+  image: {
+    height: 50,
+    width: 50
   }
 })
 
@@ -137,6 +139,17 @@ class NewLesson extends Component {
     })
   }
 
+  handleFileThumbnail = name => event => {
+    var url = encodeImageFileAsURL(event)
+
+    this.setState({
+      form: {
+        ...this.state.form,
+        [name]: url
+      }
+    })
+  }
+
   render() {
     const { classes } = this.props
     const { form } = this.state
@@ -174,23 +187,23 @@ class NewLesson extends Component {
                 label={"Type"}
               />
             </Grid>
-            <Grid xs={3} item>
-              <LessonRadioGroup
+            {/* <Grid xs={3} item> */}
+            {/* <LessonRadioGroup
                 handleChange={this.handleChange}
                 value={form.source_type}
                 updateField={"source_type"}
                 data={sourceTypes}
                 label={"Source"}
-              />
-            </Grid>
+              /> */}
+            {/* </Grid> */}
             <Grid xs={6} item>
               <Grid item>
                 <TextField
                   id="url"
                   label={`URL`}
-                  disabled={form.source_type !== "URL"}
+                  // disabled={form.source_type !== "URL"}
                   className={classes.textField}
-                  value={form.source}
+                  value={form.source_type == "URL" || form.source}
                   onChange={this.handleChange("source")}
                   margin="normal"
                 />
@@ -198,7 +211,7 @@ class NewLesson extends Component {
               <div className={classes.inputSet}>
                 <TextField
                   id="file"
-                  disabled={form.source_type !== "FILE"}
+                  // disabled={form.source_type !== "FILE"}
                   type="file"
                   onChange={() =>
                     this.setState({

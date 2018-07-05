@@ -84,20 +84,24 @@ paths =
 
 # courses
 
-course_descriptions = [
-  "This is a course",
+course_titles = [
   "Onboarding Training Course",
-  "Your Course",
-  "An awesome course"
+  "New Hire Sales Course",
+  "An Awesome Course 1",
+  "An Awesome Course 2",
+  "An Awesome Course 3",
+  "An Awesome Course 4",
+  "Title of Course"
 ]
 
 courses =
   Enum.map(
-    course_descriptions,
+    course_titles,
     &Repo.insert!(%Course{
-      description: &1,
-      title: "Sample Course",
-      company: Enum.random(companies)
+      description: "Awesome Course descrption goes here!",
+      title: &1,
+      company: Enum.random(companies),
+      slug: URI.encode_www_form(title)
     })
   )
 
@@ -106,16 +110,16 @@ courses =
 lesson_details = [
   "This is the first lesson",
   "Onboarding Training lesson",
-  "Your Lesson 1",
-  "Your Lesson 2",
-  "Your Lesson 3",
-  "Your Lesson 4",
-  "Your Lesson 5",
-  "Your Lesson 6",
-  "Your Lesson 7",
-  "Your Lesson 8",
-  "Your Lesson 9",
-  "Your Lesson 10"
+  "Lesson 1",
+  "Lesson 2",
+  "Lesson 3",
+  "Lesson 4",
+  "Lesson 5",
+  "Lesson 6",
+  "Lesson 7",
+  "Lesson 8",
+  "Lesson 9",
+  "Lesson 10"
 ]
 
 lessons =

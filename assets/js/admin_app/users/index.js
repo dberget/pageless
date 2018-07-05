@@ -36,7 +36,7 @@ class UsersHome extends Component {
 const Users = ({ match, classes }) => {
   return (
     <Fragment>
-      <SubMenu resource="users" />
+      <SubMenu resource="user" />
       <Container>
         <Switch>
           <Route

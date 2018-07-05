@@ -14,7 +14,6 @@ import Build from "@material-ui/icons/Build"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import Dashboard from "@material-ui/icons/dashboard"
 import ViewModule from "@material-ui/icons/ViewModule"
-import Edit from "@material-ui/icons/edit"
 import Person from "@material-ui/icons/person"
 import Pages from "@material-ui/icons/pages"
 
@@ -30,10 +29,14 @@ const styles = theme => ({
 })
 
 class SideMenu extends Component {
-  state = { open: false }
+  state = { lessonOpen: false, courseOpen: false }
 
-  handleClick = () => {
-    this.setState({ open: !this.state.open })
+  handleLessonClick = () => {
+    this.setState({ lessonOpen: !this.state.lessonOpen })
+  }
+
+  handleCourseClick = () => {
+    this.setState({ courseOpen: !this.state.courseOpen })
   }
 
   render() {
@@ -48,26 +51,53 @@ class SideMenu extends Component {
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-          <ListItem button component={Link} to="/users">
+          <ListItem button component={Link} to="/user">
             <ListItemIcon>
               <Person />
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
-          <ListItem button component={Link} to="/course">
+          <ListItem button onClick={this.handleCourseClick}>
             <ListItemIcon>
               <Pages />
             </ListItemIcon>
-            <ListItemText primary="Courses" />
+            <ListItemText inset primary="Courses" />
+            {this.state.courseOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <ListItem button onClick={this.handleClick}>
+          <Collapse in={this.state.courseOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                component={Link}
+                to="/course"
+                className={classes.nested}
+              >
+                <ListItemIcon>
+                  <ViewModule />
+                </ListItemIcon>
+                <ListItemText inset primary="All" />
+              </ListItem>
+              <ListItem
+                button
+                component={Link}
+                to="/course/new"
+                className={classes.nested}
+              >
+                <ListItemIcon>
+                  <Build />
+                </ListItemIcon>
+                <ListItemText inset primary="Create" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <ListItem button onClick={this.handleLessonClick}>
             <ListItemIcon>
               <ViewList />
             </ListItemIcon>
             <ListItemText inset primary="Lessons" />
-            {this.state.open ? <ExpandLess /> : <ExpandMore />}
+            {this.state.lessonOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <Collapse in={this.state.lessonOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem
                 button
@@ -90,17 +120,6 @@ class SideMenu extends Component {
                   <Build />
                 </ListItemIcon>
                 <ListItemText inset primary="Create" />
-              </ListItem>
-              <ListItem
-                button
-                component={Link}
-                to="/lesson"
-                className={classes.nested}
-              >
-                <ListItemIcon>
-                  <Edit />
-                </ListItemIcon>
-                <ListItemText inset primary="Edit" />
               </ListItem>
             </List>
           </Collapse>

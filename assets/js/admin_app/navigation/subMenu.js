@@ -5,31 +5,31 @@ import { withStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
 import ButtonBase from "@material-ui/core/ButtonBase"
 
-const styles = {
-  root: {
-    display: "flex",
-    flexGrow: 1
-  },
-  button: {
-    height: 48
-  },
-  menuLink: {
-    color: "#0000008a",
-    fontSize: ".875rem",
-    lineHeight: "1.4rem",
-    fontWeight: 500,
-    textTransform: "uppercase",
-    padding: "12px 16px",
-    margin: "0px 1px",
-    borderBottom: "solid",
-    borderBottomColor: "transparent"
-  },
-  selected: {
-    borderBottomColor: "#2196f3",
-    borderBottom: "solid",
-    color: "#2196f3"
+const styles = theme => (
+  console.log(theme),
+  {
+    root: {
+      display: "flex",
+      flexGrow: 1
+    },
+    menuLink: {
+      color: theme.palette.primary.dark,
+      fontSize: ".875rem",
+      fontFamily: theme.typography.fontFamily,
+      lineHeight: "1.4rem",
+      textTransform: "uppercase",
+      padding: "12px 16px",
+      borderBottom: "solid",
+      borderBottomColor: "transparent",
+      height: 45
+    },
+    selected: {
+      borderBottomColor: theme.palette.secondary.main,
+      borderBottom: "solid",
+      color: theme.palette.primary.dark
+    }
   }
-}
+)
 
 class SubMenu extends Component {
   render() {
@@ -44,15 +44,13 @@ class SubMenu extends Component {
         >
           {resource} Home
         </NavLink>
-        <ButtonBase className={classes.button} component="a">
-          <NavLink
-            activeClassName={classes.selected}
-            className={classes.menuLink}
-            to={`/${resource}/new`}
-          >
-            New {resource}
-          </NavLink>
-        </ButtonBase>
+        <NavLink
+          activeClassName={classes.selected}
+          className={classes.menuLink}
+          to={`/${resource}/new`}
+        >
+          New {resource}
+        </NavLink>
         {this.props.children}
       </Paper>
     )

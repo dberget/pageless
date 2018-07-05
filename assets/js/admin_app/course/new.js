@@ -156,7 +156,6 @@ class NewCourse extends Component {
           onClick={() => this.handleBack()}
           to={`${match.path}/${activeStep - 1 || ""}`}
           component={Link}
-          variant="outlined"
           color="secondary"
           disabled={activeStep == 0}
           className={classes.button}

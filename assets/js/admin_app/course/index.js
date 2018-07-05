@@ -13,7 +13,7 @@ import SearchBar from "../../components/searchBar"
 
 const styles = theme => ({
   grid: {
-    margin: "1rem 0"
+    margin: ".5rem 0"
   }
 })
 
@@ -37,7 +37,7 @@ class CourseHome extends Component {
   }
 
   handleSearch = filters => {
-    if (filters.search.length > 2) {
+    if (filters.search.length > 1) {
       this.fetchResults(filters)
     } else {
       this.getInitialCourses()
@@ -72,7 +72,7 @@ class CourseHome extends Component {
 
     return (
       <Grid className={classes.grid} container spacing={24}>
-        <SearchBar filterTypes={filterTypes} handleChange={this.handleChange} />
+        <SearchBar handleChange={this.handleChange} />
         {is_loading
           ? null
           : courses.map(course => (
