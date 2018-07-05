@@ -8,6 +8,9 @@ use Mix.Config
 # General application configuration
 config :pageless, ecto_repos: [Pageless.Repo]
 
+config :ex_aws,
+  region: "us-east-2"
+
 # Configures the endpoint
 config :pageless, PagelessWeb.Endpoint,
   url: [host: "localhost"],

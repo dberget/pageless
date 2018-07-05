@@ -135,20 +135,11 @@ defmodule PagelessWeb.UserChannel do
   def filter_steps(%Pageless.Lessons.Lesson{} = step) do
     %{
       content: step.source,
+      source_type: step.source_type,
+      lesson_type: step.lesson_type,
       description: step.description,
       id: step.id,
-      title: step.title,
-      type: step.lesson_type
-    }
-  end
-
-  defp filter_lessons(lesson) do
-    %{
-      content: lesson.source,
-      description: lesson.description,
-      id: lesson.id,
-      title: lesson.title,
-      type: lesson.lesson_type
+      title: step.title
     }
   end
 
@@ -159,8 +150,7 @@ defmodule PagelessWeb.UserChannel do
       lesson_type: lesson.lesson_type,
       description: lesson.description,
       id: lesson.id,
-      title: lesson.title,
-      type: lesson.lesson_type
+      title: lesson.title
     }
   end
 end

@@ -3,33 +3,29 @@ import React, { Component } from "react"
 import { NavLink } from "react-router-dom"
 import { withStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
-import ButtonBase from "@material-ui/core/ButtonBase"
 
-const styles = theme => (
-  console.log(theme),
-  {
-    root: {
-      display: "flex",
-      flexGrow: 1
-    },
-    menuLink: {
-      color: theme.palette.primary.dark,
-      fontSize: ".875rem",
-      fontFamily: theme.typography.fontFamily,
-      lineHeight: "1.4rem",
-      textTransform: "uppercase",
-      padding: "12px 16px",
-      borderBottom: "solid",
-      borderBottomColor: "transparent",
-      height: 45
-    },
-    selected: {
-      borderBottomColor: theme.palette.secondary.main,
-      borderBottom: "solid",
-      color: theme.palette.primary.dark
-    }
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexGrow: 1
+  },
+  menuLink: {
+    color: theme.palette.primary.dark,
+    fontSize: ".875rem",
+    fontFamily: theme.typography.fontFamily,
+    lineHeight: "1.4rem",
+    textTransform: "uppercase",
+    padding: "12px 16px",
+    borderBottom: "solid",
+    borderBottomColor: "transparent",
+    height: 45
+  },
+  selected: {
+    borderBottomColor: theme.palette.secondary.main,
+    borderBottom: "solid",
+    color: theme.palette.primary.dark
   }
-)
+})
 
 class SubMenu extends Component {
   render() {

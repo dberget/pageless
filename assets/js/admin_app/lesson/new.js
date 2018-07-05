@@ -44,10 +44,6 @@ const styles = theme => ({
   },
   button: {
     margin: "0 4px"
-  },
-  image: {
-    height: 50,
-    width: 50
   }
 })
 
