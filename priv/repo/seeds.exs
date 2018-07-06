@@ -14,7 +14,6 @@ alias Pageless.Repo
 Repo.delete_all(Course)
 Repo.delete_all(User)
 Repo.delete_all(Path)
-Repo.delete_all(Assignment)
 Repo.delete_all(Lesson)
 Repo.delete_all(Company)
 
@@ -101,7 +100,7 @@ courses =
       description: "Awesome Course descrption goes here!",
       title: &1,
       company: Enum.random(companies),
-      slug: URI.encode_www_form(title)
+      slug: URI.encode_www_form(&1)
     })
   )
 
