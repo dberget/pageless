@@ -5,17 +5,17 @@ defmodule Pageless.AWS do
   alias ExAws.S3
   alias Pageless.AWS
 
-  defstruct [:filename, :src_path, :content_type, :size, :aws_url, :zip, :errors]
+  defstruct [:filename, :src_path, :content_type, :size, :zip, :errors]
 
   @bucket "pageless"
 
   def upload(upload) when is_map(upload) do
     file =
-      %AWS{filename: upload.filename, src_path: upload.path}
+      %AWS{filename: "img-#{upload.filename}", src_path: upload.path}
       |> get_file_size()
       |> send_to_aws()
 
-    "https://#{@bucket}.s3.amazonaws.com/#{file.filename}"
+    "https://s3.us-east-2.amazonaws.com/pageless/temp/#{URI.encode_www_form(file.filename)}"
   end
 
   def upload(path) when is_bitstring(path) do
@@ -24,7 +24,7 @@ defmodule Pageless.AWS do
       |> get_file_size()
       |> send_to_aws()
 
-    "https://#{@bucket}.s3.amazonaws.com/#{file.filename}"
+    "https://s3.us-east-2.amazonaws.com/pageless/temp/#{URI.encode_www_form(file.filename)}"
   end
 
   # def save(%{size: size} = upload) when size > 1_000_000 do

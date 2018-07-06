@@ -47,7 +47,7 @@ defmodule Pageless.Mixfile do
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.12"},
-      {:distillery, "~> 1.5"},
+      {:distillery, "~> 1.5.3"},
       {:sweet_xml, "~> 0.6"}
     ]
   end
