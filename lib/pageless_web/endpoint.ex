@@ -27,7 +27,8 @@ defmodule PagelessWeb.Endpoint do
   plug Plug.Logger
 
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart, :json],
+    parsers: [:urlencoded, {:multipart, length: 100_000_000}, :json],
+    length: 100_000_000,
     pass: ["*/*"],
     json_decoder: Poison
 

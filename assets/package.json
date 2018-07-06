@@ -10,10 +10,13 @@
     "@material-ui/core": "^1.2.1",
     "@material-ui/icons": "^1.1.0",
     "downshift": "^2.0.0",
+    "immutable": "^3.8.2",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "slate": "^0.34.5",
+    "slate-react": "^0.13.2"
   },
   "devDependencies": {
     "autoprefixer": "^8.3.0",

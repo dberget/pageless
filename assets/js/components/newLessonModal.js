@@ -12,13 +12,14 @@ const classes = theme => ({
     position: "fixed",
     top: "50%",
     left: "50%",
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 5,
+    overflow: "scroll",
     transform: "translate(-50%, -50%)"
   },
   fab: {
     position: "absolute",
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2
+    bottom: theme.spacing.unit,
+    right: theme.spacing.unit
   }
 })
 
@@ -40,7 +41,7 @@ class NewLessonModal extends Component {
             onClick={() => this.handleOpen()}
             variant="fab"
             className={classes.fab}
-            color="primary"
+            color="secondary"
           >
             <Add />
           </Button>

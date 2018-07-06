@@ -9,6 +9,7 @@ import LessonSelect from "../../components/lessonSelect"
 import { NewCourseInfo } from "../../components/NewCourseInfo"
 import Modal from "@material-ui/core/Modal"
 import ShowLesson from "../lesson/show"
+import NewLessonModal from "../../components/newLessonModal"
 import Paper from "@material-ui/core/Paper"
 import Grid from "@material-ui/core/Grid"
 import ListView from "../../components/listView"
@@ -34,15 +35,15 @@ const styles = theme => ({
   menu: {
     width: 300
   },
-  // modalBox: {
-  //   maxHeight: "calc(100% - 100px)",
-  //   position: "fixed",
-  //   top: "50%",
-  //   left: "50%",
-  //   padding: theme.spacing.unit * 5,
-  //   overflow: "scroll",
-  //   transform: "translate(-50%, -50%)"
-  // },
+  modalBox: {
+    maxHeight: "calc(100% - 100px)",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    padding: theme.spacing.unit * 5,
+    overflow: "scroll",
+    transform: "translate(-50%, -50%)"
+  },
   buttonGroup: {
     position: "fixed",
     bottom: theme.spacing.unit * 2,
@@ -145,13 +146,7 @@ class NewCourse extends Component {
 
     const Buttons = () => (
       <div className={classes.buttonGroup}>
-        <Button
-          onClick={() => this.saveCourse()}
-          variant="outlined"
-          className={classes.button}
-        >
-          Save Draft
-        </Button>
+        {activeStep == 0 ? null : <NewLessonModal />}
         <Button
           onClick={() => this.handleBack()}
           to={`${match.path}/${activeStep - 1 || ""}`}
@@ -214,13 +209,11 @@ class NewCourse extends Component {
                       items={allLessons}
                     />
                   </Grid>
-                  <div className={classes.container}>
-                    <Modal onClose={this.handlePreview} open={this.state.open}>
-                      <Paper className={classes.modalBox}>
-                        <ShowLesson lesson={this.state.previewLesson} />
-                      </Paper>
-                    </Modal>
-                  </div>
+                  <Modal onClose={this.handlePreview} open={this.state.open}>
+                    <Paper className={classes.modalBox}>
+                      <ShowLesson lesson={this.state.previewLesson} />
+                    </Paper>
+                  </Modal>
                   <Grid item xs={12}>
                     <ListView
                       handleRemove={lesson => this.handleRemove(lesson)}

@@ -10,23 +10,4 @@ defmodule PagelessWeb.Api.CourseController do
 
     json(conn, "ok")
   end
-
-  def upload(conn, params) do
-    if upload = params["file"] do
-      {:ok, [path]} = File.cp_r(upload.path, "files/#{upload.filename}")
-
-      json(conn, %{path: path})
-    else
-      json(conn, %{error: "error, no file param"})
-    end
-  end
-
-  @moduledoc """
-  Not currently doing anything. 
-  """
-  def download(conn, params) do
-    source = Pageless.Lessons.get_lesson_source(params["id"])
-
-    send_download(conn, {:file, source})
-  end
 end
