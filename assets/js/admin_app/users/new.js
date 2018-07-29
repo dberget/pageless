@@ -76,7 +76,7 @@ class NewUsers extends Component {
         "content-type": "application/json",
         "x-csrf-token": token
       }
-    }).then(this.props.history.push("/"))
+    }).then(this.props.history.push("/user/new/assignments"))
   }
 
   handleChange = name => event => {
@@ -131,10 +131,17 @@ class NewUsers extends Component {
               />
             )}
           />
-          <LessonSelect
-            handleSelect={course => this.handleSelect(course)}
-            items={allCourses}
-            classes={classes}
+          <Route
+            path={`${match.path}/assignments`}
+            render={() => (
+              <div>
+                <LessonSelect
+                  handleSelect={course => this.handleSelect(course)}
+                  items={allCourses}
+                  classes={classes}
+                />
+              </div>
+            )}
           />
         </Switch>
         <Buttons />

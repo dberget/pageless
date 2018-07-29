@@ -14,8 +14,8 @@ const Lesson = ({ match }) => {
       <Container>
         <Switch>
           <Route exact path={`${match.path}/`} component={Index} />
-          <Route path={`${match.path}/new`} component={NewLesson} />
-          <Route path={`${match.path}/text`} component={TextEditor} />
+          <Route exact path={`${match.path}/new`} component={NewLesson} />
+          <Route path={`${match.path}/new/text`} component={TextEditor} />
           <Route path={`${match.path}/:id`} component={ViewLesson} />
         </Switch>
       </Container>

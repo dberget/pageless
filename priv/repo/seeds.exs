@@ -17,7 +17,7 @@ Repo.delete_all(Path)
 Repo.delete_all(Lesson)
 Repo.delete_all(Company)
 
-company_names = ["Looney Tunes", "company"]
+company_names = ["dashe", "company"]
 
 companies =
   Enum.map(

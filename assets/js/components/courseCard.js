@@ -15,9 +15,9 @@ import Modal from "@material-ui/core/Modal"
 import Paper from "@material-ui/core/Paper"
 import OptionsMenu from "./optionsMenu"
 import TextField from "@material-ui/core/TextField"
-import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
 import MessageSnackbar from "./snackbar"
+import SVGImage from "../admin_app/course/image"
 
 const styles = theme => ({
   actions: {
@@ -42,6 +42,12 @@ const styles = theme => ({
   },
   selected: {
     userSelect: "all"
+  },
+  image: { height: "8rem" },
+  content: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
   }
 })
 
@@ -94,7 +100,10 @@ class CourseCard extends Component {
           title={<span>{course.title}</span>}
           classes={{ title: classes.title }}
         />
-        <CardContent>
+        <CardContent className={classes.content}>
+          <div className={classes.image}>
+            <SVGImage />
+          </div>
           <Typography component="p">{course.description}</Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
