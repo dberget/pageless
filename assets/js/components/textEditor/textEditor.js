@@ -17,71 +17,27 @@ import {
 } from "@material-ui/icons"
 import { Paper } from "../../../node_modules/@material-ui/core"
 
-/**
- * Define the default node type.
- *
- * @type {String}
- */
-
 const DEFAULT_NODE = "paragraph"
-
-/**
- * Define hotkey matchers.
- *
- * @type {Function}
- */
 
 const isBoldHotkey = isKeyHotkey("mod+b")
 const isItalicHotkey = isKeyHotkey("mod+i")
 const isUnderlinedHotkey = isKeyHotkey("mod+u")
 const isCodeHotkey = isKeyHotkey("mod+`")
 
-/**
- * The rich text example.
- *
- * @type {Component}
- */
-
 class TextEditor extends React.Component {
-  /**
-   * Deserialize the initial editor value.
-   *
-   * @type {Object}
-   */
-
-  state = {
-    value: initialValue
-  }
-
-  /**
-   * Check if the current selection has a mark with `type` in it.
-   *
-   * @param {String} type
-   * @return {Boolean}
-   */
+  // state = {
+  //   value: this.props.value
+  // }
 
   hasMark = type => {
-    const { value } = this.state
+    const { value } = this.props
     return value.activeMarks.some(mark => mark.type == type)
   }
 
-  /**
-   * Check if the any of the currently selected blocks are of `type`.
-   *
-   * @param {String} type
-   * @return {Boolean}
-   */
-
   hasBlock = type => {
-    const { value } = this.state
+    const { value } = this.props
     return value.blocks.some(node => node.type == type)
   }
-
-  /**
-   * Render.
-   *
-   * @return {Element}
-   */
 
   render() {
     return (
@@ -90,6 +46,8 @@ class TextEditor extends React.Component {
           {this.renderMarkButton("bold", <FormatBold />)}
           {this.renderMarkButton("italic", <FormatItalic />)}
           {this.renderMarkButton("underlined", <FormatUnderlined />)}
+          {this.renderBlockButton("heading-one", "Title")}
+          {this.renderBlockButton("heading-two", "Subtitle")}
           {this.renderBlockButton("block-quote", <FormatQuote />)}
           {this.renderBlockButton("numbered-list", <FormatListNumbered />)}
           {this.renderBlockButton("bulleted-list", <FormatListBulleted />)}
@@ -99,7 +57,7 @@ class TextEditor extends React.Component {
             spellCheck
             autoFocus
             placeholder="Enter some rich text..."
-            value={this.state.value}
+            value={this.props.value}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
             renderNode={this.renderNode}
@@ -109,14 +67,6 @@ class TextEditor extends React.Component {
       </Paper>
     )
   }
-
-  /**
-   * Render a mark-toggling toolbar button.
-   *
-   * @param {String} type
-   * @param {String} icon
-   * @return {Element}
-   */
 
   renderMarkButton = (type, icon) => {
     const isActive = this.hasMark(type)
@@ -131,19 +81,11 @@ class TextEditor extends React.Component {
     )
   }
 
-  /**
-   * Render a block-toggling toolbar button.
-   *
-   * @param {String} type
-   * @param {String} icon
-   * @return {Element}
-   */
-
   renderBlockButton = (type, icon) => {
     let isActive = this.hasBlock(type)
 
     if (["numbered-list", "bulleted-list"].includes(type)) {
-      const { value } = this.state
+      const { value } = this.props
       const parent = value.document.getParent(value.blocks.first().key)
       isActive = this.hasBlock("list-item") && parent && parent.type === type
     }
@@ -157,13 +99,6 @@ class TextEditor extends React.Component {
       </Button>
     )
   }
-
-  /**
-   * Render a Slate node.
-   *
-   * @param {Object} props
-   * @return {Element}
-   */
 
   renderNode = props => {
     const { attributes, children, node } = props
@@ -183,13 +118,6 @@ class TextEditor extends React.Component {
         return <ol {...attributes}>{children}</ol>
     }
   }
-
-  /**
-   * Render a Slate mark.
-   *
-   * @param {Object} props
-   * @return {Element}
-   */
 
   renderMark = props => {
     const { children, mark, attributes } = props
@@ -213,21 +141,13 @@ class TextEditor extends React.Component {
    */
 
   onChange = ({ value }) => {
-    if (value.document != this.state.value.document) {
+    if (value.document != this.props.value.document) {
       const content = JSON.stringify(value.toJSON())
       localStorage.setItem("content", content)
     }
 
-    this.setState({ value })
+    this.props.handleChange(value)
   }
-
-  /**
-   * On key down, if it's a formatting command toggle a mark.
-   *
-   * @param {Event} event
-   * @param {Change} change
-   * @return {Change}
-   */
 
   onKeyDown = (event, change) => {
     let mark
@@ -249,30 +169,16 @@ class TextEditor extends React.Component {
     return true
   }
 
-  /**
-   * When a mark button is clicked, toggle the current mark.
-   *
-   * @param {Event} event
-   * @param {String} type
-   */
-
   onClickMark = (event, type) => {
     event.preventDefault()
-    const { value } = this.state
+    const { value } = this.props
     const change = value.change().toggleMark(type)
     this.onChange(change)
   }
 
-  /**
-   * When a block button is clicked, toggle the block type.
-   *
-   * @param {Event} event
-   * @param {String} type
-   */
-
   onClickBlock = (event, type) => {
     event.preventDefault()
-    const { value } = this.state
+    const { value } = this.props
     const change = value.change()
     const { document } = value
 
@@ -315,9 +221,5 @@ class TextEditor extends React.Component {
     this.onChange(change)
   }
 }
-
-/**
- * Export.
- */
 
 export default TextEditor

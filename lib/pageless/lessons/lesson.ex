@@ -7,9 +7,9 @@ defmodule Pageless.Lessons.Lesson do
   alias Pageless.Paths.Path
   alias Pageless.Courses.CourseLesson
 
-  @lesson_types ["VIDEO", "ARTICLE", "ELEARNING", "OTHER", "CLASSROOM"]
+  @lesson_types ["VIDEO", "ARTICLE", "TEXT", "ELEARNING", "OTHER", "CLASSROOM"]
 
-  @source_types ["FILE", "URL", "RICHTEXT"]
+  @source_types ["FILE", "URL", "TEXT"]
 
   schema "lessons" do
     field :title, :string
@@ -17,6 +17,7 @@ defmodule Pageless.Lessons.Lesson do
     field :lesson_type, :string
     field :source_type, :string
     field :source, :string
+    field :content, :map
 
     belongs_to :company, Pageless.Companies.Company
     many_to_many :courses, Course, join_through: CourseLesson
@@ -28,7 +29,15 @@ defmodule Pageless.Lessons.Lesson do
   @doc false
   def changeset(lesson, attrs) do
     lesson
-    |> cast(attrs, [:description, :lesson_type, :source_type, :source, :title, :company_id])
+    |> cast(attrs, [
+      :description,
+      :lesson_type,
+      :content,
+      :source_type,
+      :source,
+      :title,
+      :company_id
+    ])
     |> validate()
   end
 
@@ -38,7 +47,6 @@ defmodule Pageless.Lessons.Lesson do
       :title,
       :lesson_type,
       :company_id,
-      :source,
       :source_type
     ])
   end

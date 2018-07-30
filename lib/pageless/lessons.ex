@@ -45,9 +45,12 @@ defmodule Pageless.Lessons do
 
   """
   def create_lesson(attrs \\ %{}) do
+    IO.inspect(attrs)
+
     %Lesson{}
     |> Lesson.changeset(attrs)
     |> Repo.insert()
+    |> IO.inspect()
   end
 
   @doc """

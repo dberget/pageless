@@ -3,16 +3,17 @@ defmodule Pageless.Repo.Migrations.CreateLesson do
 
   def up do
     execute(
-      "CREATE TYPE lesson_type AS ENUM ('VIDEO', 'ARTICLE', 'ELEARNING', 'OTHER','CLASSROOM')"
+      "CREATE TYPE lesson_type AS ENUM ('VIDEO', 'TEXT', 'ARTICLE', 'ELEARNING', 'OTHER','CLASSROOM')"
     )
 
-    execute("CREATE TYPE source_type AS ENUM ('FILE', 'URL', 'RICHTEXT')")
+    execute("CREATE TYPE source_type AS ENUM ('FILE', 'URL', 'TEXT')")
 
     create table(:lessons) do
       add :title, :string, null: false
       add :description, :text
       add :lesson_type, :lesson_type
       add :source, :text
+      add :content, :map
       add :source_type, :source_type
       add :company_id, references(:companies, on_delete: :delete_all)
 

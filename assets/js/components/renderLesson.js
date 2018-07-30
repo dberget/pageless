@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import LessonFile from "./lessonFile"
 import ELearningViewer from "./eLearningViewer"
-import LessonRichText from "./lessonRichText"
+import RichTextViewer from "./lessonRichText"
 import VideoViewer from "./videoViewer"
 
 const renderLesson = lesson => {
@@ -9,7 +9,7 @@ const renderLesson = lesson => {
     case "FILE":
       return <LessonFile lesson={lesson} />
     case "TEXT":
-      return <LessonRichText lesson={lesson} />
+      return <RichTextViewer lesson={lesson} />
     case "URL":
       return handleUrl(lesson)
     default:

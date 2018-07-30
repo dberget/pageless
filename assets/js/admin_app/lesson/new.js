@@ -1,19 +1,25 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 
 import TextField from "@material-ui/core/TextField"
+import Modal from "@material-ui/core/Modal"
+import Paper from "@material-ui/core/Paper"
 import { withStyles } from "@material-ui/core/styles"
-import { Button } from "@material-ui/core"
+import Button from "@material-ui/core/Button"
+import IconButton from "@material-ui/core/IconButton"
 import Save from "@material-ui/icons/Save"
 import CloudUpload from "@material-ui/icons/CloudUpload"
 import MessageSnackbar from "../../components/snackbar"
 import { getCsrfToken } from "../../token"
 import Grid from "@material-ui/core/Grid"
 import LessonRadioGroup from "../../components/lessonRadioGroup"
+import TextEditor from "../../components/textEditor/textEditor"
+import initialValue from "../../components/textEditor/value"
 
 const lessonTypes = [
   { value: "ELEARNING", label: "eLearning" },
   { value: "ARTICLE", label: "Article" },
   { value: "VIDEO", label: "Video" },
+  { value: "TEXT", label: "Text" },
   { value: "OTHER", label: "Other" }
 ]
 
@@ -44,6 +50,25 @@ const styles = theme => ({
   },
   button: {
     margin: "0 4px"
+  },
+  modalBox: {
+    maxHeight: "calc(100% - 100px)",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    width: "33%",
+    padding: theme.spacing.unit * 4,
+    transform: "translate(-50%, -50%)"
+  },
+  modalBoxText: {
+    height: "calc(100% - 100px)",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    width: "66%",
+    padding: theme.spacing.unit * 4,
+    transform: "translate(-50%, -50%)",
+    overflow: "scroll"
   }
 })
 
@@ -52,12 +77,13 @@ class NewLesson extends Component {
     form: {
       title: "",
       description: "",
-      content: "",
-      lesson_type: "VIDEO",
-      source_type: "FILE",
+      content: initialValue,
+      lesson_type: "",
+      source_type: "",
       source: ""
     },
-    fileAdded: false
+    fileAdded: false,
+    open: false
   }
 
   state = this.initialState
@@ -135,6 +161,25 @@ class NewLesson extends Component {
     })
   }
 
+  handleTextChange = text => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        content: text
+      }
+    })
+  }
+
+  openModal = value => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        source_type: value
+      },
+      open: true
+    })
+  }
+
   handleFileThumbnail = name => event => {
     var url = encodeImageFileAsURL(event)
 
@@ -194,40 +239,51 @@ class NewLesson extends Component {
             {/* </Grid> */}
             <Grid xs={6} item>
               <Grid item>
-                <TextField
-                  id="url"
-                  label={`URL`}
-                  // disabled={form.source_type !== "URL"}
-                  className={classes.textField}
-                  value={form.source_type == "URL" || form.source}
-                  onChange={this.handleChange("source")}
-                  margin="normal"
-                />
-              </Grid>
-              <div className={classes.inputSet}>
-                <TextField
-                  id="file"
-                  // disabled={form.source_type !== "FILE"}
-                  type="file"
-                  onChange={() =>
-                    this.setState({
-                      form: {
-                        ...this.state.form,
-                        source_type: "FILE"
-                      }
-                    })
-                  }
-                  margin="normal"
-                />
                 <Button
-                  disabled={form.source_type !== "FILE"}
-                  onClick={() => this.uploadFile()}
+                  onClick={() => this.openModal("URL")}
+                  variant="raised"
                   color="primary"
+                  className={classes.button}
                 >
-                  <CloudUpload className={classes.leftIcon} />
-                  Upload
+                  URL
                 </Button>
-              </div>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={() => this.openModal("TEXT")}
+                  variant="raised"
+                  color="primary"
+                  className={classes.button}
+                >
+                  Text Lesson
+                </Button>
+              </Grid>
+              <Grid item>
+                <div className={classes.inputSet}>
+                  <TextField
+                    id="file"
+                    // disabled={form.source_type !== "FILE"}
+                    type="file"
+                    onChange={() =>
+                      this.setState({
+                        form: {
+                          ...this.state.form,
+                          source_type: "FILE"
+                        }
+                      })
+                    }
+                    margin="normal"
+                  />
+                  <Button
+                    disabled={form.source_type !== "FILE"}
+                    onClick={() => this.uploadFile()}
+                    color="primary"
+                  >
+                    <CloudUpload className={classes.leftIcon} />
+                    Upload
+                  </Button>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
           <div className={classes.buttonGroup}>
@@ -242,7 +298,7 @@ class NewLesson extends Component {
               onClick={() => this.saveLesson()}
               variant="raised"
               color="primary"
-              disabled={!form.source}
+              disabled={!form.source_type}
               className={classes.button}
             >
               <Save className={classes.leftIcon} />
@@ -254,6 +310,49 @@ class NewLesson extends Component {
           open={this.state.snackbar}
           message={this.state.message}
         />
+        <Modal
+          className={classes.modal}
+          open={this.state.open}
+          onClose={() => this.setState({ open: false })}
+        >
+          {form.source_type == "URL" ? (
+            <Paper className={classes.modalBox}>
+              <Grid container spacing={8} alignItems="flex-end">
+                <Grid sm={10} item>
+                  <TextField
+                    id="url"
+                    label={`URL`}
+                    fullWidth
+                    onChange={e =>
+                      this.setState({
+                        form: {
+                          ...this.state.form,
+                          source: e.target.value
+                        }
+                      })
+                    }
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid sm={1} item>
+                  <IconButton
+                    onClick={() => this.setState({ open: false })}
+                    className={classes.button}
+                  >
+                    <Save />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Paper>
+          ) : (
+            <Paper className={classes.modalBoxText}>
+              <TextEditor
+                value={this.state.form.content}
+                handleChange={this.handleTextChange}
+              />
+            </Paper>
+          )}
+        </Modal>
       </div>
     )
   }
