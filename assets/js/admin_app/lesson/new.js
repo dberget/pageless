@@ -268,7 +268,8 @@ class NewLesson extends Component {
                       this.setState({
                         form: {
                           ...this.state.form,
-                          source_type: "FILE"
+                          source_type:
+                            this.lesson_type == "ELEARNING" ? "URL" : "FILE"
                         }
                       })
                     }

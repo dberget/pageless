@@ -36,7 +36,7 @@ const LessonList = ({ lesson, classes }) => (
     <CardActions className={classes.actions} disableActionSpacing>
       <Button
         component={Link}
-        to={`lesson/${lesson.id}`}
+        to={`/lesson/${lesson.id}`}
         className={classes.button}
         variant="outlined"
       >

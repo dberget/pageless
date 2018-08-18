@@ -3,7 +3,7 @@ defmodule Pageless.Repo.Migrations.CreateLesson do
 
   def up do
     execute(
-      "CREATE TYPE lesson_type AS ENUM ('VIDEO', 'TEXT', 'ARTICLE', 'ELEARNING', 'OTHER','CLASSROOM')"
+      "CREATE TYPE lesson_type AS ENUM ('VIDEO', 'TEXT', 'ARTICLE', 'ELEARNING', 'OTHER', 'CLASSROOM')"
     )
 
     execute("CREATE TYPE source_type AS ENUM ('FILE', 'URL', 'TEXT')")

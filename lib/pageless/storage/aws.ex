@@ -5,13 +5,18 @@ defmodule Pageless.AWS do
   alias ExAws.S3
   alias Pageless.AWS
 
-  defstruct [:filename, :src_path, :content_type, :size, :zip, :errors]
+  defstruct [:filename, :src_path, :content_type, :size, :errors]
 
   @bucket "pageless"
 
   def upload(upload) when is_map(upload) do
     file =
-      %AWS{filename: "img-#{upload.filename}", src_path: upload.path}
+      %AWS{
+        filename: "#{upload.filename}",
+        content_type: upload.content_type,
+        src_path: upload.path
+      }
+      |> file_type()
       |> get_file_size()
       |> send_to_aws()
 
@@ -27,19 +32,27 @@ defmodule Pageless.AWS do
     "https://s3.us-east-2.amazonaws.com/pageless/temp/#{URI.encode_www_form(file.filename)}"
   end
 
-  # def save(%{size: size} = upload) when size > 1_000_000 do
-  #   upload.src_path
-  #   |> S3.Upload.stream_file()
-  #   |> S3.upload(@bucket, "temp/#{upload.filename}")
-  #   |> ExAws.request()
-  # end
+  def save(%{size: size} = upload) when size > 1_000_000 do
+    upload.src_path
+    |> S3.Upload.stream_file()
+    |> S3.upload(@bucket, "temp/#{upload.filename}")
+    |> ExAws.request()
+  end
+
+  def file_type(%{content_type: "application/pdf"} = aws) do
+    aws
+  end
+
+  def file_type(%{src_path: path, content_type: "application/zip"} = aws) do
+    String.to_char_list(path) |> :zip.unzip()
+
+    aws
+  end
 
   def send_to_aws(upload) do
     {:ok, _resp} =
       S3.put_object(@bucket, "temp/#{upload.filename}", File.read!(upload.src_path))
       |> ExAws.request()
-
-    upload
   end
 
   defp get_file_size(upload) do

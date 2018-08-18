@@ -37,7 +37,7 @@ defmodule Pageless.Courses do
           is_atom(preload) ->
             Pageless.Repo.preload(course, preload)
 
-          false ->
+          true ->
             course
         end
 

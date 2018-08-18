@@ -2,21 +2,10 @@ defmodule Pageless.CompaniesTest do
   use Pageless.DataCase
 
   alias Pageless.Companies
+  alias Pageless.Companies.Company
 
-  describe "companies" do
-    alias Pageless.Companies.Company
-
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
-
-    def company_fixture(attrs \\ %{}) do
-      {:ok, company} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Companies.create_company()
-
-      company
+  describe "create_company/1" do
+    test "creates a new company given valid params" do
     end
 
     test "list_companies/0 returns all companies" do
