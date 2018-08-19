@@ -17,6 +17,7 @@ defmodule Pageless.AWS do
         src_path: upload.path
       }
       |> file_type()
+      |> create_unique_filename()
       |> get_file_size()
       |> send_to_aws()
 
@@ -44,15 +45,24 @@ defmodule Pageless.AWS do
   end
 
   def file_type(%{src_path: path, content_type: "application/zip"} = aws) do
-    String.to_char_list(path) |> :zip.unzip()
-
     aws
   end
 
-  def send_to_aws(upload) do
-    {:ok, _resp} =
-      S3.put_object(@bucket, "temp/#{upload.filename}", File.read!(upload.src_path))
-      |> ExAws.request()
+  def file_type(%{content_type: _} = aws) do
+    aws
+  end
+
+  def create_unique_filename(%{filename: name} = aws) do
+    unique_name = "company/#{Ecto.UUID.generate()}-#{Path.basename(name)}"
+
+    %AWS{aws | filename: unique_name}
+  end
+
+  def send_to_aws(%{filename: name} = upload) do
+    S3.put_object(@bucket, name, File.read!(upload.src_path))
+    |> ExAws.request()
+
+    upload
   end
 
   defp get_file_size(upload) do

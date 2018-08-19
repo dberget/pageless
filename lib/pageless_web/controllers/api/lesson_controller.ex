@@ -13,8 +13,7 @@ defmodule PagelessWeb.Api.LessonController do
 
   def upload(conn, params) do
     if upload = params["file"] do
-      # {:ok, [path]} = File.cp_r(upload.path, "files/#{upload.filename}")
-      url = Pageless.AWS.upload(upload)
+      url = Pageless.AWS.upload(upload) |> IO.inspect()
 
       json(conn, %{path: url})
     else

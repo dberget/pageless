@@ -7,17 +7,13 @@ defmodule Pageless.LMS.Parser do
   takes a zipped eLearning folder an returns the imsmanifest.xml file if it exists, otherwise returns {:error, reason}.
   """
   def get_manifest(path_to_zip) do
-    char_path = String.to_char_list(path_to_zip)
-
-    case :zip.unzip(char_path, file_list: ['imsmanifest.xml']) do
-      {:ok, []} ->
-        {:error, "No manifest file exists"}
-
-      {:ok, file} ->
-        {:ok, file}
-
-      {:error, reason} ->
-        {:error, reason}
+    with char_path <- String.to_charlist(path_to_zip),
+         {:ok, zip_handle} <- :zip.zip_open(char_path, [:memory]),
+         {:ok, {_file, _exists}} <- :zip.zip_get('imsmanifest.xml', zip_handle) do
+      :zip.zip_close(zip_handle)
+    else
+      _err ->
+        {:error, "unable to find manifest file"}
     end
   end
 end
